@@ -1,0 +1,9 @@
+{
+  "itemGroup.examplemod": "Example Mod Tab",
+  "block.examplemod.example_block": "Example Block",
+  "item.examplemod.example_item": "Example Item",
+  "item.ironbounds_artefacts.devils_finger": "Devil's Crimson Finger",
+  "item.ironbounds_artefacts.devils_finger.tooltip": "A wizened devil's cut off finger...\nContains lingering traces of ancient magic",
+  "item.ironbounds_artefacts.magicians_monocle": "Magician's Monocle",
+  "item.ironbounds_artefacts.magicians_monocle.tooltip": "A magician's monocle.\n\"Now, peer into the unseen, and experience the wisdom of the cosmos\""
+}
