@@ -1,3 +1,4 @@
+import org.gradle.jvm.toolchain.JavaLanguageVersion.*
 import org.gradle.plugins.ide.idea.model.IdeaLanguageLevel
 
 plugins {
@@ -97,11 +98,9 @@ neoForge {
     }
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+of(21).also { java.toolchain.languageVersion = it }
 
 dependencies {
-    implementation(accessTransformers(interfaceInjectionData("dev.latvian.mods:kubejs-neoforge:$kubejsVersion")!!)!!)
-
     implementation("io.redspace:irons_spellbooks:$ironsSpellbooksVersion")
     runtimeOnly("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.21")
     implementation("curse.maven:adorned-1036809:5546365") // curios-neoforge-9.0.5+1.21.0.jar

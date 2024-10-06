@@ -1,0 +1,7 @@
+{
+  "message_id": "deaths.ironbounds_artefacts.void_damage",
+  "scaling": "never",
+  "exhaustion": 0.2,
+  "effects": "hurt",
+  "death_message_type": "default"
+}

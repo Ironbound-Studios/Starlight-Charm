@@ -1,0 +1,12 @@
+{
+	"parent": "minecraft:item/handheld",
+	"loader": "neoforge:separate_transforms",
+	"base": {
+		"parent": "ironbounds_artefacts:item/archmage_spellbook_model"
+	},
+	"perspectives": {
+		"gui": {
+			"parent": "ironbounds_artefacts:item/archmage_spellbook_gui"
+		}
+	}
+}
