@@ -1,19 +1,27 @@
 package com.c446.ironbound_artefacts.registries;
 
-import com.c446.ironbound_artefacts.attributes.Attributes;
+import io.redspace.ironsspellbooks.registries.CreativeTabRegistry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 
 public class ModSetup {
     public static void register(IEventBus eventBus) {
         ItemRegistry.ITEMS.register(eventBus);
-        Attributes.ATTRIBUTES.register(eventBus);
+        AttributeRegistry.ATTRIBUTES.register(eventBus);
+        EffectsRegistry.EFFECTS.register(eventBus);
+
         //ArmorMaterials.MATERIALS.register(eventBus);
-        //ModCreativeTabs.CREATIVE_MOB_TABS.register(eventBus);
+        ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
         //ModIngredientTypeRegistry.INGREDIENT_TYPES.register(eventBus);
     }
     public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
@@ -31,5 +39,25 @@ public class ModSetup {
         // DO OTHER MODS CONFIG
     }
 
+
+    protected static class ModCreativeTabReg {
+        public static final DeferredRegister<CreativeModeTab> CREATIVE_MOD_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
+
+        public static final DeferredHolder<CreativeModeTab, CreativeModeTab> THINGS = CREATIVE_MOD_TABS.register("ironbound_artefacts", () ->
+                CreativeModeTab.builder()
+                        .withTabsBefore(CreativeTabRegistry.EQUIPMENT_TAB.getKey())
+                        .title(Component.translatable("tab.ironbounds_artefacts.curios"))
+                        .icon(() -> new ItemStack(ItemRegistry.DEVILS_FINGER))
+                        .displayItems((enabledFeatures, entries) -> {
+                            entries.accept(ItemRegistry.DEATH_AMULET.get());
+                            entries.accept(ItemRegistry.DEVILS_FINGER.get());
+                            entries.accept(ItemRegistry.MAGICIANS_MONOCLE.get());
+                            entries.accept(ItemRegistry.JUDGEMENT_SCALE.get());
+                            entries.accept(ItemRegistry.LICH_HAND.get());
+                            entries.accept(ItemRegistry.LICH_CROWN.get());
+                            entries.accept(ItemRegistry.ARCHMAGE_SPELLBOOK.get());
+                        })
+                        .build());
+    }
 }
 

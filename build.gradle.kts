@@ -101,14 +101,17 @@ neoForge {
 of(21).also { java.toolchain.languageVersion = it }
 
 dependencies {
-    implementation("io.redspace:irons_spellbooks:$ironsSpellbooksVersion")
+    //implementation("io.redspace:irons_spellbooks:$ironsSpellbooksVersion")
     runtimeOnly("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.21")
     implementation("curse.maven:adorned-1036809:5546365") // curios-neoforge-9.0.5+1.21.0.jar
     runtimeOnly("curse.maven:caelus-308989:5442975") // caelus-neoforge-7.0.0+1.21.jar
     implementation("curse.maven:geckolib-388172:5605715") // geckolib-neoforge-1.21-4.5.8.jar
     runtimeOnly("curse.maven:emi-580555:5619579")
     runtimeOnly("curse.maven:jade-324717:5591256")
+    implementation("curse.maven:apothic-attributes-898963:5530502")
+    implementation("curse.maven:placebo-283644:5547234")
 //    runtimeOnly("curse.maven:probejs-585406:5536459")
+    implementation(files("C:/Users/cleme/Desktop/irons-spells-n-spellbooks/build/libs/irons_spellbooks-1.21-3.4.3.jar"))
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

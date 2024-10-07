@@ -22,23 +22,17 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class MagicianMonocle extends UserDependantCurios {
-    public MagicianMonocle(Properties p) {
+public class LichCrown extends UserDependantCurios {
+    public LichCrown(Properties p) {
         super(p);
-    }
-
-    public MagicianMonocle(Properties p, boolean showEnch) {
-        super(p, showEnch);
     }
 
     @Override
     public boolean canEntityUseItem(Entity entity) {
         if (entity instanceof Player player) {
-            return (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON) || entity.getName().getString().equals("Dev"));
+            return (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ENDER) || entity.getName().getString().equals("Dev"));
         }
         return false;
     }
@@ -50,7 +44,7 @@ public class MagicianMonocle extends UserDependantCurios {
             multiplier = 2;
         }
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeModifier.put(AttributeRegistry.SPELL_POWER, new AttributeModifier(IronboundArtefact.prefix("magicians_monocle"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.SUMMON_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("emperor_crown"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         return attributeModifier;
     }
@@ -58,7 +52,7 @@ public class MagicianMonocle extends UserDependantCurios {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip"));
         var affinity = AffinityData.getAffinityData(stack);
         var spell = affinity.getSpell();
         if (!spell.equals(SpellRegistry.none())) {
@@ -75,16 +69,8 @@ public class MagicianMonocle extends UserDependantCurios {
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (canEntityUseItem(slotContext.entity())) {
-           var copy = stack.copy();
-//            var ComponentList = new ArrayList<AffinityData>();
-//            ComponentList.add(new AffinityData(SpellRegistry.FIREBALL_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.LIGHTNING_BOLT_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.MAGIC_MISSILE_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.OAKSKIN_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.HASTE_SPELL.get().getSpellId(), 3));
-//            copy.set(ComponentRegistry.AFFINITY_COMPONENT, ComponentList);
-
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.SCULK_TENTACLES_SPELL.get().getSpellId(), 7));
+            var copy = stack.copy();
+            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.RAISE_DEAD_SPELL.get().getSpellId(), 3));
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         } else {
             var copy = stack.copy();

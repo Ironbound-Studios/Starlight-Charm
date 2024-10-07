@@ -37,6 +37,7 @@ public class IronboundArtefact {
 
         public static final String ENDER = "6302e022-0de6-4254-bd2c-7c5cc7b27982";
         public static final String IRON = "c3adad79-e88a-4f15-bd61-c58766d725e9";
+        public static final String TAR = "64d64b70-fde8-467e-ad70-271d5ddf26f6";
         public static final String THEKILLAGER = "0150f698-e592-43f5-b78f-b6d6d5755772";
 
         public static final String TOMATO = "5ff3e718-e002-4c48-bdc2-c638477620e4";

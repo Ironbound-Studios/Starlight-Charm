@@ -1,7 +1,7 @@
 package com.c446.ironbound_artefacts.items.impl;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.attributes.Attributes;
+import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.Holder;
@@ -32,7 +32,7 @@ public class DeathAmulet extends UserDependantCurios {
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
         int multiplier = (canEntityUseItem(slotContext.entity())) ? 2 : 1;
 
-        attributeModifier.put(Attributes.VOID_DAMAGE, new AttributeModifier(id, 1.25 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.VOID_DAMAGE_ATTRIBUTE, new AttributeModifier(id, 1.25 * multiplier, AttributeModifier.Operation.ADD_VALUE));
         return attributeModifier;
     }
 }
