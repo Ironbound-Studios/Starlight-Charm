@@ -52,7 +52,7 @@ public class LichHand extends UserDependantCurios {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.strength_hand.tooltip"));
         var affinity = AffinityData.getAffinityData(stack);
         var spell = affinity.getSpell();
         if (!spell.equals(SpellRegistry.none())) {

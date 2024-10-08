@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "ironbounds_artefacts:item/archmage_spellbook_model",
-		"particle": "ironbounds_artefacts:item/archmage_spellbook_model"
+		"0": "ironbounds_artefacts:item/spellbookmodel/archmage_spellbook_model",
+		"particle": "ironbounds_artefacts:item/spellbookmodel/archmage_spellbook_model"
 	},
 	"elements": [
 		{

@@ -60,8 +60,6 @@ public class DevilsFinger extends UserDependantCurios {
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (canEntityUseItem(slotContext.entity())) {
-            if (AffinityData.getAffinityData(stack).getSpell().getSpellId() == SpellRegistry.ELDRITCH_BLAST_SPELL.get().getSpellId() && AffinityData.getAffinityData(stack).bonus() > 0) {
-            }
             var copy = stack.copy();
             copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.ELDRITCH_BLAST_SPELL.get().getSpellId(), 3));
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));

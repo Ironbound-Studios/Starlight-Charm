@@ -8,13 +8,14 @@
   "item.ironbounds_artefacts.devils_finger.tooltip": "A wizened devil's cut off finger...\n\"Malevolence lives within you.\"",
   "item.ironbounds_artefacts.magicians_monocle": "Magician's Monocle",
   "item.ironbounds_artefacts.magicians_monocle.tooltip": "A magician's monocle.\n\"Now, peer into the unseen, and experience the wisdom of the cosmos\"",
-  "item.ironbounds_artefacts.judgement_scale.tooltip": "A judge's golden scale.\n\"Weigh your heart, be the judge of only yourself\n\"",
-  "item.ironbounds_artefacts.judgement_scale" : "Scale of Judgement",
+  "item.ironbounds_artefacts.judgement_scale.tooltip": "Golden scale having witnessed countless trials.\n\"Weigh your heart, be the judge of only yourself\n\"",
+  "item.ironbounds_artefacts.judgement_scale" : "Final Judgement Scale",
   "item.ironbounds_artefacts.death_amulet" : "Amulet of Death.",
   "item.ironbounds_artefacts.death_amulet.tooltip" : "Amulet of Death.",
-  "item.ironbounds_artefacts.hermit_amulet" : "Amulet of Death.",
-  "item.ironbounds_artefacts.hermit_amulet.tooltip" : "Amulet of Death.",
-  "item.ironbounds_artefacts.emperor_crown.tooltip": "Putrid crown of an old Archlich",
-
-  "item.ironbounds_artefacts.strength_hand.tooltip": "Hands of a decrepit Archlich."
+  "item.ironbounds_artefacts.hermit_amulet" : "Hermetic Eye",
+  "item.ironbounds_artefacts.hermit_amulet.tooltip" : "Eye of an Old Hermit.",
+  "item.ironbounds_artefacts.emperor_crown.tooltip": "\"The Crown of a Long Decayed Lich, feels horrible just looking at it\"",
+  "item.ironbounds_artefacts.emperor_crown": "Golden Crown",
+  "item.ironbounds_artefacts.strength_hand.tooltip": "Hands of a decrepit Archlich.\n\"filler_text\"",
+  "item.ironbounds_artefacts.strength_hand": "Hand of Power"
 }

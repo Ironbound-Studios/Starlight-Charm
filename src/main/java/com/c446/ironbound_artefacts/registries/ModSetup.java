@@ -24,6 +24,7 @@ public class ModSetup {
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
         //ModIngredientTypeRegistry.INGREDIENT_TYPES.register(eventBus);
     }
+
     public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
         //modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
@@ -31,7 +32,7 @@ public class ModSetup {
         modEventBus.addListener(this::setup);
     }
 
-    public static ResourceLocation prefix(String path){
+    public static ResourceLocation prefix(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
 
@@ -57,7 +58,8 @@ public class ModSetup {
                             entries.accept(ItemRegistry.LICH_CROWN.get());
                             entries.accept(ItemRegistry.ARCHMAGE_SPELLBOOK.get());
                         })
-                        .build());
+                        .build()
+        );
     }
 }
 

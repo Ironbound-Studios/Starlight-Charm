@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "ironbounds_artefacts:item/archmage_spellbook_gui"
+    "layer0": "ironbounds_artefacts:item/archmage_spellbook"
   }
 }
