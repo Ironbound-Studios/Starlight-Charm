@@ -1,6 +1,8 @@
 package com.c446.ironbound_artefacts.events;
 
 
+import com.c446.ironbound_artefacts.items.impl.ArchMageSpellBook;
+import com.c446.ironbound_artefacts.items.impl.StaffOfPower;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.IronboundDamageSources;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
@@ -12,6 +14,7 @@ import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
+import io.redspace.ironsspellbooks.spells.eldritch.AbyssalShroudSpell;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,6 +39,8 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.c446.ironbound_artefacts.registries.ItemRegistry.ARCHMAGE_SPELLBOOK;
+import static com.c446.ironbound_artefacts.registries.ItemRegistry.STAFF_OF_POWER;
 import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 
 @EventBusSubscriber
@@ -44,16 +49,22 @@ public class ServerEvents {
     public static void spellLevelEvent(ModifySpellLevelEvent event) {
         if (event.getEntity() instanceof Player player) {
             AtomicInteger boost = new AtomicInteger(0);
-            CuriosApi.getCuriosInventory(player).
-                    ifPresent(inv -> inv.findCurios(
-                                    stack -> AffinityData.hasAffinityData(stack)
-                                            && AffinityData.getAffinityData(stack).getSpell() == event.getSpell())
-                            .forEach(slot -> boost.addAndGet(
-                                    Objects.requireNonNull(slot.stack().get(ComponentRegistry.AFFINITY_COMPONENT)).bonus()
-                            ))
-                    );
+            CuriosApi.getCuriosInventory(player).ifPresent((curioHandler) -> {
+                if (curioHandler.isEquipped(ARCHMAGE_SPELLBOOK.get())) {
+                    boost.addAndGet(1);
+                }
+            });
+
+            if (player.getMainHandItem().is(STAFF_OF_POWER)) {
+                boost.addAndGet(AffinityData.getAffinityData(player.getMainHandItem()).bonus());
+            }
+            if (player.getOffhandItem().is(STAFF_OF_POWER)){
+                boost.addAndGet(AffinityData.getAffinityData(player.getOffhandItem()).bonus());
+            }
+            event.setLevel(event.getLevel() + boost.get());
         }
     }
+
 
     @SubscribeEvent
     public static void onEntityDamaged(LivingDamageEvent.Post event) {

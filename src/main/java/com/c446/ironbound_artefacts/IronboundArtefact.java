@@ -9,6 +9,8 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+
 @Mod(IronboundArtefact.MODID)
 public class IronboundArtefact {
     public static final String MODID = "ironbounds_artefacts";
@@ -42,5 +44,16 @@ public class IronboundArtefact {
 
         public static final String TOMATO = "5ff3e718-e002-4c48-bdc2-c638477620e4";
 
+        public static  ArrayList<String> CONTRIBUTOR_LIST = new ArrayList<>();
+        static{
+            CONTRIBUTOR_LIST.add(ACE);
+            CONTRIBUTOR_LIST.add(AMADHE);
+            CONTRIBUTOR_LIST.add(AMON);
+            CONTRIBUTOR_LIST.add(CATMOTH);
+            CONTRIBUTOR_LIST.add(ENDER);
+            CONTRIBUTOR_LIST.add(IRON);
+            CONTRIBUTOR_LIST.add(TAR);
+            CONTRIBUTOR_LIST.add(THEKILLAGER);
+        }
     }
 }

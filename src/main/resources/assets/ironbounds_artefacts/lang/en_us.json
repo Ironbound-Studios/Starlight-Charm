@@ -1,5 +1,5 @@
 {
-  "tab.ironbounds_artefacts.curios" : "Ironbound : Artefacts  ",
+  "tab.ironbounds_artefacts.curios" : "Ironbounds  Artefacts  ",
   "itemGroup.examplemod": "Example Mod Tab",
   "block.examplemod.example_block": "Example Block",
   "item.examplemod.example_item": "Example Item",
@@ -14,8 +14,13 @@
   "item.ironbounds_artefacts.death_amulet.tooltip" : "Amulet of Death.",
   "item.ironbounds_artefacts.hermit_amulet" : "Hermetic Eye",
   "item.ironbounds_artefacts.hermit_amulet.tooltip" : "Eye of an Old Hermit.",
-  "item.ironbounds_artefacts.emperor_crown.tooltip": "\"The Crown of a Long Decayed Lich, feels horrible just looking at it\"",
+  "item.ironbounds_artefacts.emperor_crown.tooltip": "The Crown of a Long Decayed Lich, feels horrible just looking at it\n\nAllows the creation of Greater Undeads.",
   "item.ironbounds_artefacts.emperor_crown": "Golden Crown",
-  "item.ironbounds_artefacts.strength_hand.tooltip": "Hands of a decrepit Archlich.\n\"filler_text\"",
-  "item.ironbounds_artefacts.strength_hand": "Hand of Power"
+  "item.ironbounds_artefacts.strength_hand.tooltip": "Hands of a decrepit Archlich.\n\"filler_text\"\n\nAllows the creation of Greater Undeads.",
+  "item.ironbounds_artefacts.strength_hand": "Hand of Power",
+  "item.ironbounds_artefacts.archmage_spellbook": "Archmage's Spellbook",
+  "item.ironbounds_artefacts.archmage_spellbook.tooltip": "Spellbook dropped by the apprentice of an Archmage.",
+  "item.ironbounds_artefacts.staff_of_power": "The Staff of Power",
+  "item.ironbounds_artefacts.staff_of_power.tooltip": "",
+  "spell.ironbounds_artefacts.all_spell.name" : "all spells"
 }
