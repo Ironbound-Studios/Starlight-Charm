@@ -6,14 +6,12 @@ import io.redspace.ironsspellbooks.api.item.weapons.ExtendedSwordItem;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellDataRegistryHolder;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
-import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.item.UniqueSpellBook;
 import io.redspace.ironsspellbooks.item.curios.AffinityRing;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.item.weapons.StaffItem;
-import io.redspace.ironsspellbooks.item.weapons.StaffOfTheNines;
 import io.redspace.ironsspellbooks.item.weapons.StaffTier;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
@@ -47,8 +45,8 @@ public class ItemRegistry {
 //    public static final DeferredHolder<Item, MagicianMonocle> MAGICIANS_MONOCLE;
 
     public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(10, 2,
-            new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-            new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+            new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+            new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_VALUE)
     );
 
     static {
@@ -73,14 +71,10 @@ public class ItemRegistry {
             return new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER)));
         });
 
-        ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new UniqueSpellBook(
-                new SpellDataRegistryHolder[]{
-                        new SpellDataRegistryHolder(SpellRegistry.FIREBALL_SPELL, 5),
-                        new SpellDataRegistryHolder(SpellRegistry.LIGHTNING_BOLT_SPELL, 10)},
-                13).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.MAX_MANA, 300, AttributeModifier.Operation.ADD_VALUE), new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL))
-        );
-//        ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(15, new Item.Properties().rarity(Rarity.EPIC).fireResistant().stacksTo(1)));
-    }
+        ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(
+                13).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
+
+   }
 
 
 }

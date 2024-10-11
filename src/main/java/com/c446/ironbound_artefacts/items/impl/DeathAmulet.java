@@ -32,7 +32,7 @@ public class DeathAmulet extends UserDependantCurios {
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
         int multiplier = (canEntityUseItem(slotContext.entity())) ? 2 : 1;
 
-        attributeModifier.put(AttributeRegistry.VOID_DAMAGE_ATTRIBUTE, new AttributeModifier(id, 1.25 * multiplier, AttributeModifier.Operation.ADD_VALUE));
+        attributeModifier.put(AttributeRegistry.VOID_DAMAGE_ATTRIBUTE, new AttributeModifier(id, multiplier, AttributeModifier.Operation.ADD_VALUE));
         return attributeModifier;
     }
 }

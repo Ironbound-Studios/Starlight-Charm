@@ -111,7 +111,9 @@ dependencies {
     implementation("curse.maven:apothic-attributes-898963:5530502")
     implementation("curse.maven:placebo-283644:5547234")
 //    runtimeOnly("curse.maven:probejs-585406:5536459")
-    implementation(files("C:/Users/cleme/Desktop/IronboundArtefacts/src/CUSTOM-BUILD_irons_spellbooks-1.21-3.4.3.jar"))
+    implementation(files("C:/Users/cleme/OneDrive/Bureau/New folder/IDK/IronboundArtefacts/src/CUSTOM-BUILD_irons_spellbooks-1.21-3.4.3.jar"))
+    // MAIN COMPUTER : "C:/Users/cleme/OneDrive/Bureau/New folder/IDK/IronboundArtefacts/src/CUSTOM-BUILD_irons_spellbooks-1.21-3.4.3.jar"
+    // SEC COMPUTER : C:/Users/cleme/Desktop/IronboundArtefacts/src/CUSTOM-BUILD_irons_spellbooks-1.21-3.4.3.jar
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

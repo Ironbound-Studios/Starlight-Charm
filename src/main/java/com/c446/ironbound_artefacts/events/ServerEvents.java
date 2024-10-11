@@ -3,9 +3,11 @@ package com.c446.ironbound_artefacts.events;
 
 import com.c446.ironbound_artefacts.items.impl.ArchMageSpellBook;
 import com.c446.ironbound_artefacts.items.impl.StaffOfPower;
+import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.IronboundDamageSources;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
+import io.redspace.ironsspellbooks.api.events.CounterSpellEvent;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.events.PlayerSummonsCreature;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
@@ -35,6 +37,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
@@ -61,11 +64,26 @@ public class ServerEvents {
                 }
             });
 
-            if (player.getMainHandItem().is(STAFF_OF_POWER)) {
-                Arrays.stream(ISpellContainer.get(event.getEntity().getMainHandItem()).getAllSpells()).forEach(spell -> {if (spell.getSpell() instanceof )});
-            }
-            else if (player.getOffhandItem().is(STAFF_OF_POWER)) {
-                boost.addAndGet(AffinityData.getAffinityData(player.getOffhandItem()).bonus());
+            if (player != null) {
+                if (player.getMainHandItem() != null && player.getMainHandItem().is(STAFF_OF_POWER)) {
+                    ISpellContainer mainHandSpellContainer = ISpellContainer.get(player.getMainHandItem());
+                    if (mainHandSpellContainer != null && mainHandSpellContainer.getAllSpells() != null) {
+                        Arrays.stream(mainHandSpellContainer.getAllSpells()).forEach(spell -> {
+                            if (spell != null && spell.getSpell() != null && spell.getSpell().equals(event.getSpell())) {
+                                boost.addAndGet(1);
+                            }
+                        });
+                    }
+                } else if (player.getOffhandItem() != null && player.getOffhandItem().is(STAFF_OF_POWER)) {
+                    ISpellContainer offhandSpellContainer = ISpellContainer.get(player.getOffhandItem());
+                    if (offhandSpellContainer != null && offhandSpellContainer.getAllSpells() != null) {
+                        Arrays.stream(offhandSpellContainer.getAllSpells()).forEach(spell -> {
+                            if (spell != null && spell.getSpell() != null && spell.getSpell().equals(event.getSpell())) {
+                                boost.addAndGet(1);
+                            }
+                        });
+                    }
+                }
             }
 
             if (boost.get() > 2) {
@@ -184,4 +202,18 @@ public class ServerEvents {
         creature.setDropChance(EquipmentSlot.LEGS, 0.0F);
         creature.setDropChance(EquipmentSlot.FEET, 0.0F);
     }
+
+    @SubscribeEvent
+    public static void onDispelEvent(CounterSpellEvent event){
+        if (event.caster instanceof Player player && event.target instanceof LivingEntity living) {
+
+        }
+    }
+
+//    @SubscribeEvent
+//    public static void onPlayerDeath(PlayerEvent.Clone event) {
+//        if (event.isWasDeath() && Objects.requireNonNull(event.getEntity().getAttribute(AttributeRegistry.INSIGHT)).getBaseValue() >10){
+//            Objects.requireNonNull(event.getEntity().getAttribute(AttributeRegistry.INSIGHT)).setBaseValue(Objects.requireNonNull(event.getEntity().getAttribute(AttributeRegistry.INSIGHT)).getBaseValue()-1);
+//        }
+//    }
 }

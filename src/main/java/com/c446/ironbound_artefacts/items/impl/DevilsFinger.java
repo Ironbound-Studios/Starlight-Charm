@@ -43,7 +43,8 @@ public class DevilsFinger extends UserDependantCurios {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.devils_finger.tooltip"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.devils_finger.tooltip1"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.devils_finger.tooltip2"));
         var affinity = AffinityData.getAffinityData(stack);
         var spell = affinity.getSpell();
         if (!spell.equals(SpellRegistry.none())) {
@@ -82,7 +83,7 @@ public class DevilsFinger extends UserDependantCurios {
             multiplier = 2;
         }
         Multimap<Holder<Attribute>, AttributeModifier> attributeMap = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeMap.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeMap.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.15 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         AttributeModifier value = new AttributeModifier(id, -0.3 * 1 / multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
         attributeMap.put(AttributeRegistry.HOLY_SPELL_POWER, value);
         attributeMap.put(AttributeRegistry.HOLY_MAGIC_RESIST, value);

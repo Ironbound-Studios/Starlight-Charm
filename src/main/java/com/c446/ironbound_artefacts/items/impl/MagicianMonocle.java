@@ -45,12 +45,12 @@ public class MagicianMonocle extends UserDependantCurios {
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
-        int multiplier = 1;
+        double multiplier = 1;
         if (canEntityUseItem(slotContext.entity())) {
             multiplier = 2;
         }
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeModifier.put(AttributeRegistry.SPELL_POWER, new AttributeModifier(IronboundArtefact.prefix("magicians_monocle"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.15 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         return attributeModifier;
     }
@@ -58,7 +58,8 @@ public class MagicianMonocle extends UserDependantCurios {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip1"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip2"));
         var affinity = AffinityData.getAffinityData(stack);
         var spell = affinity.getSpell();
         if (!spell.equals(SpellRegistry.none())) {
@@ -84,7 +85,7 @@ public class MagicianMonocle extends UserDependantCurios {
 //            ComponentList.add(new AffinityData(SpellRegistry.HASTE_SPELL.get().getSpellId(), 3));
 //            copy.set(ComponentRegistry.AFFINITY_COMPONENT, ComponentList);
 
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.SCULK_TENTACLES_SPELL.get().getSpellId(), 7));
+            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.SCULK_TENTACLES_SPELL.get().getSpellId(), 3));
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         } else {
             var copy = stack.copy();

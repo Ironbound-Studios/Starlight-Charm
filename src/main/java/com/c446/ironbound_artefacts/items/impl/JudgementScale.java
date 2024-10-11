@@ -45,7 +45,8 @@ public class JudgementScale extends UserDependantCurios {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.judgement_scale.tooltip"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.judgement_scale.tooltip1"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.judgement_scale.tooltip2"));
         var affinity = AffinityData.getAffinityData(stack);
         var spell = affinity.getSpell();
         if (!spell.equals(SpellRegistry.none())) {
