@@ -9,7 +9,12 @@ import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.events.PlayerSummonsCreature;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
+import io.redspace.ironsspellbooks.api.magic.MagicHelper;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
+import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
+import io.redspace.ironsspellbooks.command.CreateImbuedSwordCommand;
+import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
@@ -34,6 +39,7 @@ import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -56,15 +62,25 @@ public class ServerEvents {
             });
 
             if (player.getMainHandItem().is(STAFF_OF_POWER)) {
-                boost.addAndGet(AffinityData.getAffinityData(player.getMainHandItem()).bonus());
+                Arrays.stream(ISpellContainer.get(event.getEntity().getMainHandItem()).getAllSpells()).forEach(spell -> {if (spell.getSpell() instanceof )});
             }
-            if (player.getOffhandItem().is(STAFF_OF_POWER)){
+            else if (player.getOffhandItem().is(STAFF_OF_POWER)) {
                 boost.addAndGet(AffinityData.getAffinityData(player.getOffhandItem()).bonus());
+            }
+
+            if (boost.get() > 2) {
+                boost.set(2);
             }
             event.setLevel(event.getLevel() + boost.get());
         }
     }
 
+    @SubscribeEvent
+    public static void onServerStart(net.neoforged.neoforge.event.server.ServerStartedEvent event) {
+        if (!(ServerConfigs.IMBUE_WHITELIST_ITEMS.contains(STAFF_OF_POWER.get()))) {
+            ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
+        }
+    }
 
     @SubscribeEvent
     public static void onEntityDamaged(LivingDamageEvent.Post event) {

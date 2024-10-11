@@ -6,12 +6,14 @@ import io.redspace.ironsspellbooks.api.item.weapons.ExtendedSwordItem;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellDataRegistryHolder;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.item.UniqueSpellBook;
 import io.redspace.ironsspellbooks.item.curios.AffinityRing;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.item.weapons.StaffItem;
+import io.redspace.ironsspellbooks.item.weapons.StaffOfTheNines;
 import io.redspace.ironsspellbooks.item.weapons.StaffTier;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
@@ -44,10 +46,9 @@ public class ItemRegistry {
 //    public static final DeferredHolder<Item, MagicianMonocle> MAGICIANS_MONOCLE;
 //    public static final DeferredHolder<Item, MagicianMonocle> MAGICIANS_MONOCLE;
 
-    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(10,2,
-            new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.4, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-            new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-            new AttributeContainer(AttributeRegistry.CAST_TIME_REDUCTION, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE )
+    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(10, 2,
+            new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+            new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)
     );
 
     static {
@@ -71,16 +72,7 @@ public class ItemRegistry {
         STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> {
             return new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER)));
         });
-/*
-     public static final DeferredHolder<Item, Item> EVOKER_SPELL_BOOK = ITEMS.register("evoker_spell_book", () -> new UniqueSpellBook(
-            new SpellDataRegistryHolder[]{
-                    new SpellDataRegistryHolder(SpellRegistry.FANG_STRIKE_SPELL, 6),
-                    new SpellDataRegistryHolder(SpellRegistry.FANG_WARD_SPELL, 4),
-                    new SpellDataRegistryHolder(SpellRegistry.SUMMON_VEX_SPELL, 4)},
-            7).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.EVOCATION_SPELL_POWER, .10, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE))
-    );
-*
-* */
+
         ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new UniqueSpellBook(
                 new SpellDataRegistryHolder[]{
                         new SpellDataRegistryHolder(SpellRegistry.FIREBALL_SPELL, 5),
