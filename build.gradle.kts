@@ -14,6 +14,7 @@ val neoVersion: String by project
 val neoVersionRange: String by project
 val loaderVersionRange: String by project
 
+
 val modId: String by project
 val modName: String by project
 val modLicense: String by project
@@ -23,14 +24,15 @@ val modAuthors: String by project
 val modDescription: String by project
 
 val rhino_version: String by project
-val ironsSpellbooksVersion: String by project
-val ironsSpellbooksFileId: String by project
+val irons_spells_version: String by project
 val kubejsVersion: String by project
+val player_animator_version: String by project
 
 repositories {
     mavenLocal()
     maven("https://maven.saps.dev/minecraft")
     maven("https://code.redspace.io/releases")
+    maven("https://code.redspace.io/snapshots")
     maven("https://maven.kosmx.dev/")
     maven("https://www.cursemaven.com")
     maven {
@@ -102,7 +104,7 @@ of(21).also { java.toolchain.languageVersion = it }
 
 dependencies {
     //implementation("io.redspace:irons_spellbooks:$ironsSpellbooksVersion")
-    runtimeOnly("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.21")
+    runtimeOnly("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
     implementation("curse.maven:adorned-1036809:5546365") // curios-neoforge-9.0.5+1.21.0.jar
     runtimeOnly("curse.maven:caelus-308989:5442975") // caelus-neoforge-7.0.0+1.21.jar
     implementation("curse.maven:geckolib-388172:5605715") // geckolib-neoforge-1.21-4.5.8.jar
@@ -111,7 +113,7 @@ dependencies {
     implementation("curse.maven:apothic-attributes-898963:5530502")
     implementation("curse.maven:placebo-283644:5547234")
 //    runtimeOnly("curse.maven:probejs-585406:5536459")
-    implementation(files("C:/Users/cleme/OneDrive/Bureau/New folder/IDK/IronboundArtefacts/src/CUSTOM-BUILD_irons_spellbooks-1.21-3.4.3.jar"))
+    implementation("io.redspace:irons_spellbooks:${irons_spells_version}")
     // MAIN COMPUTER : "C:/Users/cleme/OneDrive/Bureau/New folder/IDK/IronboundArtefacts/src/CUSTOM-BUILD_irons_spellbooks-1.21-3.4.3.jar"
     // SEC COMPUTER : C:/Users/cleme/Desktop/IronboundArtefacts/src/CUSTOM-BUILD_irons_spellbooks-1.21-3.4.3.jar
 
@@ -134,7 +136,7 @@ tasks {
             "mod_version" to modVersion,
             "mod_authors" to modAuthors,
             "mod_description" to modDescription,
-            "irons_spellbooks_version" to ironsSpellbooksVersion,
+            "irons_spellbooks_version" to irons_spells_version,
             "kubejs_version" to kubejsVersion
         )
 
