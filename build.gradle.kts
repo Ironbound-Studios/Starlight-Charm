@@ -26,6 +26,7 @@ val modDescription: String by project
 val rhino_version: String by project
 val irons_spells_version: String by project
 val kubejsVersion: String by project
+val player_animator_version: String by project
 
 repositories {
     mavenLocal()
@@ -103,7 +104,7 @@ of(21).also { java.toolchain.languageVersion = it }
 
 dependencies {
     //implementation("io.redspace:irons_spellbooks:$ironsSpellbooksVersion")
-    runtimeOnly("dev.kosmx.player-anim:player-animation-lib-forge:1.0.2-rc1+1.21")
+    runtimeOnly("dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}")
     implementation("curse.maven:adorned-1036809:5546365") // curios-neoforge-9.0.5+1.21.0.jar
     runtimeOnly("curse.maven:caelus-308989:5442975") // caelus-neoforge-7.0.0+1.21.jar
     implementation("curse.maven:geckolib-388172:5605715") // geckolib-neoforge-1.21-4.5.8.jar
