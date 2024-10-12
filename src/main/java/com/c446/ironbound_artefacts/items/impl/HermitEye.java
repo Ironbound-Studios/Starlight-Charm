@@ -7,6 +7,7 @@ import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
+import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.util.MinecraftInstanceHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -15,27 +16,29 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
-import java.util.Objects;
 
-public class DevilsFinger extends UserDependantCurios {
+public class HermitEye extends UserDependantCurios {
     private boolean canUse = false;
 
-    public DevilsFinger(Properties p) {
+    public HermitEye(Properties p) {
         super(p);
     }
 
     @Override
     public boolean canEntityUseItem(Entity entity) {
         if (entity instanceof Player player) {
-            canUse = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ACE) || entity.getName().getString().equals("Dev"));
+            canUse = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMADHE) || player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON));
             return canUse;
         }
         return false;
@@ -43,8 +46,8 @@ public class DevilsFinger extends UserDependantCurios {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.devils_finger.tooltip1"));
-        lines.add(Component.translatable("item.ironbounds_artefacts.devils_finger.tooltip2").withStyle(ChatFormatting.ITALIC));
+        lines.add(Component.translatable("item.ironbounds_artefacts.hermit_amulet.tooltip1"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.hermit_amulet.tooltip2").withStyle(ChatFormatting.ITALIC));
         var affinity = AffinityData.getAffinityData(stack);
         var spell = affinity.getSpell();
         if (!spell.equals(SpellRegistry.none())) {
@@ -78,15 +81,15 @@ public class DevilsFinger extends UserDependantCurios {
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
-        int multiplier = 1;
-        if (canEntityUseItem(slotContext.entity())) {
-            multiplier = 2;
-        }
         Multimap<Holder<Attribute>, AttributeModifier> attributeMap = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeMap.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.15 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        AttributeModifier value = new AttributeModifier(id, -0.3 * 1 / multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
-        attributeMap.put(AttributeRegistry.HOLY_SPELL_POWER, value);
-        attributeMap.put(AttributeRegistry.HOLY_MAGIC_RESIST, value);
+        double multiplier = 1;
+        if (slotContext.entity() != null) {
+            multiplier = Math.max(0, (40 - slotContext.entity().getAttributeValue(Attributes.ARMOR) - slotContext.entity().getAttributeValue(Attributes.ARMOR_TOUGHNESS)) / 10);
+            if (canEntityUseItem(slotContext.entity())) {
+                multiplier *= 2;
+            }
+            attributeMap.put(AttributeRegistry.MANA_REGEN, new AttributeModifier(id, 0.125 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        }
         return attributeMap;
     }
 }
