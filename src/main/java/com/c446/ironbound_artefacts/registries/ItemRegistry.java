@@ -1,19 +1,12 @@
 package com.c446.ironbound_artefacts.registries;
 
 import com.c446.ironbound_artefacts.items.impl.*;
-import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.item.weapons.ExtendedSwordItem;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
-import io.redspace.ironsspellbooks.api.registry.SpellDataRegistryHolder;
-import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
-import io.redspace.ironsspellbooks.item.SpellBook;
-import io.redspace.ironsspellbooks.item.UniqueSpellBook;
-import io.redspace.ironsspellbooks.item.curios.AffinityRing;
+import io.redspace.ironsspellbooks.item.SpellSlotUpgradeItem;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
-import io.redspace.ironsspellbooks.item.weapons.StaffItem;
 import io.redspace.ironsspellbooks.item.weapons.StaffTier;
-import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -21,9 +14,6 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.minecraft.world.item.Rarity;
-import org.w3c.dom.Attr;
-
-import java.util.ArrayList;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 
@@ -36,18 +26,17 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, LichCrown> LICH_CROWN;
     public static final DeferredHolder<Item, LichHand> LICH_HAND;
     public static final DeferredHolder<Item, StaffOfPower> STAFF_OF_POWER;
-//    public static final DeferredHolder<Item, DeathAmulet> HERMIT_EYE;
+    public static final DeferredHolder<Item, HermitEye> HERMIT_EYE;
 
 
     public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK;
-    //    public static final DeferredHolder<Item, MagicianMonocle> MAGICIANS_MONOCLE;
-//    public static final DeferredHolder<Item, MagicianMonocle> MAGICIANS_MONOCLE;
-//    public static final DeferredHolder<Item, MagicianMonocle> MAGICIANS_MONOCLE;
+    public static final DeferredHolder<Item, Item> GREATER_SPELL_SLOT_UPGRADE;
 
-    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(10, 2,
+    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, 1,
             new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-            new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_VALUE)
+            new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)
     );
+
 
     static {
 
@@ -64,15 +53,13 @@ public class ItemRegistry {
         /*TAR*/
         LICH_HAND = ITEMS.register("strength_hand", () -> new LichHand(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
         /*AMA*/
-        //HERMIT_EYE = ITEMS.register("hermit_eye", () -> new DeathAmulet(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
+        HERMIT_EYE = ITEMS.register("hermit_eye", () -> new HermitEye(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
 
+        GREATER_SPELL_SLOT_UPGRADE = ITEMS.register("greater_spell_slot_upgrade", () -> {return new SpellSlotUpgradeItem(15);});
 
-        STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> {
-            return new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER)));
-        });
+        STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> {return new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER)));});
 
-        ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(
-                13).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
+        ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(1).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
 
    }
 

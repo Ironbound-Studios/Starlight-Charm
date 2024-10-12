@@ -53,6 +53,7 @@ public class IronboundArtefact {
             CONTRIBUTOR_LIST.add(ENDER);
             CONTRIBUTOR_LIST.add(IRON);
             CONTRIBUTOR_LIST.add(TAR);
+            CONTRIBUTOR_LIST.add(TOMATO);
             CONTRIBUTOR_LIST.add(THEKILLAGER);
         }
     }

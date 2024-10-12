@@ -56,6 +56,10 @@ public class ModSetup {
                             entries.accept(ItemRegistry.JUDGEMENT_SCALE.get());
                             entries.accept(ItemRegistry.LICH_HAND.get());
                             entries.accept(ItemRegistry.LICH_CROWN.get());
+                            entries.accept(ItemRegistry.HERMIT_EYE.get());
+                            entries.accept(ItemRegistry.STAFF_OF_POWER.get());
+                            entries.accept(ItemRegistry.GREATER_SPELL_SLOT_UPGRADE.get());
+
                             entries.accept(ItemRegistry.ARCHMAGE_SPELLBOOK.get());
                         })
                         .build()
