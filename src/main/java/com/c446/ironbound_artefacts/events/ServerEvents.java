@@ -9,7 +9,7 @@ import com.c446.ironbound_artefacts.registries.IronboundDamageSources;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.api.events.CounterSpellEvent;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
-import io.redspace.ironsspellbooks.api.events.PlayerSummonsCreature;
+import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.magic.MagicHelper;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
@@ -138,7 +138,7 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onSummoningThings(PlayerSummonsCreature event) {
+    public static void onSummoningThings(SpellSummonEvent event) {
         var spell = SpellRegistry.getSpell(event.getSpellId());
         LivingEntity player = event.getCaster();
         var multiplier = spell.getSpellPower(event.getSpellLevel(), player);
@@ -157,7 +157,7 @@ public class ServerEvents {
         }
     }
 
-    private static void equipCreatureBasedOnQuality(PlayerSummonsCreature event, int quality) {
+    private static void equipCreatureBasedOnQuality(SpellSummonEvent event, int quality) {
         Mob creature = (Mob) event.getCreature();
 
         // Equip the creature based on quality value
