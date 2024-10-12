@@ -38,7 +38,7 @@ public class HermitEye extends UserDependantCurios {
     @Override
     public boolean canEntityUseItem(Entity entity) {
         if (entity instanceof Player player) {
-            canUse = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMADHE) || player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON));
+            canUse = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMADHE) || player.getName().getString().equals("Dev"));
             return canUse;
         }
         return false;
