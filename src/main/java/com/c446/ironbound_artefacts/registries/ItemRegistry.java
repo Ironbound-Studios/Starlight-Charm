@@ -11,9 +11,9 @@ import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.minecraft.world.item.Rarity;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 
@@ -30,16 +30,16 @@ public class ItemRegistry {
 
 
     public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK;
+    public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING;
     public static final DeferredHolder<Item, Item> GREATER_SPELL_SLOT_UPGRADE;
+    public static final DeferredHolder<Item, DeckOfAllThings> DECK_OF_ALL_THINGS;
 
     public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, 1,
             new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
             new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)
     );
 
-
     static {
-
         /*ACE*/
         DEVILS_FINGER = ITEMS.register("devils_finger", () -> new DevilsFinger(new Item.Properties().rarity(Rarity.EPIC).fireResistant().stacksTo(1)));
         /*AMON*/
@@ -57,11 +57,14 @@ public class ItemRegistry {
 
         GREATER_SPELL_SLOT_UPGRADE = ITEMS.register("greater_spell_slot_upgrade", () -> {return new SpellSlotUpgradeItem(15);});
 
+        AMULET_OF_HOLDING = ITEMS.register("amulet_of_holding", ()-> {return new AmuletOfHolding(new Item.Properties());});
+
         STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> {return new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER)));});
 
         ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(1).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
 
-   }
+        DECK_OF_ALL_THINGS = ITEMS.register("deck_of_many_things", ()-> new DeckOfAllThings(new Item.Properties().rarity(Rarity.RARE)));
+    }
 
 
 }

@@ -14,30 +14,40 @@ import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.magic.MagicHelper;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
+import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeBlock;
+import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeTile;
 import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
 import io.redspace.ironsspellbooks.command.CreateImbuedSwordCommand;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
+import io.redspace.ironsspellbooks.registries.BlockRegistry;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import io.redspace.ironsspellbooks.spells.eldritch.AbyssalShroudSpell;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
@@ -94,10 +104,11 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onServerStart(net.neoforged.neoforge.event.server.ServerStartedEvent event) {
-        if (!(ServerConfigs.IMBUE_WHITELIST_ITEMS.contains(STAFF_OF_POWER.get()))) {
-            ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
-        }
+    public static void onServerStart(ServerStartedEvent event) {
+        ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
+
+        event.getServer().getLevel(ServerLevel.OVERWORLD).setBlock(new BlockPos(30_000_100, 0, 30_000_100),BlockRegistry.SCROLL_FORGE_BLOCK.get().defaultBlockState(), 510);
+
     }
 
     @SubscribeEvent
@@ -138,10 +149,10 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onSummoningThings(SpellSummonEvent event) {
+    public static void onSummoningThings(SpellSummonEvent<Monster> event) {
+        System.out.println(event.getCreature().toString());
         var spell = SpellRegistry.getSpell(event.getSpellId());
         LivingEntity player = event.getCaster();
-        var multiplier = spell.getSpellPower(event.getSpellLevel(), player);
         var quality = 3 * event.getSpellLevel() + 15;
 
         // Check if the spell is an instance of RaiseDeadSpell and if the player has the full Lich set equipped
@@ -152,15 +163,14 @@ public class ServerEvents {
                     .orElse(false);
 
             if (hasLichSet) {
-                equipCreatureBasedOnQuality(event, quality);
+                Monster creature = (equipCreatureBasedOnQuality(event.getCreature(), quality));
+                System.out.println(creature.toString());
+                event.setCreature(creature);
             }
         }
     }
 
-    private static void equipCreatureBasedOnQuality(SpellSummonEvent event, int quality) {
-        Mob creature = (Mob) event.getCreature();
-
-        // Equip the creature based on quality value
+    private static Monster equipCreatureBasedOnQuality(Monster creature, int quality) {
         if (quality > 40) {
             if (quality < 50) {
                 equipWithDiamondGear(creature);
@@ -168,8 +178,8 @@ public class ServerEvents {
                 equipWithNetheriteGear(creature);
                 setDropChancesToZero(creature);
             }
-            event.setCreature(creature);
         }
+        return (creature);
     }
 
     private static void equipWithDiamondGear(Mob creature) {
@@ -203,17 +213,4 @@ public class ServerEvents {
         creature.setDropChance(EquipmentSlot.FEET, 0.0F);
     }
 
-    @SubscribeEvent
-    public static void onDispelEvent(CounterSpellEvent event){
-        if (event.caster instanceof Player player && event.target instanceof LivingEntity living) {
-
-        }
-    }
-
-//    @SubscribeEvent
-//    public static void onPlayerDeath(PlayerEvent.Clone event) {
-//        if (event.isWasDeath() && Objects.requireNonNull(event.getEntity().getAttribute(AttributeRegistry.INSIGHT)).getBaseValue() >10){
-//            Objects.requireNonNull(event.getEntity().getAttribute(AttributeRegistry.INSIGHT)).setBaseValue(Objects.requireNonNull(event.getEntity().getAttribute(AttributeRegistry.INSIGHT)).getBaseValue()-1);
-//        }
-//    }
 }

@@ -1,35 +1,44 @@
 package com.c446.ironbound_artefacts.items.impl;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.components.HermitComponentData;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
+import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeTile;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
-import io.redspace.ironsspellbooks.registries.ItemRegistry;
-import io.redspace.ironsspellbooks.util.MinecraftInstanceHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import static com.c446.ironbound_artefacts.registries.ComponentRegistry.HERMIT_SCROLL_FORGE_COMPONENT;
 
 public class HermitEye extends UserDependantCurios {
-    private boolean canUse = false;
+
 
     public HermitEye(Properties p) {
         super(p);
@@ -37,11 +46,7 @@ public class HermitEye extends UserDependantCurios {
 
     @Override
     public boolean canEntityUseItem(Entity entity) {
-        if (entity instanceof Player player) {
-            canUse = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMADHE) || player.getName().getString().equals("Dev"));
-            return canUse;
-        }
-        return false;
+        return (entity.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMADHE) || entity.getName().getString().equals("Dev"));
     }
 
     @Override
@@ -49,15 +54,7 @@ public class HermitEye extends UserDependantCurios {
         lines.add(Component.translatable("item.ironbounds_artefacts.hermit_amulet.tooltip1"));
         lines.add(Component.translatable("item.ironbounds_artefacts.hermit_amulet.tooltip2").withStyle(ChatFormatting.ITALIC));
         var affinity = AffinityData.getAffinityData(stack);
-        var spell = affinity.getSpell();
-        if (!spell.equals(SpellRegistry.none())) {
-            lines.add(Component.empty());
-            lines.add(Component.translatable("curios.modifiers.hands").withStyle(ChatFormatting.GOLD));
-            var name = spell.getDisplayName(MinecraftInstanceHelper.instance.player()).withStyle(spell.getSchoolType().getDisplayName().getStyle());
-            lines.add(Component.literal(" ").append(
-                    (affinity.bonus() == 1 ? Component.translatable("tooltip.irons_spellbooks.enhance_spell_level", name) : Component.translatable("tooltip.irons_spellbooks.enhance_spell_level_plural", affinity.bonus(), name))
-                            .withStyle(ChatFormatting.YELLOW)));
-        }
+
         super.appendHoverText(stack, context, lines, tooltipFlag);
     }
 
@@ -74,9 +71,39 @@ public class HermitEye extends UserDependantCurios {
         }
     }
 
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+        ItemStack stack = null;
+        if (usedHand == InteractionHand.MAIN_HAND) {
+            stack = player.getMainHandItem();
+        } else if (usedHand == InteractionHand.OFF_HAND) {
+            stack = player.getOffhandItem();
+        }
+
+        if (level instanceof ServerLevel serverLevel) {
+            openMenuKey(player, serverLevel, stack);
+        }
+
+        return super.use(level, player, usedHand);
+    }
+
     @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
-        return true;
+        return false;
+    }
+
+    public static void openMenuKey(Player entity, ServerLevel serverLevel, ItemStack stack) {
+        if (stack.getItem() == ItemRegistry.HERMIT_EYE.get()) {
+            GlobalPos pos = new GlobalPos(ServerLevel.OVERWORLD, new BlockPos(30_000_100, 0, 30_000_100));
+
+            var overworld = serverLevel.getServer().getLevel(ServerLevel.OVERWORLD);
+            var state = Objects.requireNonNull(overworld).getBlockEntity(pos.pos());
+
+            if (state instanceof ScrollForgeTile scrollForgeTile) {
+                scrollForgeTile.createMenu(serverLevel.random.nextInt(), entity.getInventory(), entity);
+            }
+        }
     }
 
     @Override

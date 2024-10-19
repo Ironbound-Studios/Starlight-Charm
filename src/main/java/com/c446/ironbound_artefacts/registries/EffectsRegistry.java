@@ -1,13 +1,9 @@
 package com.c446.ironbound_artefacts.registries;
 
-import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.effects.IronboundMobEffect;
-import io.redspace.ironsspellbooks.effect.PlanarSightEffect;
-import io.redspace.ironsspellbooks.registries.PotionRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.Mob;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 

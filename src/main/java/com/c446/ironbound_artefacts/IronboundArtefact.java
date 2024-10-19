@@ -36,13 +36,12 @@ public class IronboundArtefact {
         public static final String AMADHE = "387aa6d4-f388-400f-b9c5-1514f238ceae";
         public static final String AMON = "2980a99e-8582-4f63-9b82-f7117bc8be2c";
         public static final String CATMOTH = "8330d120-2e4b-48c1-bfdc-8d4920dee119";
-
         public static final String ENDER = "6302e022-0de6-4254-bd2c-7c5cc7b27982";
         public static final String IRON = "c3adad79-e88a-4f15-bd61-c58766d725e9";
         public static final String TAR = "64d64b70-fde8-467e-ad70-271d5ddf26f6";
         public static final String THEKILLAGER = "0150f698-e592-43f5-b78f-b6d6d5755772";
 
-        public static final String Styly = "03d1d7ca-657f-45ad-a51b-1f5dc85b2f4c";
+        public static final String STYLY = "03d1d7ca-657f-45ad-a51b-1f5dc85b2f4c";
         public static final String TOMATO = "5ff3e718-e002-4c48-bdc2-c638477620e4";
 
         public static  ArrayList<String> CONTRIBUTOR_LIST = new ArrayList<>();
@@ -56,7 +55,7 @@ public class IronboundArtefact {
             CONTRIBUTOR_LIST.add(TAR);
             CONTRIBUTOR_LIST.add(TOMATO);
             CONTRIBUTOR_LIST.add(THEKILLAGER);
-            CONTRIBUTOR_LIST.add(Styly);
+            CONTRIBUTOR_LIST.add(STYLY);
         }
     }
 }
