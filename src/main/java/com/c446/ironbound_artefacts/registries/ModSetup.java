@@ -19,6 +19,8 @@ public class ModSetup {
         ItemRegistry.ITEMS.register(eventBus);
         AttributeRegistry.ATTRIBUTES.register(eventBus);
         EffectsRegistry.EFFECTS.register(eventBus);
+        CustomSpellRegistry.SPELLS.register(eventBus);
+
 
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);

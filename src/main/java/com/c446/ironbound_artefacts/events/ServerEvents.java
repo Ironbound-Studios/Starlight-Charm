@@ -10,6 +10,7 @@ import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.api.events.CounterSpellEvent;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
+import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.magic.MagicHelper;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
@@ -24,11 +25,14 @@ import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.registries.BlockRegistry;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
+import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import io.redspace.ironsspellbooks.spells.eldritch.AbyssalShroudSpell;
+import io.redspace.ironsspellbooks.spells.ender.TeleportSpell;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,9 +48,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -107,7 +114,7 @@ public class ServerEvents {
     public static void onServerStart(ServerStartedEvent event) {
         ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
 
-        event.getServer().getLevel(ServerLevel.OVERWORLD).setBlock(new BlockPos(30_000_100, 0, 30_000_100),BlockRegistry.SCROLL_FORGE_BLOCK.get().defaultBlockState(), 510);
+        event.getServer().getLevel(ServerLevel.OVERWORLD).setBlock(new BlockPos(30_000_100, 0, 30_000_100), BlockRegistry.SCROLL_FORGE_BLOCK.get().defaultBlockState(), 510);
 
     }
 
@@ -128,6 +135,33 @@ public class ServerEvents {
             if (living.tickCount % (40 / ((amplifier * 2 == 0) ? (1) : (amplifier * 2))) == 0) {
                 living.hurt(DamageSources.get(event.getEntity().level(), IronboundDamageSources.VOID_DAMAGE), 1);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void entityTriesTP(SpellTeleportEvent event) {
+        if (event.getEntity() instanceof LivingEntity living && living.hasEffect(EffectsRegistry.TIME_STOP)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onManaRegen(io.redspace.ironsspellbooks.api.events.ChangeManaEvent event) {
+        if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
+            event.setCanceled(true);
+        }
+    }
+
+    public static void onThrowItem(net.neoforged.neoforge.event.entity.item.ItemTossEvent event) {
+        if (event.getPlayer().hasEffect(EffectsRegistry.TIME_STOP)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onItemUse(PlayerInteractEvent.RightClickItem event){
+        if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
+            event.setCanceled(true);
         }
     }
 
