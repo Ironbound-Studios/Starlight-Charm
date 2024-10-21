@@ -86,7 +86,7 @@ public class TimeStopSpell extends AbstractSpell {
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
 
-        List<Entity> entityList = level.getEntities(entity, new AABB(0, 0, 0, 0, 0, 0).inflate(15 + 5 * getSpellPower(spellLevel, entity)));
+        List<Entity> entityList = level.getEntities(entity, new AABB(0, 0, 0, 0, 0, 0).inflate(15 + 2 * getSpellPower(spellLevel, entity)));
         for (Entity e : entityList) {
             if (e instanceof LivingEntity l && !(l.equals(entity))) {
                 l.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, this.getTickDuration(spellLevel, entity), 0, true, true));
