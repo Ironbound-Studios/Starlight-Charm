@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.NotNull;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
@@ -55,9 +56,8 @@ public class MagicianMonocle extends UserDependantCurios {
         return attributeModifier;
     }
 
-
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
+    public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> lines, @NotNull TooltipFlag tooltipFlag) {
         lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip1"));
         lines.add(Component.translatable("item.ironbounds_artefacts.magicians_monocle.tooltip2").withStyle(ChatFormatting.ITALIC));
         var affinity = AffinityData.getAffinityData(stack);
@@ -76,20 +76,10 @@ public class MagicianMonocle extends UserDependantCurios {
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (canEntityUseItem(slotContext.entity())) {
-           var copy = stack.copy();
-//            var ComponentList = new ArrayList<AffinityData>();
-//            ComponentList.add(new AffinityData(SpellRegistry.FIREBALL_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.LIGHTNING_BOLT_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.MAGIC_MISSILE_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.OAKSKIN_SPELL.get().getSpellId(), 3));
-//            ComponentList.add(new AffinityData(SpellRegistry.HASTE_SPELL.get().getSpellId(), 3));
-//            copy.set(ComponentRegistry.AFFINITY_COMPONENT, ComponentList);
-
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.SCULK_TENTACLES_SPELL.get().getSpellId(), 3));
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        } else {
             var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.none().getSpellId(), 0));
+
+
+
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         }
     }

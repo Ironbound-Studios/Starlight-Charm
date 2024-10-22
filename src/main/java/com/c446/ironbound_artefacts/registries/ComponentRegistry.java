@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.components.ClassLevelData;
 import com.c446.ironbound_artefacts.components.HermitComponentData;
 import io.netty.buffer.ByteBuf;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
@@ -32,6 +33,10 @@ public class ComponentRegistry {
             ByteBufCodecs.INT, HermitComponentData::invID,
             HermitComponentData::new
     );
+
+//    public static final StreamCodec<ByteBuf, ClassLevelData> CLASS_COMPONENT = StreamCodec.composite(
+//            ByteBufCodecs.STRING_UTF8
+//    )
 
     public static double Somme(int... ints) {
         double sum = 0;
