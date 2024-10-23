@@ -1,11 +1,10 @@
 package com.c446.ironbound_artefacts.events;
 
 
+import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.impl.ArchMageSpellBook;
 import com.c446.ironbound_artefacts.items.impl.StaffOfPower;
-import com.c446.ironbound_artefacts.registries.AttributeRegistry;
-import com.c446.ironbound_artefacts.registries.EffectsRegistry;
-import com.c446.ironbound_artefacts.registries.IronboundDamageSources;
+import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.api.events.CounterSpellEvent;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
@@ -17,15 +16,13 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeBlock;
 import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeTile;
+import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
 import io.redspace.ironsspellbooks.command.CreateImbuedSwordCommand;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
-import io.redspace.ironsspellbooks.registries.BlockRegistry;
-import io.redspace.ironsspellbooks.registries.ComponentRegistry;
-import io.redspace.ironsspellbooks.registries.EntityRegistry;
-import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
+import io.redspace.ironsspellbooks.registries.*;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import io.redspace.ironsspellbooks.spells.eldritch.AbyssalShroudSpell;
 import io.redspace.ironsspellbooks.spells.ender.TeleportSpell;
@@ -197,14 +194,25 @@ public class ServerEvents {
                     .orElse(false);
 
             if (hasLichSet) {
-                Monster creature = (equipCreatureBasedOnQuality(event.getCreature(), quality));
+                var canGetNetherite = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.TAR) || player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ENDER));
+                Monster creature = (equipCreatureBasedOnQuality(event.getCreature(), quality, canGetNetherite));
                 System.out.println(creature.toString());
                 event.setCreature(creature);
             }
         }
     }
 
-    private static Monster equipCreatureBasedOnQuality(Monster creature, int quality) {
+    @SubscribeEvent
+    public static void onCounterspell(CounterSpellEvent event){
+        if (event.target instanceof Player player && player.getData(DataAttachmentRegistry.MAGIC_DATA).isCasting()){
+            if (player.getData(DataAttachmentRegistry.MAGIC_DATA).getCastingSpellId().equals(CustomSpellRegistry.TIME_STOP.get().getSpellId())){
+                event.setCanceled(true);
+            }
+        }
+
+        }
+
+    private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {
         if (quality > 40) {
             if (quality < 50) {
                 equipWithDiamondGear(creature);
