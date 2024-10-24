@@ -60,10 +60,16 @@ public class ModSetup {
                             entries.accept(ItemRegistry.LICH_CROWN.get());
                             entries.accept(ItemRegistry.HERMIT_EYE.get());
 
-                            entries.accept(ItemRegistry.AMULET_OF_HOLDING.get());
                             entries.accept(ItemRegistry.GREATER_SPELL_SLOT_UPGRADE.get());
+                            entries.accept(ItemRegistry.AMULET_OF_HOLDING.get());
+                            entries.accept(ItemRegistry.DECK_OF_ALL_THINGS.get());
                             entries.accept(ItemRegistry.STAFF_OF_POWER.get());
                             entries.accept(ItemRegistry.ARCHMAGE_SPELLBOOK.get());
+
+                            entries.accept(ItemRegistry.WEAVE_HELMET.get());
+                            entries.accept(ItemRegistry.WEAVE_CHEST_PLATE.get());
+                            entries.accept(ItemRegistry.WEAVE_LEGGINGS.get());
+                            entries.accept(ItemRegistry.WEAVE_BOOTS.get());
                         })
                         .build()
         );

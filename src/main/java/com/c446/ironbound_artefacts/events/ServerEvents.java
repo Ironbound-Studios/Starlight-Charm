@@ -127,12 +127,6 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void tickEntity(EntityTickEvent.Post event) {
-        if (event.getEntity() instanceof LivingEntity living && living.hasEffect(EffectsRegistry.VOID_POISON)) {
-            int amplifier = Objects.requireNonNull(living.getEffect(EffectsRegistry.VOID_POISON)).getAmplifier();
-            if (living.tickCount % (40 / ((amplifier * 2 == 0) ? (1) : (amplifier * 2))) == 0) {
-                living.hurt(DamageSources.get(event.getEntity().level(), IronboundDamageSources.VOID_DAMAGE), 1);
-            }
-        }
     }
 
     @SubscribeEvent
@@ -156,7 +150,7 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onItemUse(PlayerInteractEvent.RightClickItem event){
+    public static void onItemUse(PlayerInteractEvent.RightClickItem event) {
         if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
             event.setCanceled(true);
         }
@@ -203,14 +197,14 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onCounterspell(CounterSpellEvent event){
-        if (event.target instanceof Player player && player.getData(DataAttachmentRegistry.MAGIC_DATA).isCasting()){
-            if (player.getData(DataAttachmentRegistry.MAGIC_DATA).getCastingSpellId().equals(CustomSpellRegistry.TIME_STOP.get().getSpellId())){
+    public static void onCounterspell(CounterSpellEvent event) {
+        if (event.target instanceof Player player && player.getData(DataAttachmentRegistry.MAGIC_DATA).isCasting()) {
+            if (player.getData(DataAttachmentRegistry.MAGIC_DATA).getCastingSpellId().equals(CustomSpellRegistry.TIME_STOP.get().getSpellId())) {
                 event.setCanceled(true);
             }
         }
 
-        }
+    }
 
     private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {
         if (quality > 40) {
