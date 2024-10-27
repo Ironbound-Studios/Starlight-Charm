@@ -1,12 +1,9 @@
 package com.c446.ironbound_artefacts.registries;
 
-import com.c446.ironbound_artefacts.TimeStopSpell;
-import io.redspace.ironsspellbooks.IronsSpellbooks;
+import com.c446.ironbound_artefacts.ironbound_spells.spells.TimeStopSpell;
+import com.c446.ironbound_artefacts.ironbound_spells.spells.WishSpell;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
@@ -17,6 +14,7 @@ public class CustomSpellRegistry {
     public static final DeferredRegister<AbstractSpell> SPELLS = DeferredRegister.create(SpellRegistry.REGISTRY, MODID);
 
     public static final Supplier<AbstractSpell> TIME_STOP;
+    public static final Supplier<AbstractSpell> WISH;
 
     private static Supplier<AbstractSpell> registerSpell(AbstractSpell spell) {
         return SPELLS.register(spell.getSpellName(), () -> spell);
@@ -24,6 +22,7 @@ public class CustomSpellRegistry {
 
     static{
         TIME_STOP = registerSpell(new TimeStopSpell());
+        WISH = registerSpell(new WishSpell());
     }
 
 }

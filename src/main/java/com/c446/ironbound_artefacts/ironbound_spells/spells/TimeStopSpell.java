@@ -1,23 +1,18 @@
-package com.c446.ironbound_artefacts;
+package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
-import com.c446.ironbound_artefacts.effects.TimeStopEffect;
+import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.effects.IronboundMobEffect;
 import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
-import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
-import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
-import io.redspace.ironsspellbooks.damage.SpellDamageSource;
-import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -26,10 +21,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Objects;
+
+import static com.c446.ironbound_artefacts.registries.AttributeRegistry.INSIGHT;
 
 @AutoSpellConfig
 public class TimeStopSpell extends AbstractSpell {
@@ -61,7 +57,7 @@ public class TimeStopSpell extends AbstractSpell {
 
 
     public int getTickDuration(int spellLevel, @NonNull LivingEntity caster) {
-        return (int) (5 * this.getSpellPower(spellLevel, caster));
+        return  (int) (spellLevel + caster.getAttributeValue(INSIGHT)*0.5);
     }
 
     @Override
@@ -84,17 +80,19 @@ public class TimeStopSpell extends AbstractSpell {
         return CastType.LONG;
     }
 
+    public float getAOE(int spellLevel, LivingEntity entity) {
+        return (15 + getSpellPower(spellLevel, entity) / 10);
+    }
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
 
-        List<Entity> entityList = level.getEntities(entity, new AABB(0, 0, 0, 0, 0, 0).inflate((15 + 2 * getSpellPower(spellLevel, entity))/5));
+        List<Entity> entityList = level.getEntities(entity, new AABB(0, 0, 0, 0, 0, 0).inflate(getAOE(spellLevel, entity)));
         for (Entity e : entityList) {
             if (e instanceof LivingEntity l && !(l.equals(entity))) {
-                l.addEffect(new MobEffectInstance((Holder<MobEffect>) EffectsRegistry.TIME_STOP, (int) (spellLevel*20+((int)entity.getAttributeValue(AttributeRegistry.INSIGHT)*0.25)), 0, true, true));
+                l.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, this.getTickDuration(spellLevel, entity), 0, true, true));
             }
         }
-
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 }

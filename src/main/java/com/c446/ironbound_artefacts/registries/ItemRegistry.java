@@ -68,17 +68,6 @@ public class ItemRegistry {
             )
     );
 
-
-
-
-
-
-
-
-
-
-
-
     public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, 1,
             new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
             new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)

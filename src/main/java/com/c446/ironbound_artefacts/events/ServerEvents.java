@@ -2,54 +2,31 @@ package com.c446.ironbound_artefacts.events;
 
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.items.impl.ArchMageSpellBook;
-import com.c446.ironbound_artefacts.items.impl.StaffOfPower;
 import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
-import io.redspace.ironsspellbooks.api.events.CounterSpellEvent;
 import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
-import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
-import io.redspace.ironsspellbooks.api.magic.MagicHelper;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
-import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeBlock;
-import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeTile;
-import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
-import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
-import io.redspace.ironsspellbooks.command.CreateImbuedSwordCommand;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
-import io.redspace.ironsspellbooks.damage.DamageSources;
-import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.registries.*;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
-import io.redspace.ironsspellbooks.spells.eldritch.AbyssalShroudSpell;
-import io.redspace.ironsspellbooks.spells.ender.TeleportSpell;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.Tags;
-import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -58,7 +35,6 @@ import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -157,6 +133,13 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
+    public static void onItemUseLeftClick(PlayerInteractEvent.LeftClickBlock event) {
+        if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
     public static void entityGoalChanges(LivingChangeTargetEvent event) {
         AtomicBoolean isCrownPresent = new AtomicBoolean(false);
         AtomicBoolean isHandPresent = new AtomicBoolean(false);
@@ -196,15 +179,7 @@ public class ServerEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void onCounterspell(CounterSpellEvent event) {
-        if (event.target instanceof Player player && player.getData(DataAttachmentRegistry.MAGIC_DATA).isCasting()) {
-            if (player.getData(DataAttachmentRegistry.MAGIC_DATA).getCastingSpellId().equals(CustomSpellRegistry.TIME_STOP.get().getSpellId())) {
-                event.setCanceled(true);
-            }
-        }
 
-    }
 
     private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {
         if (quality > 40) {

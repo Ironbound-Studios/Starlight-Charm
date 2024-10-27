@@ -50,7 +50,7 @@ public class ModSetup {
                 CreativeModeTab.builder()
                         .withTabsBefore(CreativeTabRegistry.EQUIPMENT_TAB.getKey())
                         .title(Component.translatable("tab.ironbounds_artefacts.curios"))
-                        .icon(() -> new ItemStack(ItemRegistry.DEVILS_FINGER))
+                        .icon(() -> new ItemStack(ItemRegistry.LICH_HAND))
                         .displayItems((enabledFeatures, entries) -> {
                             entries.accept(ItemRegistry.DEATH_AMULET.get());
                             entries.accept(ItemRegistry.DEVILS_FINGER.get());
