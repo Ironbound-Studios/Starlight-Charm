@@ -97,11 +97,11 @@ public class WishSpell extends AbstractSpell {
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 120, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(offHand);
         }
-        else if (offHand.has(ComponentRegistry.SPELL_CONTAINER)) {
-            var spells = offHand.get(ComponentRegistry.SPELL_CONTAINER).getActiveSpells();
-            var num = level.random.nextIntBetweenInclusive(0, spells.size());
-            spells.get(num).getSpell().castSpell(level, spells.get(num).getLevel(), (ServerPlayer) entity, castSource, true);
-        }
+//        else if (offHand.has(ComponentRegistry.SPELL_CONTAINER)) {
+//            var spells = offHand.get(ComponentRegistry.SPELL_CONTAINER).getActiveSpells();
+//            var num = level.random.nextIntBetweenInclusive(0, spells.size());
+//            spells.get(num).getSpell().castSpell(level, spells.get(num).getLevel(), (ServerPlayer) entity, castSource, true);
+//        }
         else {
             AtomicBoolean isFocus = new AtomicBoolean(false);
             ArrayList<AbstractSpell> schoolSpells;

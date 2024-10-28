@@ -9,6 +9,7 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.spells.fire.FireballSpell;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -50,14 +51,14 @@ public class TimeStopSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks(getTickDuration(spellLevel, caster), 1)),
-                Component.translatable("ui.irons_spellbooks.radius", Utils.stringTruncation(15 + 5 * getSpellPower(spellLevel, caster), 1))
+                Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks((float) getTickDuration(spellLevel, caster), 1)),
+                Component.translatable("ui.irons_spellbooks.radius", Utils.stringTruncation(this.getAOE(spellLevel, caster), 1))
         );
     }
 
 
-    public int getTickDuration(int spellLevel, @NonNull LivingEntity caster) {
-        return  (int) (spellLevel + caster.getAttributeValue(INSIGHT)*0.5);
+    public double getTickDuration(int spellLevel, @NonNull LivingEntity caster) {
+        return  20*(spellLevel + caster.getAttributeValue(INSIGHT)*0.5);
     }
 
     @Override
@@ -81,7 +82,7 @@ public class TimeStopSpell extends AbstractSpell {
     }
 
     public float getAOE(int spellLevel, LivingEntity entity) {
-        return (15 + getSpellPower(spellLevel, entity) / 10);
+        return (10*spellLevel + getSpellPower(spellLevel, entity));
     }
 
     @Override
@@ -90,7 +91,7 @@ public class TimeStopSpell extends AbstractSpell {
         List<Entity> entityList = level.getEntities(entity, new AABB(0, 0, 0, 0, 0, 0).inflate(getAOE(spellLevel, entity)));
         for (Entity e : entityList) {
             if (e instanceof LivingEntity l && !(l.equals(entity))) {
-                l.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, this.getTickDuration(spellLevel, entity), 0, true, true));
+                l.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, (int) (this.getTickDuration(spellLevel, entity)), 0, true, true));
             }
         }
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
