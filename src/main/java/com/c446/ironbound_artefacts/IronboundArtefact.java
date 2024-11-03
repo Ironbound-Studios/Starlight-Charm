@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Mod(IronboundArtefact.MODID)
 public class IronboundArtefact {
     public static final String MODID = "ironbounds_artefacts";
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static final Logger LOGGER = LogManager.getLogger();
     public IronboundArtefact(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
 //        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);

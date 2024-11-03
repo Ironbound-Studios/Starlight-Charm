@@ -6,10 +6,16 @@ import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.HashMultimap;
 import io.redspace.ironsspellbooks.api.events.*;
+import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
+import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
+import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
+import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
+import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.registries.*;
+import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -38,6 +44,7 @@ import top.theillusivec4.curios.api.SlotResult;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -90,8 +97,6 @@ public class ServerEvents {
     public static void onServerStart(ServerStartedEvent event) {
         ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
 
-        event.getServer().getLevel(ServerLevel.OVERWORLD).setBlock(new BlockPos(30_000_100, 0, 30_000_100), BlockRegistry.SCROLL_FORGE_BLOCK.get().defaultBlockState(), 510);
-
     }
 
     @SubscribeEvent
@@ -122,6 +127,7 @@ public class ServerEvents {
         }
     }
 
+    @SubscribeEvent
     public static void onThrowItem(net.neoforged.neoforge.event.entity.item.ItemTossEvent event) {
         if (event.getPlayer().hasEffect(EffectsRegistry.TIME_STOP)) {
             event.setCanceled(true);
@@ -161,8 +167,6 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onSummoningThings(SpellSummonEvent<Monster> event) {
-
-
         System.out.println(event.getCreature().toString());
         var spell = SpellRegistry.getSpell(event.getSpellId());
         LivingEntity player = event.getCaster();
@@ -193,6 +197,33 @@ public class ServerEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void getBonusSpells(SpellSelectionManager.SpellSelectionEvent event) {
+        var player = event.getEntity();
+        CuriosApi.getCuriosInventory(player).ifPresent(
+                a -> {
+                    var list = a.findCurios(item -> item != null && item.has(ComponentRegistry.SPELL_CONTAINER));
+                    for (var i : list) {
+                        var spellContainer = i.stack() != null ? i.stack().get(ComponentRegistry.SPELL_CONTAINER) : null;
+                        if (spellContainer != null) {
+                            var spells = spellContainer.getAllSpells();
+                            if (spells != null && !Arrays.stream(spells).toList().isEmpty()) {
+                                for (var spell : spells) {
+                                    if (spell == null || spell.getSpell() == null) {
+                                        return;
+                                    }
+                                    event.addSelectionOption(
+                                            new SpellData(spell.getSpell(), spell.getLevel(), true),
+                                            i.stack().getItem().getDescriptionId(),
+                                            spell.index()
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+        );
+    }
 
     private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {
         if (quality > 40) {
@@ -237,8 +268,9 @@ public class ServerEvents {
         creature.setDropChance(EquipmentSlot.FEET, 0.0F);
     }
 
-    public static void onCast(SpellPreCastEvent preCastEvent){
-        if (preCastEvent.getEntity().hasEffect(EffectsRegistry.TIME_STOP)){
+    @SubscribeEvent
+    public static void onCast(SpellPreCastEvent preCastEvent) {
+        if (preCastEvent.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
             preCastEvent.setCanceled(true);
         }
     }

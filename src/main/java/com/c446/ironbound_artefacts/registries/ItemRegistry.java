@@ -37,12 +37,13 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, LichHand> LICH_HAND;
     public static final DeferredHolder<Item, StaffOfPower> STAFF_OF_POWER;
     public static final DeferredHolder<Item, HermitEye> HERMIT_EYE;
+    public static final DeferredHolder<Item, LoversStopwatch> STOPWATCH;
 
 
     public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK;
     public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING;
     public static final DeferredHolder<Item, Item> GREATER_SPELL_SLOT_UPGRADE;
-    public static final DeferredHolder<Item, DeckOfAllThings> DECK_OF_ALL_THINGS;
+    //public static final DeferredHolder<Item, DeckOfAllThings> DECK_OF_ALL_THINGS;
 
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_HELMET = ITEMS.register("arcane_weave_helmet",
             () -> new ArcaneWeaveItem(Type.HELMET,
@@ -88,6 +89,7 @@ public class ItemRegistry {
         LICH_HAND = ITEMS.register("strength_hand", () -> new LichHand(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
         /*AMA*/
         HERMIT_EYE = ITEMS.register("hermit_eye", () -> new HermitEye(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
+        STOPWATCH = ITEMS.register("stopwatch", () -> new LoversStopwatch(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
 
         GREATER_SPELL_SLOT_UPGRADE = ITEMS.register("greater_spell_slot_upgrade", () -> {
             return new SpellSlotUpgradeItem(15);
@@ -103,7 +105,7 @@ public class ItemRegistry {
 
         ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(1).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
 
-        DECK_OF_ALL_THINGS = ITEMS.register("deck_of_many_things", () -> new DeckOfAllThings(new Item.Properties().rarity(Rarity.RARE)));
+        //DECK_OF_ALL_THINGS = ITEMS.register("deck_of_many_things", () -> new DeckOfAllThings(new Item.Properties().rarity(Rarity.RARE)));
     }
 
 

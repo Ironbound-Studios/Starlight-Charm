@@ -3,12 +3,17 @@ package com.c446.ironbound_artefacts.items.impl;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.components.HermitComponentData;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
+import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.api.registry.SpellDataRegistryHolder;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.SpellData;
+import io.redspace.ironsspellbooks.api.spells.SpellSlot;
 import io.redspace.ironsspellbooks.block.scroll_forge.ScrollForgeTile;
+import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -62,11 +67,15 @@ public class HermitEye extends UserDependantCurios {
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.ELDRITCH_BLAST_SPELL.get().getSpellId(), 3));
+            copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(2, true, false, false, new SpellSlot[]{
+                            new SpellSlot(new SpellData(SpellRegistry.TELEKINESIS_SPELL.get(), 10, true), 0),
+                            new SpellSlot(new SpellData(SpellRegistry.TELEPORT_SPELL.get(), 10, true), 1)
+                    })
+            );
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         } else {
             var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.none().getSpellId(), 0));
+            copy.remove(ComponentRegistry.SPELL_CONTAINER);
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         }
     }
@@ -114,6 +123,7 @@ public class HermitEye extends UserDependantCurios {
             multiplier = Math.max(0, (40 - slotContext.entity().getAttributeValue(Attributes.ARMOR) - slotContext.entity().getAttributeValue(Attributes.ARMOR_TOUGHNESS)) / 10);
             if (canEntityUseItem(slotContext.entity())) {
                 multiplier *= 2;
+                attributeMap.put(AttributeRegistry.MAX_MANA, new AttributeModifier(id, 0.125 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
             }
             attributeMap.put(AttributeRegistry.MANA_REGEN, new AttributeModifier(id, 0.125 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }

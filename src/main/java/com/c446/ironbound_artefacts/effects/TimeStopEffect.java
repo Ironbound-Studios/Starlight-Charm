@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-public class TimeStopEffect extends MagicMobEffect {
+public class TimeStopEffect extends IronboundMobEffect {
     public TimeStopEffect(MobEffectCategory category, int color) {
         super(category, color);
 
