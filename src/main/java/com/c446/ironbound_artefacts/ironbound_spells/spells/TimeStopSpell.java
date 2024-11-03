@@ -22,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +47,8 @@ public class TimeStopSpell extends AbstractSpell {
         this.castTime = 300;
     }
 
+
+
     private final ResourceLocation spellId = IronboundArtefact.prefix("time_stop");
 
     @Override
@@ -58,7 +61,7 @@ public class TimeStopSpell extends AbstractSpell {
 
 
     public double getTickDuration(int spellLevel, @NonNull LivingEntity caster) {
-        return  20*(spellLevel + caster.getAttributeValue(INSIGHT)*0.5);
+        return 20 * (spellLevel + caster.getAttributeValue(INSIGHT) * 0.5);
     }
 
     @Override
@@ -82,18 +85,22 @@ public class TimeStopSpell extends AbstractSpell {
     }
 
     public float getAOE(int spellLevel, LivingEntity entity) {
-        return (10*spellLevel + getSpellPower(spellLevel, entity));
+        return (10 * spellLevel + getSpellPower(spellLevel, entity));
     }
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-
-        List<Entity> entityList = level.getEntities(entity, new AABB(0, 0, 0, 0, 0, 0).inflate(getAOE(spellLevel, entity)));
+        List<Entity> entityList = level.getEntities(entity, getInflated(spellLevel, entity));
         for (Entity e : entityList) {
             if (e instanceof LivingEntity l && !(l.equals(entity))) {
                 l.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, (int) (this.getTickDuration(spellLevel, entity)), 0, true, true));
             }
         }
+        entity.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP_CASTER, (int) this.getTickDuration(spellLevel, entity), 0));
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
+    }
+
+    public @NotNull AABB getInflated(int spellLevel, LivingEntity entity) {
+        return new AABB(0, 0, 0, 0, 0, 0).inflate(getAOE(spellLevel, entity));
     }
 }

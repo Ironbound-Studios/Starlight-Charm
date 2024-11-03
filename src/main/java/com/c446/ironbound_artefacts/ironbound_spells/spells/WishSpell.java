@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
@@ -73,6 +74,11 @@ public class WishSpell extends AbstractSpell {
     }
 
     @Override
+    public boolean canBeCraftedBy(Player player) {
+        return (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON));
+    }
+
+    @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
         ItemStack offHand = entity.getOffhandItem();
         // MANA REGEN POT
@@ -85,23 +91,38 @@ public class WishSpell extends AbstractSpell {
             consumeOneFromStack(offHand);
         }
         else if (offHand.getItem().equals(Items.MAGMA_CREAM)) {
-            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 120, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
+            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(offHand);
         }
         else if (offHand.getItem().equals(Items.GOLD_BLOCK)) {
-            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
+            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(offHand);
 
         }
         else if (offHand.getItem().equals(Items.GHAST_TEAR)) {
-            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 120, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
+            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(offHand);
         }
-//        else if (offHand.has(ComponentRegistry.SPELL_CONTAINER)) {
-//            var spells = offHand.get(ComponentRegistry.SPELL_CONTAINER).getActiveSpells();
-//            var num = level.random.nextIntBetweenInclusive(0, spells.size());
-//            spells.get(num).getSpell().castSpell(level, spells.get(num).getLevel(), (ServerPlayer) entity, castSource, true);
-//        }
+        else if (offHand.has(ComponentRegistry.SPELL_CONTAINER)) {
+            var spellContainer = offHand.get(ComponentRegistry.SPELL_CONTAINER);
+            if (spellContainer != null && offHand.getItem().equals(ItemRegistry.SCROLL.get())) {
+                var spells = spellContainer.getActiveSpells();
+                if (spells != null && !spells.isEmpty()) {
+                    var num = level.random.nextIntBetweenInclusive(0, spells.size() - 1);
+                    var selectedSpell = spells.get(num);
+                    if (selectedSpell != null && selectedSpell.getSpell() != null) {
+                        selectedSpell.getSpell().castSpell(
+                                level,
+                                selectedSpell.getLevel(),
+                                (ServerPlayer) entity,
+                                castSource,
+                                true
+                        );
+                    }
+                }
+            }
+        }
+
         else {
             AtomicBoolean isFocus = new AtomicBoolean(false);
             ArrayList<AbstractSpell> schoolSpells;

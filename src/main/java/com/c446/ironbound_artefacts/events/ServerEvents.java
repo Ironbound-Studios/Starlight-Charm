@@ -4,20 +4,23 @@ package com.c446.ironbound_artefacts.events;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
-import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
-import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
-import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
+import com.google.common.collect.HashMultimap;
+import io.redspace.ironsspellbooks.api.events.*;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.registries.*;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -158,6 +161,8 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onSummoningThings(SpellSummonEvent<Monster> event) {
+
+
         System.out.println(event.getCreature().toString());
         var spell = SpellRegistry.getSpell(event.getSpellId());
         LivingEntity player = event.getCaster();
@@ -174,11 +179,19 @@ public class ServerEvents {
                 var canGetNetherite = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.TAR) || player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ENDER));
                 Monster creature = (equipCreatureBasedOnQuality(event.getCreature(), quality, canGetNetherite));
                 System.out.println(creature.toString());
+                HashMultimap<Holder<Attribute>, AttributeModifier> summonAttributes = HashMultimap.create();
+                summonAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(IronboundArtefact.prefix("summon_health_boost"), 4 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));
+                summonAttributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(
+                        IronboundArtefact.prefix("summon_damage"),
+                        2 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player),
+                        AttributeModifier.Operation.ADD_VALUE
+                ));
+
+                creature.getAttributes().addTransientAttributeModifiers(summonAttributes);
                 event.setCreature(creature);
             }
         }
     }
-
 
 
     private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {
@@ -224,4 +237,9 @@ public class ServerEvents {
         creature.setDropChance(EquipmentSlot.FEET, 0.0F);
     }
 
+    public static void onCast(SpellPreCastEvent preCastEvent){
+        if (preCastEvent.getEntity().hasEffect(EffectsRegistry.TIME_STOP)){
+            preCastEvent.setCanceled(true);
+        }
+    }
 }
