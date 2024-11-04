@@ -22,13 +22,13 @@ public class TimeStopEffect extends IronboundMobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return true;
+        return super.shouldApplyEffectTickThisTick(duration, amplifier);
     }
 
     @Override
     public boolean applyEffectTick(LivingEntity livingEntity, int amplifier) {
-        livingEntity.setDeltaMovement(0,0,0);
-        if (livingEntity.hasData(DataAttachmentRegistry.MAGIC_DATA) && livingEntity instanceof ServerPlayer serverPlayer){
+        livingEntity.setDeltaMovement(0, 0, 0);
+        if (livingEntity.hasData(DataAttachmentRegistry.MAGIC_DATA) && livingEntity instanceof ServerPlayer serverPlayer) {
             Utils.serverSideCancelCast(serverPlayer, true);
             MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().removeAll(RecastResult.COUNTERSPELL);
         }
