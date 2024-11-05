@@ -54,27 +54,28 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
-    repositories {
-        flatDir {
-            dir 'libs'
-        }
+repositories {
+    flatDir {
+        dir 'libs'
+    }
 
-        maven { url = "https://maven.enginehub.org/repo/" }
-        maven {
-            url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
-            content {
-                includeGroup("software.bernie.geckolib")
-            }
+    maven { url = "https://maven.enginehub.org/repo/" }
+    maven {
+        url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+        content {
+            includeGroup("software.bernie.geckolib")
         }
-        maven { url = "https://maven.theillusivec4.top" }
-        maven { url = "https://cursemaven.com" }
-        maven { url = "https://maven.blamejared.com" }
-        maven { url = "https://maven.kosmx.dev/" }
-        maven { url = "https://code.redspace.io/releases" }
+    }
+    maven { url = "https://maven.theillusivec4.top" }
+    maven { url = "https://cursemaven.com" }
+    maven { url = "https://maven.blamejared.com" }
+    maven { url = "https://maven.kosmx.dev/" }
+    maven { url = "https://code.redspace.io/releases" }
     maven {
         url = uri("https://jitpack.io")
         content {
             includeGroup("com.github.IGN-Styly")
+            includeGroup("com.github.Ironbound-Studios")
         }
     }
     maven {
@@ -83,12 +84,6 @@ configurations {
         content {
             includeGroup("dev.latvian.mods")
             includeGroup("dev.latvian.apps")
-        }
-    }
-    maven {
-        url = uri("https://jitpack.io")
-        content {
-            includeGroup("com.github.rtyley")
         }
     }
     maven {
@@ -105,16 +100,15 @@ jarJar.enable()
 dependencies {
     // FORGE ******************************************************************************************************
     implementation "net.neoforged:neoforge:${neoVersion}"
-
+    // IRONBOUND CORE
+    //implementation("com.github.Ironbound-Studios:IronboundCore:731201954b")
     // GECKOLIB ***************************************************************************************************
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraftVersion}:${geckolib_version}"
-
     // CAELUS *****************************************************************************************************
     compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
     localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
 
     // PLAYER ANIMATOR ********************************************************************************************
-    //compileOnly "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
     implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
 
     compileOnly "mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"
@@ -145,7 +139,7 @@ dependencies {
     implementation("io.redspace:irons_spellbooks:${irons_spells_version}")
 
     // IB CORE DEPS
-    implementation("com.github.IGN-Styly:Arcanus:1.21.1-0.3.6.1a")
+    //implementation("com.github.IGN-Styly:Arcanus:1.21.1-0.3.6.1a")
 
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
