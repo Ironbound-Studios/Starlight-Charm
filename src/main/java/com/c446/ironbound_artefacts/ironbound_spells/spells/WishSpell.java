@@ -7,10 +7,12 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
-import io.redspace.ironsspellbooks.registries.ComponentRegistry;
-import io.redspace.ironsspellbooks.registries.DataAttachmentRegistry;
-import io.redspace.ironsspellbooks.registries.ItemRegistry;
-import io.redspace.ironsspellbooks.registries.PotionRegistry;
+import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
+import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
+import io.redspace.ironsspellbooks.item.curios.InvisibiltyRing;
+import io.redspace.ironsspellbooks.registries.*;
+import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -80,32 +83,45 @@ public class WishSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        ItemStack offHand = entity.getOffhandItem();
+        ItemStack item = entity.getMainHandItem();
+        if (!(item.equals(ItemStack.EMPTY))) {
+            item = entity.getOffhandItem();
+        }
+
+        if (item== ItemStack.EMPTY){
+            entity.heal(entity.getMaxHealth());
+            for (MobEffectInstance i : entity.getActiveEffects()){
+                if (!i.getEffect().value().isBeneficial()){
+                    entity.removeEffect(i.getEffect());
+                }
+            }
+        }
+
         // MANA REGEN POT
-        if (offHand.getItem().equals(ItemRegistry.ARCANE_ESSENCE.get())) {
+        if (item.getItem().equals(ItemRegistry.ARCANE_ESSENCE.get())) {
             entity.getData(DataAttachmentRegistry.MAGIC_DATA).addMana((float) entity.getAttributeValue(MAX_MANA) * this.getSpellPower(spellLevel, entity) * .25F);
-            consumeOneFromStack(offHand);
+            consumeOneFromStack(item);
         }
-        else if (offHand.getItem().equals(Items.PHANTOM_MEMBRANE)) {
+        else if (item.getItem().equals(Items.PHANTOM_MEMBRANE)) {
             entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 120, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(offHand);
+            consumeOneFromStack(item);
         }
-        else if (offHand.getItem().equals(Items.MAGMA_CREAM)) {
+        else if (item.getItem().equals(Items.MAGMA_CREAM)) {
             entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(offHand);
+            consumeOneFromStack(item);
         }
-        else if (offHand.getItem().equals(Items.GOLD_BLOCK)) {
+        else if (item.getItem().equals(Items.GOLD_BLOCK)) {
             entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(offHand);
+            consumeOneFromStack(item);
 
         }
-        else if (offHand.getItem().equals(Items.GHAST_TEAR)) {
+        else if (item.getItem().equals(Items.GHAST_TEAR)) {
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(offHand);
+            consumeOneFromStack(item);
         }
-        else if (offHand.has(ComponentRegistry.SPELL_CONTAINER)) {
-            var spellContainer = offHand.get(ComponentRegistry.SPELL_CONTAINER);
-            if (spellContainer != null && offHand.getItem().equals(ItemRegistry.SCROLL.get())) {
+        else if (item.has(ComponentRegistry.SPELL_CONTAINER)) {
+            var spellContainer = item.get(ComponentRegistry.SPELL_CONTAINER);
+            if (spellContainer != null && item.getItem().equals(ItemRegistry.SCROLL.get())) {
                 var spells = spellContainer.getActiveSpells();
                 if (spells != null && !spells.isEmpty()) {
                     var num = level.random.nextIntBetweenInclusive(0, spells.size() - 1);
@@ -122,26 +138,46 @@ public class WishSpell extends AbstractSpell {
                 }
             }
         }
-
-        else {
-            AtomicBoolean isFocus = new AtomicBoolean(false);
-            ArrayList<AbstractSpell> schoolSpells;
-            AtomicReference<SchoolType> school = new AtomicReference<>();
-            SchoolRegistry.REGISTRY.keySet().forEach(a -> {
-                if (SchoolRegistry.getSchool(a).isFocus(offHand)) {
-                    isFocus.set(true);
-                    school.set(SchoolRegistry.getSchool(a));
+        else if (item.getItem().equals(Items.ZOMBIE_HEAD) && item.getCount() > 3){
+            var entities = level.getEntities(entity, entity.getBoundingBox().inflate(150));
+            for (Entity e : entities){
+                if (e instanceof LivingEntity l){
+                    if (l instanceof IMagicSummon s){
+                        if (s.getSummoner().equals(entity)){
+                            l.addEffect(new MobEffectInstance(MobEffectRegistry.HASTENED,  60*spellLevel,spellLevel));
+                            l.addEffect(new MobEffectInstance(MobEffectRegistry.CHARGED,  60*spellLevel,spellLevel));
+                        }
+                    }
                 }
-            });
-            ArrayList<AbstractSpell> spells = new ArrayList<>();
-            SpellRegistry.REGISTRY.keySet().forEach(a -> {
-                if (SpellRegistry.getSpell(a).getSchoolType().equals(school.get())) {
-                    spells.add(SpellRegistry.getSpell(a));
-                }
-            });
-            super.onCast(level, spellLevel, entity, castSource, playerMagicData);
-            return;
+            }
         }
+
+        else if (item.getItem().equals(Items.WITHER_SKELETON_SKULL)){
+            var result = Utils.raycastForEntity(level, entity, 150, true);
+            if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l && l.getHealth() > l.getMaxHealth() / 2){
+
+            }
+        }
+
+//        else {
+//            AtomicBoolean isFocus = new AtomicBoolean(false);
+//            ArrayList<AbstractSpell> schoolSpells;
+//            AtomicReference<SchoolType> school = new AtomicReference<>();
+//            SchoolRegistry.REGISTRY.keySet().forEach(a -> {
+//                if (SchoolRegistry.getSchool(a).isFocus(item)) {
+//                    isFocus.set(true);
+//                    school.set(SchoolRegistry.getSchool(a));
+//                }
+//            });
+//            ArrayList<AbstractSpell> spells = new ArrayList<>();
+//            SpellRegistry.REGISTRY.keySet().forEach(a -> {
+//                if (SpellRegistry.getSpell(a).getSchoolType().equals(school.get())) {
+//                    spells.add(SpellRegistry.getSpell(a));
+//                }
+//            });
+//            super.onCast(level, spellLevel, entity, castSource, playerMagicData);
+//            return;
+//        }
 
         entity.addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 1 ,2));
 

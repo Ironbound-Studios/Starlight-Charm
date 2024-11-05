@@ -64,7 +64,7 @@ public class HermitEye extends UserDependantCurios {
     }
 
     @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
             copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(2, true, false, false, new SpellSlot[]{
@@ -78,8 +78,8 @@ public class HermitEye extends UserDependantCurios {
             copy.remove(ComponentRegistry.SPELL_CONTAINER);
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         }
+        super.onEquip(slotContext, prevStack, stack);
     }
-
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {

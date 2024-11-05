@@ -33,6 +33,20 @@ public class DevilsFinger extends UserDependantCurios {
     }
 
     @Override
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
+        if (canEntityUseItem(slotContext.entity())) {
+            var copy = stack.copy();
+            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.ELDRITCH_BLAST_SPELL.get().getSpellId(), 3));
+            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
+        } else {
+            var copy = stack.copy();
+            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.none().getSpellId(), 0));
+            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
+        }
+        super.onEquip(slotContext, prevStack, stack);
+    }
+
+    @Override
     public boolean canEntityUseItem(Entity entity) {
         if (entity instanceof Player player) {
             canUse = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ACE) || entity.getName().getString().equals("Dev"));
@@ -56,19 +70,6 @@ public class DevilsFinger extends UserDependantCurios {
                             .withStyle(ChatFormatting.YELLOW)));
         }
         super.appendHoverText(stack, context, lines, tooltipFlag);
-    }
-
-    @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (canEntityUseItem(slotContext.entity())) {
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.ELDRITCH_BLAST_SPELL.get().getSpellId(), 3));
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        } else {
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.none().getSpellId(), 0));
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        }
     }
 
     @Override
