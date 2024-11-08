@@ -5,10 +5,14 @@ package com.c446.ironbound_artefacts.effects;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.IronboundDamageSources;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 import java.util.Objects;
 
@@ -36,5 +40,10 @@ public class IronboundMobEffect extends MobEffect {
                 livingEntity.hurt(DamageSources.get(livingEntity.level(), IronboundDamageSources.VOID_DAMAGE), 1);}
             return super.applyEffectTick(livingEntity, amplifier);
         }
+    }
+
+    @Override
+    public IronboundMobEffect addAttributeModifier(Holder<Attribute> pAttribute, ResourceLocation pId, double pAmount, AttributeModifier.Operation pOperation) {
+        return (IronboundMobEffect) super.addAttributeModifier(pAttribute, pId, pAmount, pOperation);
     }
 }
