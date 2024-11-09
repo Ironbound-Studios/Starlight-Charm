@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts;
 
 import com.c446.ironbound_artefacts.registries.ModSetup;
+import io.redspace.ironsspellbooks.entity.mobs.wizards.cryomancer.CryomancerEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -18,7 +19,6 @@ public class IronboundArtefact {
     public IronboundArtefact(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
 //        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
-
         modEventBus.addListener(this::setup);
     }
 

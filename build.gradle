@@ -58,6 +58,7 @@ repositories {
     flatDir {
         dir 'libs'
     }
+    maven { url = "https://code.redspace.io/releases" }
 
     maven { url = "https://maven.enginehub.org/repo/" }
     maven {
@@ -70,7 +71,6 @@ repositories {
     maven { url = "https://cursemaven.com" }
     maven { url = "https://maven.blamejared.com" }
     maven { url = "https://maven.kosmx.dev/" }
-    maven { url = "https://code.redspace.io/releases" }
     maven {
         url = uri("https://jitpack.io")
         content {
@@ -79,23 +79,15 @@ repositories {
         }
     }
     maven {
-        // saps.dev Maven (KubeJS and Rhino)
-        url = uri("https://maven.saps.dev/releases")
-        content {
-            includeGroup("dev.latvian.mods")
-            includeGroup("dev.latvian.apps")
-        }
-    }
-    maven {
         setUrl("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
         content {
             includeGroup("software.bernie.geckolib")
         }
     }
+    maven { url = 'https://maven.neoforged.net/releases' }
 }
 
 jarJar.enable()
-
 
 dependencies {
     // FORGE ******************************************************************************************************

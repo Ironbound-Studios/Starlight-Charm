@@ -17,7 +17,6 @@ import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.*;
@@ -26,9 +25,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.api.distmarker.Dist;
@@ -150,34 +147,50 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         return listSpells;
     }
 
-    public List<AbstractSpell> getOffensiveSpells(List<AbstractSpell> spells, Player player) {
-        for (var spell : spells) {
+    public List<AbstractSpell> getOffensiveSpellsFromList(List<AbstractSpell> spells, Player player) {
+        var list = new ArrayList<AbstractSpell>();
 
+        for (var spell : spells) {
+            SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
+                if (a.is(Tags.SpellTags.OFFENSIVE_SPELL)) {
+                    list.add(spell);
+                }
+            });
         }
-        return null;
+        return list;
     }
 
     public List<AbstractSpell> getDefensiveSpells(List<AbstractSpell> spells, Player player) {
-        for (var spell : spells) {
+        var list = new ArrayList<AbstractSpell>();
 
+        for (var spell : spells) {
+            if (player.level().holderOrThrow(Tags.SpellTags.DEFENSIVE_SPELL.registry()).value().containsKey(spell.getSpellResource())) {
+                list.add(spell);
+            }
         }
-        return null;
+        return list;
     }
 
     public List<AbstractSpell> getMovementSpells(List<AbstractSpell> spells, Player player) {
+        var list = new ArrayList<AbstractSpell>();
+
         for (var spell : spells) {
-            Tags
-
-
+            if (player.level().holderOrThrow(Tags.SpellTags.MOUVEMENT_SPELL.registry()).value().containsKey(spell.getSpellResource())) {
+                list.add(spell);
+            }
         }
-        return null;
+        return list;
     }
 
     public List<AbstractSpell> getUtilSpells(List<AbstractSpell> spells, Player player) {
-        for (var spell : spells) {
+        var list = new ArrayList<AbstractSpell>();
 
+        for (var spell : spells) {
+            if (player.level().holderOrThrow(Tags.SpellTags.UTILITY_SPELL.registry()).value().containsKey(spell.getSpellResource())) {
+                list.add(spell);
+            }
         }
-        return null;
+        return list;
     }
 
     @Override
@@ -186,7 +199,7 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         if (this.getSummoner() instanceof Player player) {
             this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 50, 75)
                     .setSpells(
-                            getOffensiveSpells(simpleGetSpells(player), player),
+                            getOffensiveSpellsFromList(simpleGetSpells(player), player),
                             getDefensiveSpells(simpleGetSpells(player), player),
                             getMovementSpells(simpleGetSpells(player), player),
                             getUtilSpells(simpleGetSpells(player), player)

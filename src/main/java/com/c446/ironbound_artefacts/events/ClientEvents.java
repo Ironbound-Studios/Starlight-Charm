@@ -13,7 +13,6 @@ import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 
-
 @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
 
@@ -21,5 +20,4 @@ public class ClientEvents {
     public static void renderRegisters(EntityRenderersEvent.RegisterRenderers event){
         ItemRegistry.ITEMS.getEntries().stream().filter(item -> item.get() instanceof SpellBook).forEach((item) -> CuriosRendererRegistry.register(item.get(), SpellBookCurioRenderer::new));
     }
-
 }

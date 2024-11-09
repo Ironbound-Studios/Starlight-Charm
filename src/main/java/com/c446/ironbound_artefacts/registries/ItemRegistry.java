@@ -50,13 +50,12 @@ public class ItemRegistry {
                     new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(55))
             )
     );
-
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_CHEST_PLATE = ITEMS.register("arcane_weave_chestplate",
             () -> new ArcaneWeaveItem(Type.CHESTPLATE,
+
                     new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(55))
             )
     );
-
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_LEGGINGS = ITEMS.register("arcane_weave_leggings",
             () -> new ArcaneWeaveItem( Type.LEGGINGS,
                     new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(55))
