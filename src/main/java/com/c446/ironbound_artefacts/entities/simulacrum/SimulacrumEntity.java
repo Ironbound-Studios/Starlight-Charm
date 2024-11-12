@@ -85,14 +85,17 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     }
 
     private PlayerInfo playerInfo = null;
-    private @NotNull Player player;
+    private Player player;
 
     protected UUID summonerUUID;
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     public void setSummoner(Player player) {
-        this.player = player;
-        this.summonerUUID = player.getUUID();
+        if (player != null)
+        {
+            this.player = player;
+            this.summonerUUID = player.getUUID();
+        }
     }
 
     public boolean isSlim() {
