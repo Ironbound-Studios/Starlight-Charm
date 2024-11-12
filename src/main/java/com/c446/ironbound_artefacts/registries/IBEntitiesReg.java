@@ -1,5 +1,6 @@
-package com.c446.ironbound_artefacts.simulacrum;
+package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;

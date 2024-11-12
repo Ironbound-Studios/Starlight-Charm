@@ -14,14 +14,17 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
+import io.redspace.ironsspellbooks.item.UpgradeOrbItem;
 import io.redspace.ironsspellbooks.registries.*;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -34,6 +37,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
+import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -47,6 +52,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.c446.ironbound_artefacts.registries.ItemRegistry.ARCHMAGE_SPELLBOOK;
 import static com.c446.ironbound_artefacts.registries.ItemRegistry.STAFF_OF_POWER;
@@ -121,14 +127,14 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onManaRegen(io.redspace.ironsspellbooks.api.events.ChangeManaEvent event) {
+    public static void onManaRegen(ChangeManaEvent event) {
         if (event.getEntity().hasEffect(EffectsRegistry.TIME_STOP)) {
             event.setCanceled(true);
         }
     }
 
     @SubscribeEvent
-    public static void onThrowItem(net.neoforged.neoforge.event.entity.item.ItemTossEvent event) {
+    public static void onThrowItem(ItemTossEvent event) {
         if (event.getPlayer().hasEffect(EffectsRegistry.TIME_STOP)) {
             event.setCanceled(true);
         }
@@ -174,10 +180,7 @@ public class ServerEvents {
 
         // Check if the spell is an instance of RaiseDeadSpell and if the player has the full Lich set equipped
         if (spell instanceof RaiseDeadSpell) {
-            boolean hasLichSet = CuriosApi.getCuriosInventory(player)
-                    .map(inv -> !inv.findCurios(ItemRegistry.LICH_CROWN.get()).isEmpty() ||
-                            !inv.findCurios(ItemRegistry.LICH_HAND.get()).isEmpty())
-                    .orElse(false);
+            boolean hasLichSet = CuriosApi.getCuriosInventory(player).map(inv -> !inv.findCurios(ItemRegistry.LICH_CROWN.get()).isEmpty() || !inv.findCurios(ItemRegistry.LICH_HAND.get()).isEmpty()).orElse(false);
 
             if (hasLichSet) {
                 var canGetNetherite = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.TAR) || player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ENDER));
@@ -185,11 +188,7 @@ public class ServerEvents {
                 System.out.println(creature.toString());
                 HashMultimap<Holder<Attribute>, AttributeModifier> summonAttributes = HashMultimap.create();
                 summonAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(IronboundArtefact.prefix("summon_health_boost"), 4 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));
-                summonAttributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(
-                        IronboundArtefact.prefix("summon_damage"),
-                        2 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player),
-                        AttributeModifier.Operation.ADD_VALUE
-                ));
+                summonAttributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("summon_damage"), 2 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));
 
                 creature.getAttributes().addTransientAttributeModifiers(summonAttributes);
                 event.setCreature(creature);
@@ -198,31 +197,48 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
+    public static void onAttributesAddedToItem(ItemAttributeModifierEvent event) {
+        if (event.getItemStack().getItem().equals(ItemRegistry.STAFF_OF_MAGI.get()) && event.getItemStack().has(ComponentRegistry.UPGRADE_DATA)) {
+            var data = event.getItemStack().get(ComponentRegistry.UPGRADE_DATA);
+            for (var upgrade : data.getUpgrades().keySet()) {
+                var amount = data.getUpgrades().get(upgrade);
+                AtomicReference<EquipmentSlotGroup> slot = new AtomicReference<>();
+                AtomicReference<AttributeModifier> modifier = new AtomicReference<>();
+
+                event.getModifiers().forEach(a -> {
+                    if (a.modifier().id().equals(upgrade.getId())) {
+                        slot.set(a.slot());
+                        modifier.set(a.modifier());
+                    }
+                });
+                if (slot.get() != null && modifier.get() != null) {
+                    //event.removeModifier(upgrade.getAttribute(), upgrade.getId());
+                    //event.addModifier(upgrade.getAttribute(), modifier.get(), slot.get());
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void getBonusSpells(SpellSelectionManager.SpellSelectionEvent event) {
         var player = event.getEntity();
-        CuriosApi.getCuriosInventory(player).ifPresent(
-                a -> {
-                    var list = a.findCurios(item -> item != null && item.has(ComponentRegistry.SPELL_CONTAINER));
-                    for (var i : list) {
-                        var spellContainer = i.stack() != null ? i.stack().get(ComponentRegistry.SPELL_CONTAINER) : null;
-                        if (spellContainer != null) {
-                            var spells = spellContainer.getAllSpells();
-                            if (spells != null && !Arrays.stream(spells).toList().isEmpty()) {
-                                for (var spell : spells) {
-                                    if (spell == null || spell.getSpell() == null) {
-                                        return;
-                                    }
-                                    event.addSelectionOption(
-                                            new SpellData(spell.getSpell(), spell.getLevel(), true),
-                                            i.stack().getItem().getDescriptionId(),
-                                            spell.index()
-                                    );
-                                }
+        CuriosApi.getCuriosInventory(player).ifPresent(a -> {
+            var list = a.findCurios(item -> item != null && item.has(ComponentRegistry.SPELL_CONTAINER));
+            for (var i : list) {
+                var spellContainer = i.stack() != null ? i.stack().get(ComponentRegistry.SPELL_CONTAINER) : null;
+                if (spellContainer != null) {
+                    var spells = spellContainer.getAllSpells();
+                    if (spells != null && !Arrays.stream(spells).toList().isEmpty()) {
+                        for (var spell : spells) {
+                            if (spell == null || spell.getSpell() == null) {
+                                return;
                             }
+                            event.addSelectionOption(new SpellData(spell.getSpell(), spell.getLevel(), true), i.stack().getItem().getDescriptionId(), spell.index());
                         }
                     }
                 }
-        );
+            }
+        });
     }
 
     private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {

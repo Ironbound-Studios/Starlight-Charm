@@ -1,4 +1,4 @@
-package com.c446.ironbound_artefacts.simulacrum;
+package com.c446.ironbound_artefacts.entities.simulacrum;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

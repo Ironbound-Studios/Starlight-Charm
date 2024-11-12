@@ -5,7 +5,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -21,8 +20,8 @@ public class ModSetup {
         AttributeRegistry.ATTRIBUTES.register(eventBus);
         EffectsRegistry.EFFECTS.register(eventBus);
         CustomSpellRegistry.SPELLS.register(eventBus);
-
-
+        IBEntitiesReg.ENTITIES.register(eventBus);
+        AttachmentRegistry.ATTACHMENT_TYPE_DEFERRED_REGISTER.register(eventBus);
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
         //ModIngredientTypeRegistry.INGREDIENT_TYPES.register(eventBus);

@@ -1,5 +1,6 @@
-package com.c446.ironbound_artefacts.simulacrum;
+package com.c446.ironbound_artefacts.entities.simulacrum;
 
+import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;

@@ -1,6 +1,7 @@
-package com.c446.ironbound_artefacts.simulacrum;
+package com.c446.ironbound_artefacts.entities.simulacrum;
 
 import com.c446.ironbound_artefacts.datagen.Tags;
+import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
@@ -10,16 +11,23 @@ import io.redspace.ironsspellbooks.effect.SummonTimer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
-import io.redspace.ironsspellbooks.registries.EntityRegistry;
+import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
+import net.minecraft.core.Holder;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -28,6 +36,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -43,22 +52,43 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
      * If you wish to add an entity to it, I recommend sending me a message on discord, with the code to make it happen...
      *
      * @param pLevel : the server level to add the simulacrum to.
-     * @param owner  : the owner of the Summon.
      * @author : disc : @clement446
      */
-    public SimulacrumEntity(Level pLevel, Player owner) {
-        this(EntityRegistry.SUMMONED_POLAR_BEAR.get(), pLevel);
-        setSummoner(owner);
+    public SimulacrumEntity(Level pLevel) {
+        this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
+    }
+
+    public static AttributeSupplier.Builder createAttributes(){
+        return Player.createAttributes()
+                .add(Attributes.FOLLOW_RANGE, 30D);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder pBuilder) {
+        super.defineSynchedData(pBuilder);
+        pBuilder.define(OWNER_UUID, Optional.of(Util.NIL_UUID));
+    }
+
+    @Override
+    public double getAttributeValue(Holder<Attribute> pAttribute) {
+        if (this.player != null){
+            return player.getAttributeValue(pAttribute);
+        }
+        else {
+            return createAttributes().build().getValue(pAttribute);
+        }
     }
 
     public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        this.setUUID(UUID.randomUUID());
     }
 
     private PlayerInfo playerInfo = null;
-    private Player player = null;
+    private @NotNull Player player;
 
     protected UUID summonerUUID;
+    private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     public void setSummoner(Player player) {
         this.player = player;
@@ -68,13 +98,14 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     public boolean isSlim() {
         return this.playerInfo.getSkin().model().equals(PlayerSkin.Model.SLIM);
     }
-
     @Override
     public LivingEntity getSummoner() {
         if (this.player == null) {
-            this.discard();
+            System.out.println("player is/was null !!! Why is this happening !!!!!!");
+            //this.discard();
         }
-        return null;
+        System.out.println("player is/was not null. The good ending :3c");
+        return this.player;
     }
 
     @Override
@@ -235,4 +266,6 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         }
         return this.playerInfo;
     }
+
+
 }

@@ -7,10 +7,12 @@ import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
 import com.c446.ironbound_artefacts.items.impl.*;
 import io.redspace.ironsspellbooks.api.item.weapons.ExtendedSwordItem;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
 import io.redspace.ironsspellbooks.item.SpellSlotUpgradeItem;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.item.weapons.StaffTier;
+import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -36,6 +38,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, LichCrown> LICH_CROWN;
     public static final DeferredHolder<Item, LichHand> LICH_HAND;
     public static final DeferredHolder<Item, StaffOfPower> STAFF_OF_POWER;
+    public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI;
     public static final DeferredHolder<Item, HermitEye> HERMIT_EYE;
     public static final DeferredHolder<Item, LoversStopwatch> STOPWATCH;
 
@@ -68,6 +71,12 @@ public class ItemRegistry {
             )
     );
 
+    public static final StaffTier TIER_STAFF_OF_MAGI = new StaffTier(3, -0.5F,
+            new AttributeContainer(AttributeRegistry.MAX_MANA, 250, AttributeModifier.Operation.ADD_VALUE),
+            new AttributeContainer(AttributeRegistry.SPELL_RESIST, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+            new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
+    );
+
     public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, 1,
             new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
             new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)
@@ -95,11 +104,19 @@ public class ItemRegistry {
         });
 
         AMULET_OF_HOLDING = ITEMS.register("amulet_of_holding", () -> {
-            return new AmuletOfHolding(new Item.Properties());
+            return new AmuletOfHolding(
+                    new Item.Properties().component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false))
+            );
         });
 
         STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> {
             return new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER)));
+        });
+
+        STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> {
+            return new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI)));
+
+
         });
 
         ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(1).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
