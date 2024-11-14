@@ -12,7 +12,11 @@ import io.redspace.ironsspellbooks.spells.ender.CounterspellSpell;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.neoforge.common.EffectCure;
+
+import java.util.Set;
 
 public class TimeStopEffect extends IronboundMobEffect {
     public TimeStopEffect(MobEffectCategory category, int color) {
@@ -33,5 +37,10 @@ public class TimeStopEffect extends IronboundMobEffect {
             MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().removeAll(RecastResult.COUNTERSPELL);
         }
         return super.applyEffectTick(livingEntity, amplifier);
+    }
+
+    @Override
+    public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
+        // Leave this empty to prevent milk or curatives from clearing
     }
 }
