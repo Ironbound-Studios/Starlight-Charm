@@ -60,10 +60,11 @@ public class SimulacrumSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        if (entity instanceof Player player && level instanceof ServerLevel serverLevel){
+        if (entity instanceof Player player && level instanceof Level serverLevel){
             var simulacrum = new SimulacrumEntity(serverLevel);
             System.out.println(player);
             simulacrum.setSummoner(player);
+
 
             //var data = (player.hasData(GENERIC_CASTING_DATA)) ? (player.getData(GENERIC_CASTING_DATA)):(new IBSpellCasterData());
 //            data.killSimulacrum(serverLevel);

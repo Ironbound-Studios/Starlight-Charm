@@ -3,6 +3,7 @@ package com.c446.ironbound_artefacts.entities.simulacrum;
 import com.c446.ironbound_artefacts.datagen.Tags;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
+import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
@@ -11,12 +12,14 @@ import io.redspace.ironsspellbooks.effect.SummonTimer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
+import io.redspace.ironsspellbooks.item.SpellBook;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.PlayerSkin;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -32,14 +35,17 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,9 +64,16 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
     }
 
-    public static AttributeSupplier.Builder createAttributes(){
-        return Player.createAttributes()
+    public static AttributeSupplier.Builder createAttributes() {
+        var attr = Player.createAttributes()
                 .add(Attributes.FOLLOW_RANGE, 30D);
+        for (var attribute : BuiltInRegistries.ATTRIBUTE.registryKeySet()) {
+            if (!attr.hasAttribute(BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute))) {
+                var holder = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute);
+                attr.add(holder, holder.value().getDefaultValue());
+            }
+        }
+        return attr;
     }
 
     @Override
@@ -70,11 +83,14 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     }
 
     @Override
-    public double getAttributeValue(Holder<Attribute> pAttribute) {
-        if (this.player != null){
-            return player.getAttributeValue(pAttribute);
-        }
-        else {
+    public double getAttributeValue(@NotNull Holder<Attribute> pAttribute) {
+        if (this.player != null) {
+            if (this.player.getAttributes().hasAttribute(pAttribute)){
+                return this.player.getAttributeValue(pAttribute);
+            } else{
+                return BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(pAttribute.getKey()).value().getDefaultValue();
+            }
+        } else {
             return createAttributes().build().getValue(pAttribute);
         }
     }
@@ -92,22 +108,30 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
 
     public void setSummoner(Player player) {
         this.player = player;
+        System.out.println("owner UUID :" + player.getStringUUID());
         this.summonerUUID = player.getUUID();
+        this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(this.summonerUUID);
     }
 
     public boolean isSlim() {
-        return this.playerInfo.getSkin().model().equals(PlayerSkin.Model.SLIM);
+        if (this.playerInfo == null){
+            return false;
+        } else{
+            return Objects.requireNonNull(this.getPlayerInfo()).getSkin().model().equals(PlayerSkin.Model.SLIM);
+        }
     }
+
     @Override
     public LivingEntity getSummoner() {
         if (this.player == null) {
             System.out.println("player is/was null !!! Why is this happening !!!!!!");
             //this.discard();
+            return null;
+        } else {
+            System.out.println("player is/was not null. The good ending :3c");
+            return this.player;
         }
-        System.out.println("player is/was not null. The good ending :3c");
-        return this.player;
     }
-
     @Override
     public void onUnSummon() {
         if (this.player.hasData(AttachmentRegistry.GENERIC_CASTING_DATA)) {
@@ -262,7 +286,7 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     @OnlyIn(Dist.CLIENT)
     protected PlayerInfo getPlayerInfo() {
         if (this.getSummoner() == null) {
-            this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(getOwnerUUID());
+            this.playerInfo = (Minecraft.getInstance().getConnection()).getPlayerInfo(getOwnerUUID());
         }
         return this.playerInfo;
     }

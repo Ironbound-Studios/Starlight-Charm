@@ -219,6 +219,8 @@ public class ServerEvents {
         }
     }
 
+
+
     @SubscribeEvent
     public static void getBonusSpells(SpellSelectionManager.SpellSelectionEvent event) {
         var player = event.getEntity();
