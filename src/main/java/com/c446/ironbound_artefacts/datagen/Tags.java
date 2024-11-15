@@ -16,5 +16,8 @@ public class Tags {
         public static TagKey<AbstractSpell> create(ResourceLocation name) {
             return new TagKey<AbstractSpell>(SpellRegistry.SPELL_REGISTRY_KEY, name);
         }
+
     }
+
+
 }

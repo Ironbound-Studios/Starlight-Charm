@@ -15,6 +15,7 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
+import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.item.UpgradeOrbItem;
 import io.redspace.ironsspellbooks.registries.*;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
@@ -233,7 +234,7 @@ public class ServerEvents {
     public static void getBonusSpells(SpellSelectionManager.SpellSelectionEvent event) {
         var player = event.getEntity();
         CuriosApi.getCuriosInventory(player).ifPresent(a -> {
-            var list = a.findCurios(item -> item != null && item.has(ComponentRegistry.SPELL_CONTAINER));
+            var list = a.findCurios(item -> item != null && item.has(ComponentRegistry.SPELL_CONTAINER) && !(item.getItem() instanceof SpellBook));
             for (var i : list) {
                 var spellContainer = i.stack() != null ? i.stack().get(ComponentRegistry.SPELL_CONTAINER) : null;
                 if (spellContainer != null) {

@@ -15,9 +15,12 @@ import net.minecraft.Util;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootParams;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -31,16 +34,16 @@ public class SimulacrumSpell extends AbstractSpell {
     private final DefaultConfig defaultConfig = new DefaultConfig()
             .setMinRarity(SpellRarity.LEGENDARY)
             .setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE)
-            .setMaxLevel(3)
+            .setMaxLevel(4)
             .setCooldownSeconds(3600)
             .build();
 
     public SimulacrumSpell() {
         this.baseSpellPower = 1;
         this.spellPowerPerLevel = 1;
-        this.baseManaCost = 250;
-        this.manaCostPerLevel = 250;
-        this.castTime = 60;
+        this.baseManaCost = 500;
+        this.manaCostPerLevel = 500;
+        this.castTime = 0;
     }
 
     @Override
@@ -64,7 +67,6 @@ public class SimulacrumSpell extends AbstractSpell {
             var simulacrum = new SimulacrumEntity(serverLevel);
             System.out.println(player);
             simulacrum.setSummoner(player);
-
 
             //var data = (player.hasData(GENERIC_CASTING_DATA)) ? (player.getData(GENERIC_CASTING_DATA)):(new IBSpellCasterData());
 //            data.killSimulacrum(serverLevel);

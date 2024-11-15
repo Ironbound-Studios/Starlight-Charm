@@ -1,10 +1,8 @@
 package com.c446.ironbound_artefacts.entities.simulacrum;
 
 import com.c446.ironbound_artefacts.datagen.Tags;
-import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
-import dev.shadowsoffire.apothic_attributes.api.ALObjects;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
@@ -12,10 +10,11 @@ import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.effect.SummonTimer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
+import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.NeutralWizard;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
 import io.redspace.ironsspellbooks.entity.mobs.necromancer.NecromancerEntity;
-import io.redspace.ironsspellbooks.entity.mobs.wizards.GenericAnimatedWarlockAttackGoal;
-import io.redspace.ironsspellbooks.item.SpellBook;
+import io.redspace.ironsspellbooks.entity.mobs.wizards.archevoker.ArchevokerEntity;
+import io.redspace.ironsspellbooks.entity.mobs.wizards.priest.PriestEntity;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -26,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
@@ -37,41 +37,79 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
-import net.minecraft.world.entity.ai.util.GoalUtils;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.scores.Team;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Predicate;
+;
 
-public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicSummon {
+public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
+    private PlayerInfo playerInfo = null;
+    private Player player = null;
+    public float quality = 0F;
+    protected ListTag attributes = new ListTag();
+
+    @Override
+    public boolean isAngryAt(LivingEntity pTarget) {
+        if (pTarget instanceof Player player && player.equals(this.getSummoner())) {
+            return false;
+        }
+        return super.isAngryAt(pTarget);
+    }
+
     /**
      * The owner can NEVER be something other than a player.
      * The simulacrum is meant to be a player-only spell due to how it "gathers" spells.
      * If you wish to add an entity to it, I recommend sending me a message on discord, with the code to make it happen...
      *
      * @param pLevel : the server level to add the simulacrum to.
-     * @author : disc : @clement446
+     * @param player : the owner of the Summon.
      */
+    public SimulacrumEntity(Level pLevel, @NotNull Player player, float quality) {
+        this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
+        setSummoner(player);
+        this.quality = quality;
+        this.playerInfo = new PlayerInfo(player.getGameProfile(), false);
+
+        this.attributes = player.getAttributes().save();
+
+        this.setItemSlot(EquipmentSlot.FEET, this.player.getItemBySlot(EquipmentSlot.FEET));
+        this.setItemSlot(EquipmentSlot.LEGS, this.player.getItemBySlot(EquipmentSlot.LEGS));
+        this.setItemSlot(EquipmentSlot.CHEST, this.player.getItemBySlot(EquipmentSlot.CHEST));
+        this.setItemSlot(EquipmentSlot.HEAD, this.player.getItemBySlot(EquipmentSlot.HEAD));
+        this.setItemSlot(EquipmentSlot.MAINHAND, this.player.getItemBySlot(EquipmentSlot.MAINHAND));
+        this.setItemSlot(EquipmentSlot.OFFHAND, this.player.getItemBySlot(EquipmentSlot.OFFHAND));
+
+        this.setDropChance(EquipmentSlot.FEET, 0);
+        this.setDropChance(EquipmentSlot.LEGS, 0);
+        this.setDropChance(EquipmentSlot.CHEST, 0);
+        this.setDropChance(EquipmentSlot.HEAD, 0);
+        this.setDropChance(EquipmentSlot.MAINHAND, 0);
+        this.setDropChance(EquipmentSlot.OFFHAND, 0);
+    }
+
     public SimulacrumEntity(Level pLevel) {
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         var attr = Player.createAttributes()
-                .add(Attributes.FOLLOW_RANGE, 30D);
+                .add(Attributes.FOLLOW_RANGE, 30D)
+                .add(Attributes.MOVEMENT_SPEED, .25)
+
+                ;
         for (var attribute : BuiltInRegistries.ATTRIBUTE.registryKeySet()) {
             if (!attr.hasAttribute(BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute))) {
                 var holder = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute);
@@ -88,6 +126,14 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     }
 
     @Override
+    public boolean isAlliedTo(Entity pEntity) {
+        if (pEntity instanceof Player player){
+            return player.equals(this.getSummoner());
+        }
+        return pEntity.isAlliedTo(this.getSummoner());
+    }
+
+    @Override
     public double getAttributeValue(@NotNull Holder<Attribute> pAttribute) {
         if (this.getSummoner() != null) {
             if (this.getSummoner().getAttributes().hasAttribute(pAttribute)) {
@@ -100,16 +146,17 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         }
     }
 
+    /**
+     * Used for registring.
+     * Don't use otherwise...
+     */
     public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setUUID(UUID.randomUUID());
-        if (this.getOwnerUUID().isPresent()){
+        if (this.getOwnerUUID().isPresent()) {
             this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
         }
     }
-
-    private PlayerInfo playerInfo = null;
-    private Player player;
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
@@ -283,7 +330,7 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         });
 
         if (this.getSummoner() instanceof Player player) {
-            this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 0, 0)
+            this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 25, 80)
                     .setSpells(
                             getOffensiveSpellsFromList(simpleGetSpells(player), player),
                             getDefensiveSpells(simpleGetSpells(player), player),
@@ -300,14 +347,6 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 0, 0)
-                .setSpells(
-                        getOffensiveSpellsFromList(simpleGetSpells(player), player),
-                        getDefensiveSpells(simpleGetSpells(player), player),
-                        getMovementSpells(simpleGetSpells(player), player),
-                        getUtilSpells(simpleGetSpells(player), player)
-                )
-        );
 
         this.goalSelector.addGoal(7, new GenericFollowOwnerGoal(this, this::getSummoner, 3f, 15, 5, false, 25));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
@@ -315,16 +354,19 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
         this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
 
-        this.targetSelector.addGoal(1, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));
-        this.targetSelector.addGoal(2, new GenericOwnerHurtTargetGoal(this, this::getSummoner));
-        this.targetSelector.addGoal(3, new GenericCopyOwnerTargetGoal(this, this::getSummoner));
-        this.targetSelector.addGoal(4, (new GenericHurtByTargetGoal(this, (entity) -> entity == getSummoner())).setAlertOthers());
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isHostileTowards));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, (mob) -> mob instanceof Enemy && !(mob instanceof Creeper)));
+        this.targetSelector.addGoal(2, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));
+        this.targetSelector.addGoal(3, new GenericOwnerHurtTargetGoal(this, this::getSummoner));
+        this.targetSelector.addGoal(4, new GenericCopyOwnerTargetGoal(this, this::getSummoner));
+        this.targetSelector.addGoal(5, (new GenericHurtByTargetGoal(this, (entity) -> entity == getSummoner())).setAlertOthers());
     }
 
     public ResourceLocation getSkinTextureLocation() {
         PlayerInfo networkplayerinfo = this.getPlayerInfo();
         return networkplayerinfo == null ? DefaultPlayerSkin.getDefaultTexture() : networkplayerinfo.getSkin().texture();
     }
+
 
     protected Optional<UUID> getOwnerUUID() {
         return this.entityData.get(OWNER_UUID);
@@ -333,8 +375,11 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     @Nullable
     @OnlyIn(Dist.CLIENT)
     protected PlayerInfo getPlayerInfo() {
-        if (this.getSummoner() == null && this.getEntityData().get(OWNER_UUID).isPresent())
-            this.playerInfo = (Minecraft.getInstance().getConnection()).getPlayerInfo(getOwnerUUID().get());
+        if (this.getSummoner() == null && this.getEntityData().get(OWNER_UUID).isPresent() && this.getOwnerUUID().isPresent()) {
+            var uuid = this.getOwnerUUID().get();
+            this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(uuid);
+            System.out.println("player info was missing.");
+        }
         return this.playerInfo;
     }
 }

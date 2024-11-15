@@ -9,14 +9,19 @@ import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import io.redspace.ironsspellbooks.registries.DataAttachmentRegistry;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.spells.ender.CounterspellSpell;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.EffectCure;
 
 import java.util.Set;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 public class TimeStopEffect extends IronboundMobEffect {
     public TimeStopEffect(MobEffectCategory category, int color) {
@@ -25,8 +30,13 @@ public class TimeStopEffect extends IronboundMobEffect {
     }
 
     @Override
+    public TimeStopEffect addAttributeModifier(Holder<Attribute> pAttribute, ResourceLocation pId, double pAmount, AttributeModifier.Operation pOperation) {
+        return (TimeStopEffect)super.addAttributeModifier(pAttribute, pId, pAmount, pOperation);
+    }
+
+    @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        return super.shouldApplyEffectTickThisTick(duration, amplifier);
+        return true;
     }
 
     @Override

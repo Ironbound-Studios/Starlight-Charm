@@ -17,10 +17,10 @@ import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
 public class EffectsRegistry {
 
     public static final DeferredRegister<MobEffect> EFFECTS = DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, MODID);
-    public static final DeferredHolder<MobEffect, MobEffect> VOID_POISON = EFFECTS.register("void_poison", () -> new IronboundMobEffect(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
+    public static final DeferredHolder<MobEffect, IronboundMobEffect.VoidPoison> VOID_POISON = EFFECTS.register("void_poison", () -> new IronboundMobEffect.VoidPoison(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
     public static final DeferredHolder<MobEffect, StoppingTimeEffect> TIME_STOP_CASTER = EFFECTS.register("stopping_time", () -> new StoppingTimeEffect(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)));
 
-    public static final DeferredHolder<MobEffect, IronboundMobEffect> TIME_STOP = EFFECTS.register("time_frozen", () -> new TimeStopEffect(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)).addAttributeModifier(Attributes.MOVEMENT_SPEED, IronboundArtefact.prefix("time_stop_speed_mod"), -1d, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+    public static final DeferredHolder<MobEffect, TimeStopEffect> TIME_STOP = EFFECTS.register("time_frozen", () -> new TimeStopEffect(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)).addAttributeModifier(Attributes.MOVEMENT_SPEED, IronboundArtefact.prefix("time_stop_speed_mod"), -1d, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
 
     public static int rgbToInt(int red, int green, int blue) {

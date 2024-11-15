@@ -4,12 +4,17 @@ import com.c446.ironbound_artefacts.ironbound_spells.spells.TimeStopSpell;
 import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.EffectCure;
 import org.jetbrains.annotations.NotNull;
@@ -59,5 +64,15 @@ public class StoppingTimeEffect extends IronboundMobEffect {
     @Override
     public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
         // Leave this empty to prevent milk or curatives from clearing
+    }
+
+    @Override
+    public StoppingTimeEffect addAttributeModifier(Holder<Attribute> pAttribute, ResourceLocation pId, double pAmount, AttributeModifier.Operation pOperation) {
+        return (StoppingTimeEffect)super.addAttributeModifier(pAttribute, pId, pAmount, pOperation);
+    }
+
+    @Override
+    public boolean shouldApplyEffectTickThisTick(int pDuration, int pAmplifier) {
+        return true;
     }
 }

@@ -8,6 +8,7 @@ import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.item.curios.InvisibiltyRing;
@@ -32,6 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static io.redspace.ironsspellbooks.api.registry.AttributeRegistry.MAX_MANA;
+import static net.minecraft.world.effect.MobEffects.WITHER;
 
 @AutoSpellConfig
 public class WishSpell extends AbstractSpell {
@@ -154,8 +156,8 @@ public class WishSpell extends AbstractSpell {
 
         else if (item.getItem().equals(Items.WITHER_SKELETON_SKULL)){
             var result = Utils.raycastForEntity(level, entity, 150, true);
-            if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l && l.getHealth() > l.getMaxHealth() / 2){
-
+            if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l){
+                l.hurt(l.damageSources().wither(), l.getMaxHealth());
             }
         }
 
