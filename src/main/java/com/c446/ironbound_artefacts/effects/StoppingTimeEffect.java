@@ -11,9 +11,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.EffectCure;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class StoppingTimeEffect extends IronboundMobEffect {
     public StoppingTimeEffect(MobEffectCategory category, int color) {
@@ -54,5 +56,8 @@ public class StoppingTimeEffect extends IronboundMobEffect {
         return super.applyEffectTick(caster, spellLevel);
     }
 
-
+    @Override
+    public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance effectInstance) {
+        // Leave this empty to prevent milk or curatives from clearing
+    }
 }
