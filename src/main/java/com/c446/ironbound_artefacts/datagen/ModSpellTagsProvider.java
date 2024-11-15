@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.datagen;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import net.minecraft.core.HolderLookup;
@@ -58,7 +59,7 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 .add(getKey(SpellRegistry.EVASION_SPELL.get()));
 
         tag(Tags.SpellTags.OFFENSIVE_SPELL)
-                .add(getKey(SpellRegistry.ACID_ORB_SPELL.get()))
+//                .add(getKey(SpellRegistry.ACID_ORB_SPELL.get()))
                 .add(getKey(SpellRegistry.ACUPUNCTURE_SPELL.get()))
                 .add(getKey(SpellRegistry.BALL_LIGHTNING_SPELL.get()))
                 .add(getKey(SpellRegistry.BLAZE_STORM_SPELL.get()))
@@ -95,6 +96,10 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 .add(getKey(SpellRegistry.WALL_OF_FIRE_SPELL.get().getSpellId()))
                 .add(getKey(SpellRegistry.WITHER_SKULL_SPELL.get().getSpellId()))
                 .add(getKey(SpellRegistry.SUMMON_POLAR_BEAR_SPELL.get().getSpellId()))
-                .add(getKey(SpellRegistry.SUMMON_VEX_SPELL.get().getSpellId()));
+                .add(getKey(SpellRegistry.SUMMON_VEX_SPELL.get().getSpellId()))
+                //.add(getKey(SpellRegistry.SLOW_SPELL.get()))
+                //.add(getKey(SpellRegistry.ROOT_SPELL.get()))
+                //.add(getKey(CustomSpellRegistry.TIME_STOP.get()))
+    ;
     }
 }

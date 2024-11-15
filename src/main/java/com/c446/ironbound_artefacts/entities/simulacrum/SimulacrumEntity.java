@@ -9,6 +9,7 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.effect.SummonTimer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
+import io.redspace.ironsspellbooks.entity.mobs.SupportMob;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.NeutralWizard;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
@@ -34,12 +35,15 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -53,9 +57,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 ;
 
-public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
+public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, SupportMob {
     private PlayerInfo playerInfo = null;
     private Player player = null;
     public float quality = 0F;
@@ -107,9 +112,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
     public static AttributeSupplier.Builder createAttributes() {
         var attr = Player.createAttributes()
                 .add(Attributes.FOLLOW_RANGE, 30D)
-                .add(Attributes.MOVEMENT_SPEED, .25)
-
-                ;
+                .add(Attributes.MOVEMENT_SPEED, .25);
         for (var attribute : BuiltInRegistries.ATTRIBUTE.registryKeySet()) {
             if (!attr.hasAttribute(BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute))) {
                 var holder = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute);
@@ -127,10 +130,13 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
 
     @Override
     public boolean isAlliedTo(Entity pEntity) {
-        if (pEntity instanceof Player player){
+        if (pEntity instanceof Player player) {
             return player.equals(this.getSummoner());
         }
-        return pEntity.isAlliedTo(this.getSummoner());
+        if (this.getSummoner() != null) {
+            return pEntity.isAlliedTo(this.getSummoner());
+        }
+        return false;
     }
 
     @Override
@@ -326,7 +332,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
 
     protected void registerWizardGoals() {
         this.goalSelector.removeAllGoals(a -> {
-            return a instanceof WizardAttackGoal;
+            return a instanceof WizardAttackGoal || a instanceof WizardSupportGoal<?>;
         });
 
         if (this.getSummoner() instanceof Player player) {
@@ -336,8 +342,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
                             getDefensiveSpells(simpleGetSpells(player), player),
                             getMovementSpells(simpleGetSpells(player), player),
                             getUtilSpells(simpleGetSpells(player), player)
-                    )
+                    ).setSpellQuality(this.quality * 0.75f, this.quality)
             );
+            this.goalSelector.addGoal(2, new WizardSupportGoal<SimulacrumEntity>(this, 1.25f, 100, 180)
+                    .setSpells(
+                            getDefensiveSpells(simpleGetSpells(player), player), (getUtilSpells(simpleGetSpells(player), player))
+                    ).setSpellQuality(this.quality * 0.75f, this.quality)
+            );
+
         }
 
 
@@ -348,6 +360,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
+        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 1.0, 1.2, this::isAngryAt));
         this.goalSelector.addGoal(7, new GenericFollowOwnerGoal(this, this::getSummoner, 3f, 15, 5, false, 25));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
@@ -381,5 +394,32 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon {
             System.out.println("player info was missing.");
         }
         return this.playerInfo;
+    }
+
+    private LivingEntity helpTarget;
+
+    @Override
+    public @Nullable LivingEntity getSupportTarget() {
+        if (this.getBoundingBox().inflate(20).intersects(this.getSummoner().getBoundingBox())) {
+            this.helpTarget = this.getSummoner();
+            return getSummoner();
+        } else if (this.helpTarget == null) {
+            AtomicReference<LivingEntity> target = new AtomicReference<>();
+            this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(20)).forEach(
+                    a -> {
+                        if (a.isAlliedTo(this.getSummoner())) {
+                            target.set(a);
+                        }
+                    }
+            );
+            this.helpTarget = target.get();
+            return target.get();
+        }
+        return this.helpTarget;
+    }
+
+    @Override
+    public void setSupportTarget(LivingEntity target) {
+        this.helpTarget = target;
     }
 }
