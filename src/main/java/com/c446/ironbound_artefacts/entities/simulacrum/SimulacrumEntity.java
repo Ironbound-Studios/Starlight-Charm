@@ -107,10 +107,11 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     public void setSummoner(Player player) {
-        this.player = player;
-        System.out.println("owner UUID :" + player.getStringUUID());
-        this.summonerUUID = player.getUUID();
-        this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(this.summonerUUID);
+        if (player != null)
+        {
+            this.player = player;
+            this.summonerUUID = player.getUUID();
+        }
     }
 
     public boolean isSlim() {
@@ -120,7 +121,6 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
             return Objects.requireNonNull(this.getPlayerInfo()).getSkin().model().equals(PlayerSkin.Model.SLIM);
         }
     }
-
     @Override
     public LivingEntity getSummoner() {
         if (this.player == null) {
