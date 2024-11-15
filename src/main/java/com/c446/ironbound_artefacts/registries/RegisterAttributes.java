@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.registries;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.entities.comet.AstralCometEntity;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;

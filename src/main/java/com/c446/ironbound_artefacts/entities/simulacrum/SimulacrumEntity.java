@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.entities.simulacrum;
 
 import com.c446.ironbound_artefacts.datagen.Tags;
+import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
 import dev.shadowsoffire.apothic_attributes.api.ALObjects;
@@ -12,6 +13,8 @@ import io.redspace.ironsspellbooks.effect.SummonTimer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
+import io.redspace.ironsspellbooks.entity.mobs.necromancer.NecromancerEntity;
+import io.redspace.ironsspellbooks.entity.mobs.wizards.GenericAnimatedWarlockAttackGoal;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -34,6 +37,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.util.GoalUtils;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -50,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicSummon {
     /**
@@ -84,11 +89,11 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
 
     @Override
     public double getAttributeValue(@NotNull Holder<Attribute> pAttribute) {
-        if (this.player != null) {
-            if (this.player.getAttributes().hasAttribute(pAttribute)){
-                return this.player.getAttributeValue(pAttribute);
-            } else{
-                return BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(pAttribute.getKey()).value().getDefaultValue();
+        if (this.getSummoner() != null) {
+            if (this.getSummoner().getAttributes().hasAttribute(pAttribute)) {
+                return this.getSummoner().getAttributeValue(pAttribute);
+            } else {
+                return BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(Objects.requireNonNull(pAttribute.getKey())).value().getDefaultValue();
             }
         } else {
             return createAttributes().build().getValue(pAttribute);
@@ -98,46 +103,55 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setUUID(UUID.randomUUID());
+        if (this.getOwnerUUID().isPresent()){
+            this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
+        }
     }
 
     private PlayerInfo playerInfo = null;
-    private @NotNull Player player;
+    private Player player;
 
-    protected UUID summonerUUID;
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
 
     public void setSummoner(Player player) {
-        if (player != null)
-        {
+        if (player != null) {
+            this.getEntityData().set(OWNER_UUID, Optional.of(player.getUUID()));
             this.player = player;
-            this.summonerUUID = player.getUUID();
+            this.registerWizardGoals();
         }
     }
 
     public boolean isSlim() {
-        if (this.playerInfo == null){
+        if (this.getPlayerInfo() == null) {
             return false;
-        } else{
+        } else {
             return Objects.requireNonNull(this.getPlayerInfo()).getSkin().model().equals(PlayerSkin.Model.SLIM);
         }
     }
+
     @Override
-    public LivingEntity getSummoner() {
+    public Player getSummoner() {
         if (this.player == null) {
-            System.out.println("player is/was null !!! Why is this happening !!!!!!");
+            //System.out.println("isClient : " + this.level().isClientSide + "player is/was null !!! Why is this happening !!!!!!");
+            if (level().getPlayerByUUID(this.getOwnerUUID().get()) == null) {
+                //System.out.println("isClient : " + this.level().isClientSide + "player UUID is absent from the player list.");
+            } else {
+                this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
+            }
             //this.discard();
-            return null;
         } else {
-            System.out.println("player is/was not null. The good ending :3c");
+            //System.out.println("isClient : " + this.level().isClientSide + "player is/was not null. The good ending :3c");
             return this.player;
         }
+        return this.level().getPlayerByUUID(this.getOwnerUUID().get());
     }
+
     @Override
     public void onUnSummon() {
-        if (this.player.hasData(AttachmentRegistry.GENERIC_CASTING_DATA)) {
-            var data = this.player.getData(AttachmentRegistry.GENERIC_CASTING_DATA);
+        if (this.getSummoner().hasData(AttachmentRegistry.GENERIC_CASTING_DATA)) {
+            var data = this.getSummoner().getData(AttachmentRegistry.GENERIC_CASTING_DATA);
             data.setSimulacrumUUID(null);
-            player.setData(AttachmentRegistry.GENERIC_CASTING_DATA, data);
+            getSummoner().setData(AttachmentRegistry.GENERIC_CASTING_DATA, data);
         }
     }
 
@@ -192,6 +206,7 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     }
 
     public ArrayList<AbstractSpell> simpleGetSpells(Player player) {
+        System.out.println("getting spells spells");
         var spells = this.getspelllist(player);
         ArrayList<AbstractSpell> listSpells = new ArrayList<>();
         spells.forEach(a -> {
@@ -203,12 +218,14 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     }
 
     public List<AbstractSpell> getOffensiveSpellsFromList(List<AbstractSpell> spells, Player player) {
+        System.out.println("getting offensive spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
             SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
                 if (a.is(Tags.SpellTags.OFFENSIVE_SPELL)) {
                     list.add(spell);
+                    System.out.println(spell.getSpellName());
                 }
             });
         }
@@ -216,43 +233,57 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
     }
 
     public List<AbstractSpell> getDefensiveSpells(List<AbstractSpell> spells, Player player) {
+        System.out.println("getting defensive spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
-            if (player.level().holderOrThrow(Tags.SpellTags.DEFENSIVE_SPELL.registry()).value().containsKey(spell.getSpellResource())) {
-                list.add(spell);
-            }
+            SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
+                if (a.is(Tags.SpellTags.DEFENSIVE_SPELL)) {
+                    list.add(spell);
+                    System.out.println(spell.getSpellName());
+                }
+            });
         }
         return list;
     }
 
     public List<AbstractSpell> getMovementSpells(List<AbstractSpell> spells, Player player) {
+        System.out.println("getting movement spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
-            if (player.level().holderOrThrow(Tags.SpellTags.MOUVEMENT_SPELL.registry()).value().containsKey(spell.getSpellResource())) {
-                list.add(spell);
-            }
+            SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
+                if (a.is(Tags.SpellTags.MOUVEMENT_SPELL)) {
+                    list.add(spell);
+                    System.out.println(spell.getSpellName());
+                }
+            });
         }
         return list;
     }
 
     public List<AbstractSpell> getUtilSpells(List<AbstractSpell> spells, Player player) {
+        System.out.println("getting utility spells");
         var list = new ArrayList<AbstractSpell>();
 
         for (var spell : spells) {
-            if (player.level().holderOrThrow(Tags.SpellTags.UTILITY_SPELL.registry()).value().containsKey(spell.getSpellResource())) {
-                list.add(spell);
-            }
+            SpellRegistry.REGISTRY.getHolder(spell.getSpellResource()).ifPresent(a -> {
+                if (a.is(Tags.SpellTags.UTILITY_SPELL)) {
+                    list.add(spell);
+                    System.out.println(spell.getSpellName());
+                }
+            });
         }
         return list;
     }
 
-    @Override
-    protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FloatGoal(this));
+    protected void registerWizardGoals() {
+        this.goalSelector.removeAllGoals(a -> {
+            return a instanceof WizardAttackGoal;
+        });
+
         if (this.getSummoner() instanceof Player player) {
-            this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 50, 75)
+            this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 0, 0)
                     .setSpells(
                             getOffensiveSpellsFromList(simpleGetSpells(player), player),
                             getDefensiveSpells(simpleGetSpells(player), player),
@@ -262,10 +293,27 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
             );
         }
 
-        this.goalSelector.addGoal(7, new GenericFollowOwnerGoal(this, this::getSummoner, 0.9f, 15, 5, false, 25));
+
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 0, 0)
+                .setSpells(
+                        getOffensiveSpellsFromList(simpleGetSpells(player), player),
+                        getDefensiveSpells(simpleGetSpells(player), player),
+                        getMovementSpells(simpleGetSpells(player), player),
+                        getUtilSpells(simpleGetSpells(player), player)
+                )
+        );
+
+        this.goalSelector.addGoal(7, new GenericFollowOwnerGoal(this, this::getSummoner, 3f, 15, 5, false, 25));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
+        this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
 
         this.targetSelector.addGoal(1, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));
         this.targetSelector.addGoal(2, new GenericOwnerHurtTargetGoal(this, this::getSummoner));
@@ -278,18 +326,15 @@ public class SimulacrumEntity extends AbstractSpellCastingMob implements IMagicS
         return networkplayerinfo == null ? DefaultPlayerSkin.getDefaultTexture() : networkplayerinfo.getSkin().texture();
     }
 
-    protected UUID getOwnerUUID() {
-        return this.summonerUUID;
+    protected Optional<UUID> getOwnerUUID() {
+        return this.entityData.get(OWNER_UUID);
     }
 
     @Nullable
     @OnlyIn(Dist.CLIENT)
     protected PlayerInfo getPlayerInfo() {
-        if (this.getSummoner() == null) {
-            this.playerInfo = (Minecraft.getInstance().getConnection()).getPlayerInfo(getOwnerUUID());
-        }
+        if (this.getSummoner() == null && this.getEntityData().get(OWNER_UUID).isPresent())
+            this.playerInfo = (Minecraft.getInstance().getConnection()).getPlayerInfo(getOwnerUUID().get());
         return this.playerInfo;
     }
-
-
 }

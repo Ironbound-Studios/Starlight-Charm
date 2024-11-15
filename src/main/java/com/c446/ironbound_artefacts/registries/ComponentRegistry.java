@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.registries;
 
 
+import com.c446.ironbound_artefacts.components.EternalDurabilityComponent;
 import com.c446.ironbound_artefacts.components.HermitComponentData;
 import io.netty.buffer.ByteBuf;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
@@ -34,6 +35,11 @@ public class ComponentRegistry {
             HermitComponentData::new
     );
 
+    public static final StreamCodec<ByteBuf, EternalDurabilityComponent> ETERNAL_DURABILITY_COMPONENT_STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.BOOL, EternalDurabilityComponent::isApplied,
+            EternalDurabilityComponent::new
+    );
+
 //    public static final StreamCodec<ByteBuf, ClassLevelData> CLASS_COMPONENT = StreamCodec.composite(
 //            ByteBufCodecs.STRING_UTF8
 //    )
@@ -47,4 +53,5 @@ public class ComponentRegistry {
     }
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<HermitComponentData>> HERMIT_SCROLL_FORGE_COMPONENT = COMPONENTS.registerComponentType("hermit_component", hermitEyeComponentBuilder -> hermitEyeComponentBuilder.networkSynchronized(STREAM_HERMIT_EYE_COMPONENT_CODEC));
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<EternalDurabilityComponent>> ETERNAL_DURA_COMPONENT = COMPONENTS.registerComponentType("eternal_dura_component", builder -> builder.networkSynchronized(ETERNAL_DURABILITY_COMPONENT_STREAM_CODEC));
 }

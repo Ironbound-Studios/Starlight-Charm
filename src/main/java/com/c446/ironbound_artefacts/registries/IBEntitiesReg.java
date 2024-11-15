@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.entities.comet.AstralCometEntity;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.Entity;
@@ -20,6 +21,13 @@ public class IBEntitiesReg {
     public static final DeferredHolder<EntityType<?>, EntityType<SimulacrumEntity>> SIMULACRUM = registerEntity(
             "simulacrum",
             EntityType.Builder.<SimulacrumEntity>of(SimulacrumEntity::new, MobCategory.MISC)
+                    .sized(1.0f, 2.0f)
+                    .setTrackingRange(10)
+                    .setShouldReceiveVelocityUpdates(true));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<AstralCometEntity>> COMET = registerEntity(
+            "comet",
+            EntityType.Builder.<AstralCometEntity>of(AstralCometEntity::new, MobCategory.MISC)
                     .sized(1.0f, 2.0f)
                     .setTrackingRange(10)
                     .setShouldReceiveVelocityUpdates(true));
