@@ -129,9 +129,9 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onServerStop(ServerStoppingEvent event){
+    public static void onServerStop(ServerStartedEvent event){
         event.getServer().getAllLevels().forEach(level->{
-
+            level.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(SimulacrumEntity::onDeathHelper);
         });
     }
 

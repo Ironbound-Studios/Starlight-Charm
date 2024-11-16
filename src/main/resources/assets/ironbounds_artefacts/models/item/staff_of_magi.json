@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "staffstoff",
-		"particle": "staffstoff"
+		"0": "ironbounds_artefacts:item/stavesmodel/staff_of_magi",
+		"particle": "ironbounds_artefacts:item/stavesmodel/staff_of_magi"
 	},
 	"elements": [
 		{

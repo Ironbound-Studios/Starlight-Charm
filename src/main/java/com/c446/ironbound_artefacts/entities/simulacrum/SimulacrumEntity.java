@@ -35,10 +35,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.monster.Creeper;
@@ -64,7 +61,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     private PlayerInfo playerInfo = null;
     private Player player = null;
     public float quality = 0F;
-    protected ListTag attributes = new ListTag();
 
     @Override
     public boolean isAngryAt(LivingEntity pTarget) {
@@ -86,23 +82,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
         setSummoner(player);
         this.quality = quality;
-        this.playerInfo = new PlayerInfo(player.getGameProfile(), false);
-
-        this.attributes = player.getAttributes().save();
-
-        this.setItemSlot(EquipmentSlot.FEET, this.player.getItemBySlot(EquipmentSlot.FEET));
-        this.setItemSlot(EquipmentSlot.LEGS, this.player.getItemBySlot(EquipmentSlot.LEGS));
-        this.setItemSlot(EquipmentSlot.CHEST, this.player.getItemBySlot(EquipmentSlot.CHEST));
-        this.setItemSlot(EquipmentSlot.HEAD, this.player.getItemBySlot(EquipmentSlot.HEAD));
-        this.setItemSlot(EquipmentSlot.MAINHAND, this.player.getItemBySlot(EquipmentSlot.MAINHAND));
-        this.setItemSlot(EquipmentSlot.OFFHAND, this.player.getItemBySlot(EquipmentSlot.OFFHAND));
-
-        this.setDropChance(EquipmentSlot.FEET, 0);
-        this.setDropChance(EquipmentSlot.LEGS, 0);
-        this.setDropChance(EquipmentSlot.CHEST, 0);
-        this.setDropChance(EquipmentSlot.HEAD, 0);
-        this.setDropChance(EquipmentSlot.MAINHAND, 0);
-        this.setDropChance(EquipmentSlot.OFFHAND, 0);
+        this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(this.getSummoner().getUUID());
     }
 
     public SimulacrumEntity(Level pLevel) {
@@ -112,7 +92,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     public static AttributeSupplier.Builder createAttributes() {
         var attr = Player.createAttributes()
                 .add(Attributes.FOLLOW_RANGE, 30D)
-                .add(Attributes.MOVEMENT_SPEED, .25);
+                .add(Attributes.MOVEMENT_SPEED, 1);
         for (var attribute : BuiltInRegistries.ATTRIBUTE.registryKeySet()) {
             if (!attr.hasAttribute(BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute))) {
                 var holder = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute);
@@ -137,19 +117,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             return pEntity.isAlliedTo(this.getSummoner());
         }
         return false;
-    }
-
-    @Override
-    public double getAttributeValue(@NotNull Holder<Attribute> pAttribute) {
-        if (this.getSummoner() != null) {
-            if (this.getSummoner().getAttributes().hasAttribute(pAttribute)) {
-                return this.getSummoner().getAttributeValue(pAttribute);
-            } else {
-                return BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(Objects.requireNonNull(pAttribute.getKey())).value().getDefaultValue();
-            }
-        } else {
-            return createAttributes().build().getValue(pAttribute);
-        }
     }
 
     /**
@@ -360,10 +327,11 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
-        this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 1.0, 1.2, this::isAngryAt));
-        this.goalSelector.addGoal(7, new GenericFollowOwnerGoal(this, this::getSummoner, 3f, 15, 5, false, 25));
+        this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 1f, 15, 5, false, 25));
+        this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 1.0, 1.2, this::isAngryAt));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1f, false));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
         this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
 
