@@ -12,6 +12,7 @@ public class Tags {
         public static TagKey<AbstractSpell> UTILITY_SPELL = create(IronboundArtefact.prefix("utility_spell"));
         public static TagKey<AbstractSpell> DEFENSIVE_SPELL = create(IronboundArtefact.prefix("defensive_spell"));
         public static TagKey<AbstractSpell> MOUVEMENT_SPELL = create(IronboundArtefact.prefix("mouvement_spell"));
+        public static TagKey<AbstractSpell> SUPPORT_SPELL = create(IronboundArtefact.prefix("support_spell"));
 
         public static TagKey<AbstractSpell> create(ResourceLocation name) {
             return new TagKey<AbstractSpell>(SpellRegistry.SPELL_REGISTRY_KEY, name);

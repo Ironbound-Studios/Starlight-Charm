@@ -100,6 +100,10 @@ public class ModSpellTagsProvider extends TagsProvider<AbstractSpell> {
                 //.add(getKey(SpellRegistry.SLOW_SPELL.get()))
                 //.add(getKey(SpellRegistry.ROOT_SPELL.get()))
                 //.add(getKey(CustomSpellRegistry.TIME_STOP.get()))
-    ;
+        ;
+        tag(Tags.SpellTags.SUPPORT_SPELL)
+                .add(getKey(SpellRegistry.HASTE_SPELL.get()))
+                .add(getKey(SpellRegistry.BLESSING_OF_LIFE_SPELL.get()))
+                .add(getKey(SpellRegistry.HEALING_CIRCLE_SPELL.get()));
     }
 }

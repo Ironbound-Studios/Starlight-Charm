@@ -1,5 +1,6 @@
-// 1.21	2024-11-15T20:34:04.1013547	Tags for irons_spellbooks:spells mod id ironbounds_artefacts
+// 1.21	2024-11-17T14:04:39.7317554	Tags for irons_spellbooks:spells mod id ironbounds_artefacts
 41408712840eb6af4956c09e00553bd66b2a64f7 data/ironbounds_artefacts/tags/irons_spellbooks/spells/defensive_spell.json
 f9cbe396e84c8436f332f794edc8f3936ba94387 data/ironbounds_artefacts/tags/irons_spellbooks/spells/mouvement_spell.json
 929f1bad459330cca0b2d04ef3b23cc25690bb80 data/ironbounds_artefacts/tags/irons_spellbooks/spells/offensive_spell.json
+80675b54b00e1ec86ce695e7261c96bdfba666b9 data/ironbounds_artefacts/tags/irons_spellbooks/spells/support_spell.json
 daabff4be86c185e977275737c22e50b6ca88489 data/ironbounds_artefacts/tags/irons_spellbooks/spells/utility_spell.json

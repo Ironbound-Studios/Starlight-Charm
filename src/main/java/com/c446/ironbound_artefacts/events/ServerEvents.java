@@ -131,7 +131,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onServerStop(ServerStartedEvent event){
         event.getServer().getAllLevels().forEach(level->{
-            level.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(SimulacrumEntity::onDeathHelper);
+            level.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(SimulacrumEntity::discard);
         });
     }
 
@@ -169,8 +169,8 @@ public class ServerEvents {
         AtomicBoolean isHandPresent = new AtomicBoolean(false);
         if (event.getNewAboutToBeSetTarget() instanceof Player player) {
             CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
-                isCrownPresent.set(inv.findCurios((new ItemStack(ItemRegistry.LICH_CROWN)).getItem()).isEmpty());
-                isHandPresent.set(inv.findCurios((new ItemStack(ItemRegistry.LICH_HAND)).getItem()).isEmpty());
+                isCrownPresent.set(!inv.findCurios((new ItemStack(ItemRegistry.LICH_CROWN)).getItem()).isEmpty());
+                isHandPresent.set(!inv.findCurios((new ItemStack(ItemRegistry.LICH_HAND)).getItem()).isEmpty());
             });
             if (isCrownPresent.get() || isHandPresent.get()) {
                 if (event.getEntity().getType().is(UNDEAD)) {

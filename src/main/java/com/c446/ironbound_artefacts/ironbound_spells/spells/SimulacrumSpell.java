@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -36,12 +38,7 @@ public class SimulacrumSpell extends AbstractSpell {
 
     private final ResourceLocation spellId = IronboundArtefact.prefix("simulacrum");
 
-    private final DefaultConfig defaultConfig = new DefaultConfig()
-            .setMinRarity(SpellRarity.LEGENDARY)
-            .setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE)
-            .setMaxLevel(3)
-            .setCooldownSeconds(3600)
-            .build();
+    private final DefaultConfig defaultConfig = new DefaultConfig().setMinRarity(SpellRarity.LEGENDARY).setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE).setMaxLevel(3).setCooldownSeconds(3600).build();
 
     public SimulacrumSpell() {
         this.baseSpellPower = 1;
@@ -50,6 +47,13 @@ public class SimulacrumSpell extends AbstractSpell {
         this.manaCostPerLevel = 500;
         this.castTime = 0;
     }
+
+    @Override
+    public boolean canBeCraftedBy(Player player) {
+        return false;
+    }
+
+
 
     @Override
     public ResourceLocation getSpellResource() {
@@ -67,40 +71,54 @@ public class SimulacrumSpell extends AbstractSpell {
     }
 
     @Override
-    public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        if (entity instanceof Player player && level instanceof Level world){
-            // code taken from the RaiseDead spell.
-            float radius = 1.5f + .185f * spellLevel;
-            for (int i = 0; i < spellLevel; i++) {
-                var simulacrum = new SimulacrumEntity(world, player, 1f);
-                System.out.println(player);
+    public float getSpellPower(int spellLevel, @Nullable Entity sourceEntity) {
+        return (float) Math.max(0.1, 1f - (float) Utils.softCapFormula(super.getSpellPower(spellLevel, sourceEntity)));
+    }
+
+    public void doSpell(ServerLevel world, int spellLevel, Player player, CastSource castSource, MagicData playerMagicData) {
+        if (player == null) {
+            return;
+        }
+        float radius = 1.5f + .185f * spellLevel;
+        for (int i = 0; i < spellLevel; i++) {
+            var simulacrum = new SimulacrumEntity(world, player, this.getSpellPower(spellLevel, player));
+
+            System.out.println(player);
                 /*simulacrum.setItemSlot(EquipmentSlot.FEET, player.getItemBySlot(EquipmentSlot.FEET));
                 simulacrum.setItemSlot(EquipmentSlot.LEGS, player.getItemBySlot(EquipmentSlot.LEGS));
                 simulacrum.setItemSlot(EquipmentSlot.CHEST, player.getItemBySlot(EquipmentSlot.CHEST));
                 simulacrum.setItemSlot(EquipmentSlot.HEAD, player.getItemBySlot(EquipmentSlot.HEAD));
                 */
 
-                simulacrum.setItemSlot(EquipmentSlot.MAINHAND, player.getItemBySlot(EquipmentSlot.MAINHAND));
-                simulacrum.setItemSlot(EquipmentSlot.OFFHAND, player.getItemBySlot(EquipmentSlot.OFFHAND));
+            simulacrum.setItemSlot(EquipmentSlot.MAINHAND, player.getItemBySlot(EquipmentSlot.MAINHAND));
+            simulacrum.setItemSlot(EquipmentSlot.OFFHAND, player.getItemBySlot(EquipmentSlot.OFFHAND));
 
-                simulacrum.setDropChance(EquipmentSlot.FEET, 0);
-                simulacrum.setDropChance(EquipmentSlot.LEGS, 0);
-                simulacrum.setDropChance(EquipmentSlot.CHEST, 0);
-                simulacrum.setDropChance(EquipmentSlot.HEAD, 0);
-                simulacrum.setDropChance(EquipmentSlot.MAINHAND, 0);
-                simulacrum.setDropChance(EquipmentSlot.OFFHAND, 0);
+            simulacrum.setDropChance(EquipmentSlot.FEET, 0);
+            simulacrum.setDropChance(EquipmentSlot.LEGS, 0);
+            simulacrum.setDropChance(EquipmentSlot.CHEST, 0);
+            simulacrum.setDropChance(EquipmentSlot.HEAD, 0);
+            simulacrum.setDropChance(EquipmentSlot.MAINHAND, 0);
+            simulacrum.setDropChance(EquipmentSlot.OFFHAND, 0);
 
-                var yrot = 6.281f / spellLevel * i + entity.getYRot() * Mth.DEG_TO_RAD;
-                Vec3 spawn = Utils.moveToRelativeGroundLevel(world, entity.getEyePosition().add(new Vec3(radius * Mth.cos(yrot), 0, radius * Mth.sin(yrot))), 10);
-                simulacrum.setPos(spawn.x, spawn.y, spawn.z);
-                simulacrum.setYRot(entity.getYRot());
-                simulacrum.setOldPosAndRot();
-                //var event = NeoForge.EVENT_BUS.post(new SpellSummonEvent<>(entity, simulacrum, this.spellId, spellLevel));
-                world.addFreshEntity(simulacrum);
+            var yrot = 6.281f / spellLevel * i + player.getYRot() * Mth.DEG_TO_RAD;
+            Vec3 spawn = Utils.moveToRelativeGroundLevel(world, player.getEyePosition().add(new Vec3(radius * Mth.cos(yrot), 0, radius * Mth.sin(yrot))), 10);
+            simulacrum.setPos(spawn.x, spawn.y, spawn.z);
+            simulacrum.setYRot(player.getYRot());
+            simulacrum.setOldPosAndRot();
+            //var event = NeoForge.EVENT_BUS.post(new SpellSummonEvent<>(entity, simulacrum, this.spellId, spellLevel));
+            world.addFreshEntity(simulacrum);
+        }
+    }
+
+    @Override
+    public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
+        if (level instanceof ServerLevel world) {
+            if (entity instanceof Player player) {
+                doSpell(world, spellLevel, player, castSource, playerMagicData);
+            } else if (entity instanceof SimulacrumEntity simulacrum) {
+                doSpell(world, spellLevel, simulacrum.getSummoner(), castSource, playerMagicData);
             }
         }
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
-
-
 }
