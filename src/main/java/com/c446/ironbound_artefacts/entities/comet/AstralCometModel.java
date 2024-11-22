@@ -8,11 +8,13 @@ package com.c446.ironbound_artefacts.entities.comet;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import io.redspace.ironsspellbooks.entity.spells.fireball.FireballRenderer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.world.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +27,10 @@ public class AstralCometModel<T extends Entity> extends EntityModel<T> {
         this.bb_main = root.getChild("bb_main");
     }
 
+    public AstralCometModel(EntityRendererProvider.Context context) {
+        var model = context.bakeLayer(LAYER_LOCATION);
+        this.bb_main = model.getChild("bb_main");
+    }
 
 
     public static LayerDefinition createBodyLayer() {

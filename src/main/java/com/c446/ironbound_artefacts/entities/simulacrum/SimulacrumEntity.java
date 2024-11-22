@@ -31,7 +31,10 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
@@ -50,17 +53,11 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, SupportMob {
-    private PlayerInfo playerInfo = null;
-    private Player player = null;
+    private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
     public float quality = 1F;
-
-    @Override
-    public boolean isAngryAt(LivingEntity pTarget) {
-        if (pTarget instanceof Player player && player.equals(this.getSummoner())) {
-            return false;
-        }
-        return super.isAngryAt(pTarget);
-    }
+    public PlayerInfo playerInfo = null;
+    private Player player = null;
+    private LivingEntity helpTarget;
 
     /**
      * The owner can NEVER be something other than a player.
@@ -73,7 +70,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     public SimulacrumEntity(Level pLevel, @NotNull Player player, float quality) {
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
         setSummoner(player);
-        System.out.println("current quality : " +quality);
+        System.out.println("current quality : " + quality);
         this.quality = quality;
         //this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(this.getSummoner().getUUID());
     }
@@ -82,10 +79,20 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
     }
 
+    /**
+     * Used for registring.
+     * Don't use otherwise...
+     */
+    public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
+        super(pEntityType, pLevel);
+        this.setUUID(UUID.randomUUID());
+        if (this.getOwnerUUID().isPresent()) {
+            this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
+        }
+    }
+
     public static AttributeSupplier.Builder createAttributes() {
-        var attr = Player.createAttributes()
-                .add(Attributes.FOLLOW_RANGE, 30D)
-                .add(Attributes.MOVEMENT_SPEED, 1);
+        var attr = Player.createAttributes().add(Attributes.FOLLOW_RANGE, 30D).add(Attributes.MOVEMENT_SPEED, 1);
         for (var attribute : BuiltInRegistries.ATTRIBUTE.registryKeySet()) {
             if (!attr.hasAttribute(BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute))) {
                 var holder = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute);
@@ -93,6 +100,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             }
         }
         return attr;
+    }
+
+    @Override
+    public boolean isAngryAt(LivingEntity pTarget) {
+        if (pTarget instanceof Player player && player.equals(this.getSummoner())) {
+            return false;
+        }
+        return super.isAngryAt(pTarget);
     }
 
     @Override
@@ -110,29 +125,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             return pEntity.isAlliedTo(this.getSummoner());
         }
         return false;
-    }
-
-    /**
-     * Used for registring.
-     * Don't use otherwise...
-     */
-    public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-        this.setUUID(UUID.randomUUID());
-        if (this.getOwnerUUID().isPresent()) {
-            this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
-        }
-    }
-
-    private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(SimulacrumEntity.class, EntityDataSerializers.OPTIONAL_UUID);
-
-    public void setSummoner(Player player) {
-        if (player != null) {
-            this.getEntityData().set(OWNER_UUID, Optional.of(player.getUUID()));
-            this.player = player;
-            this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getUUID());
-            this.registerWizardGoals();
-        }
     }
 
     public boolean isSlim() {
@@ -158,6 +150,15 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             return this.player;
         }
         return this.level().getPlayerByUUID(this.getOwnerUUID().get());
+    }
+
+    public void setSummoner(Player player) {
+        if (player != null) {
+            this.getEntityData().set(OWNER_UUID, Optional.of(player.getUUID()));
+            this.player = player;
+            this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getUUID());
+            this.registerWizardGoals();
+        }
     }
 
     @Override
@@ -191,6 +192,17 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     @Override
     public void onRemovedHelper(Entity entity, DeferredHolder<MobEffect, SummonTimer> holder) {
         IMagicSummon.super.onRemovedHelper(entity, holder);
+    }
+
+    @Override
+    public boolean shouldRender(double pX, double pY, double pZ) {
+        System.out.println("renderer queried");
+        if (this.playerInfo != null && this.player != null &&super.shouldRender(pX, pY, pZ)){
+            return this.playerInfo != null && this.player != null &&super.shouldRender(pX, pY, pZ);
+        } else {
+            discard();
+            return false;
+        }
     }
 
     @Override
@@ -309,20 +321,9 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         this.goalSelector.removeAllGoals(a -> a instanceof WizardAttackGoal || a instanceof WizardSupportGoal<?>);
 
         if (this.getSummoner() instanceof Player player) {
-            this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 25, 80)
-                    .setSpells(
-                            getOffensiveSpellsFromList(simpleGetSpells(player), player),
-                            getDefensiveSpells(simpleGetSpells(player), player),
-                            getMovementSpells(simpleGetSpells(player), player),
-                            getUtilSpells(simpleGetSpells(player), player)
-                    ).setSpellQuality(this.quality * 0.75f, this.quality)
-            );
-            System.out.println("min quality : " +this.quality * 0.75 + "max quality : "+this.quality);
-            this.goalSelector.addGoal(2, new WizardSupportGoal<SimulacrumEntity>(this, 1.25f, 100, 180)
-                    .setSpells(
-                            getDefensiveSpells(simpleGetSpells(player), player), (getUtilSpells(simpleGetSpells(player), player))
-                    ).setSpellQuality(this.quality * 0.75f, this.quality)
-            );
+            this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 25, 80).setSpells(getOffensiveSpellsFromList(simpleGetSpells(player), player), getDefensiveSpells(simpleGetSpells(player), player), getMovementSpells(simpleGetSpells(player), player), getUtilSpells(simpleGetSpells(player), player)).setSpellQuality(this.quality * 0.75f, this.quality));
+            System.out.println("min quality : " + this.quality * 0.75 + "max quality : " + this.quality);
+            this.goalSelector.addGoal(2, new WizardSupportGoal<SimulacrumEntity>(this, 1.25f, 100, 180).setSpells(getDefensiveSpells(simpleGetSpells(player), player), (getUtilSpells(simpleGetSpells(player), player))).setSpellQuality(this.quality * 0.75f, this.quality));
         }
     }
 
@@ -364,7 +365,6 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         return networkplayerinfo == null ? DefaultPlayerSkin.getDefaultTexture() : networkplayerinfo.getSkin().texture();
     }
 
-
     protected Optional<UUID> getOwnerUUID() {
         return this.entityData.get(OWNER_UUID);
     }
@@ -376,11 +376,14 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             var uuid = this.getOwnerUUID().get();
             this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(uuid);
             System.out.println("player info was missing.");
+            if (this.getSummoner() == null) {
+                this.discard();
+            } else{
+                this.playerInfo = Minecraft.getInstance().getConnection().getPlayerInfo(this.getSummoner().getUUID());
+            }
         }
         return this.playerInfo;
     }
-
-    private LivingEntity helpTarget;
 
     @Override
     public @Nullable LivingEntity getSupportTarget() {
@@ -389,13 +392,11 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             return getSummoner();
         } else if (this.helpTarget == null) {
             AtomicReference<LivingEntity> target = new AtomicReference<>();
-            this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(20)).forEach(
-                    a -> {
-                        if (a.isAlliedTo(this.getSummoner())) {
-                            target.set(a);
-                        }
-                    }
-            );
+            this.level().getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(20)).forEach(a -> {
+                if (a.isAlliedTo(this.getSummoner())) {
+                    target.set(a);
+                }
+            });
             this.helpTarget = target.get();
             return target.get();
         }

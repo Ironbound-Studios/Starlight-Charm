@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.entities.simulacrum;
 
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
+import io.redspace.ironsspellbooks.setup.ClientSetup;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,6 +15,5 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 public class ClientHandler {
     @SubscribeEvent
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(IBEntitiesReg.SIMULACRUM.get(), SimulacrumRenderer::new);
     }
 }

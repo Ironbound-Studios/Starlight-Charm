@@ -15,6 +15,8 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
+import io.redspace.ironsspellbooks.entity.mobs.SummonedSkeleton;
+import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.item.UpgradeOrbItem;
 import io.redspace.ironsspellbooks.registries.*;
@@ -23,6 +25,9 @@ import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.bossevents.CustomBossEvent;
+import net.minecraft.server.commands.BossBarCommands;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
@@ -43,8 +48,10 @@ import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -104,7 +111,18 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
         ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
+//        event.getServer().getAllLevels().forEach(l->{
+//            l.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(a->{a.remove(Entity.RemovalReason.DISCARDED);});
+//        });
 
+    }
+
+
+    @SubscribeEvent
+    public static void onServerStarting(ServerStartingEvent event){
+//        event.getServer().getAllLevels().forEach(l->{
+//            l.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(SimulacrumEntity::discard);
+//        });
     }
 
     @SubscribeEvent
@@ -181,19 +199,35 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onSummoningThings(SpellSummonEvent<Monster> event) {
+    public static void onSummoningThings(SpellSummonEvent<LivingEntity> event) {
         System.out.println(event.getCreature().toString());
         var spell = SpellRegistry.getSpell(event.getSpellId());
         LivingEntity player = event.getCaster();
         var quality = 3 * event.getSpellLevel() + 15;
 
         // Check if the spell is an instance of RaiseDeadSpell and if the player has the full Lich set equipped
-        if (spell instanceof RaiseDeadSpell) {
+        if (spell instanceof RaiseDeadSpell && event.getCreature() instanceof SummonedZombie) {
             boolean hasLichSet = CuriosApi.getCuriosInventory(player).map(inv -> !inv.findCurios(ItemRegistry.LICH_CROWN.get()).isEmpty() || !inv.findCurios(ItemRegistry.LICH_HAND.get()).isEmpty()).orElse(false);
 
             if (hasLichSet) {
                 var canGetNetherite = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.TAR) || player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ENDER));
-                Monster creature = (equipCreatureBasedOnQuality(event.getCreature(), quality, canGetNetherite));
+                Monster creature = (equipCreatureBasedOnQuality((Monster) event.getCreature(), quality, canGetNetherite));
+                System.out.println(creature.toString());
+                HashMultimap<Holder<Attribute>, AttributeModifier> summonAttributes = HashMultimap.create();
+                summonAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(IronboundArtefact.prefix("summon_health_boost"), 4 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));
+                summonAttributes.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("summon_damage"), 2 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));
+
+                creature.getAttributes().addTransientAttributeModifiers(summonAttributes);
+                event.setCreature(creature);
+            }
+        }
+
+        if (spell instanceof RaiseDeadSpell && event.getCreature() instanceof SummonedSkeleton) {
+            boolean hasLichSet = CuriosApi.getCuriosInventory(player).map(inv -> !inv.findCurios(ItemRegistry.LICH_CROWN.get()).isEmpty() || !inv.findCurios(ItemRegistry.LICH_HAND.get()).isEmpty()).orElse(false);
+
+            if (hasLichSet) {
+                var canGetNetherite = (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.TAR) || player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ENDER));
+                Monster creature = (equipCreatureBasedOnQuality((Monster) event.getCreature(), quality, canGetNetherite));
                 System.out.println(creature.toString());
                 HashMultimap<Holder<Attribute>, AttributeModifier> summonAttributes = HashMultimap.create();
                 summonAttributes.put(Attributes.MAX_HEALTH, new AttributeModifier(IronboundArtefact.prefix("summon_health_boost"), 4 * SpellRegistry.RAISE_DEAD_SPELL.get().getSpellPower(event.getSpellLevel(), player), AttributeModifier.Operation.ADD_VALUE));

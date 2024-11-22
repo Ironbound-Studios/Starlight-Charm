@@ -23,6 +23,7 @@ public class ModSetup {
         CustomSpellRegistry.SPELLS.register(eventBus);
         IBEntitiesReg.ENTITIES.register(eventBus);
         AttachmentRegistry.ATTACHMENT_TYPE_DEFERRED_REGISTER.register(eventBus);
+        ComponentRegistry.register(eventBus);
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
         //ModIngredientTypeRegistry.INGREDIENT_TYPES.register(eventBus);

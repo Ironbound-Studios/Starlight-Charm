@@ -1,21 +1,21 @@
 package com.c446.ironbound_artefacts.effects;
 
+import com.c446.ironbound_artefacts.attachment.MovementDeltaData;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.TimeStopSpell;
+import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
 import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
-import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.EffectCure;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,15 +42,26 @@ public class StoppingTimeEffect extends IronboundMobEffect {
             if (!finishSoon) {
                 for (Entity e : entities) {
                     if (e instanceof LivingEntity l) {
-                        l.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, (int) (timeStopSpell.getTickDuration(spellLevel, caster)), 0, true, true));
+                        if (!l.isAlliedTo(caster)){
+                            var data = new MovementDeltaData();
+                            data.setVec(l.getDeltaMovement());
+                            l.setData(AttachmentRegistry.VECTOR_ATTACHMENT, data);
+                            l.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, (int) (timeStopSpell.getTickDuration(spellLevel, caster)), 0, true, true));
+                        }
                     } else {
-                        e.setDeltaMovement(0, 0, 0);
-                        e.setNoGravity(true);
+                        if (e instanceof AbstractMagicProjectile projectile && projectile.getOwner() != caster){
+                            var data = new MovementDeltaData();
+                            data.setVec(e.getDeltaMovement());
+                            e.setData(AttachmentRegistry.VECTOR_ATTACHMENT, data);
+                            e.setDeltaMovement(0, 0, 0);
+                            e.setNoGravity(true);
+                        }
                     }
                 }
             } else {
                 for (Entity e : entities) {
                     e.setNoGravity(false);
+                    e.setDeltaMovement(e.getData(AttachmentRegistry.VECTOR_ATTACHMENT).getVec());
                 }
             }
 

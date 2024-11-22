@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.registries;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.items.ForsakenDreams;
 import com.c446.ironbound_artefacts.items.ModArmorMaterial;
 import com.c446.ironbound_artefacts.items.ModArmorMaterials;
 import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
@@ -41,6 +42,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI;
     public static final DeferredHolder<Item, HermitEye> HERMIT_EYE;
     public static final DeferredHolder<Item, LoversStopwatch> STOPWATCH;
+    public static final DeferredHolder<Item, ForsakenDreams> DREAMS;
 
 
     public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK;
@@ -98,6 +100,7 @@ public class ItemRegistry {
         /*AMA*/
         HERMIT_EYE = ITEMS.register("hermit_eye", () -> new HermitEye(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
         STOPWATCH = ITEMS.register("stopwatch", () -> new LoversStopwatch(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
+        DREAMS = ITEMS.register("forsaken_dreams", () -> new ForsakenDreams(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
 
         GREATER_SPELL_SLOT_UPGRADE = ITEMS.register("greater_spell_slot_upgrade", () -> {
             return new SpellSlotUpgradeItem(15);
