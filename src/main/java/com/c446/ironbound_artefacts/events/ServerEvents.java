@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.events;
 
 
+import com.c446.ironbound_artefacts.Config;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import com.c446.ironbound_artefacts.registries.*;
@@ -52,6 +53,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
 
@@ -125,6 +127,8 @@ public class ServerEvents {
 //        });
     }
 
+
+
     @SubscribeEvent
     public static void onEntityDamaged(LivingDamageEvent.Post event) {
         CuriosApi.getCuriosInventory(event.getEntity().getLastAttacker()).ifPresent(inv -> {
@@ -133,10 +137,16 @@ public class ServerEvents {
                 event.getEntity().addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 3, 1));
             }
         });
+        event.getEntity().invulnerableTime = Config.iframeCount;
     }
 
     @SubscribeEvent
     public static void tickEntity(EntityTickEvent.Post event) {
+    }
+
+    @SubscribeEvent
+    public static void levelTick(ServerTickEvent.Pre event){
+        IronboundArtefact.tickMap();
     }
 
     @SubscribeEvent

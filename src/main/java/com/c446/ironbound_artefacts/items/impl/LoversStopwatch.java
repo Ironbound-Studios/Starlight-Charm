@@ -60,7 +60,7 @@ public class LoversStopwatch extends UserDependantCurios {
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
             copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(3, true, false, false, new SpellSlot[]{
-                            new SpellSlot(new SpellData(CustomSpellRegistry.TIME_STOP.get(), 5, true), 0),
+                            new SpellSlot(new SpellData(CustomSpellRegistry.TIME_STOP.get(), 1, true), 0),
                             new SpellSlot(new SpellData(SpellRegistry.HASTE_SPELL.get(), 8, true), 1),
                             new SpellSlot(new SpellData(SpellRegistry.SLOW_SPELL.get(), 8, true), 2),
                     })

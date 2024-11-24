@@ -1,8 +1,9 @@
 package com.c446.ironbound_artefacts;
 
 import com.c446.ironbound_artefacts.registries.ModSetup;
-import io.redspace.ironsspellbooks.entity.mobs.wizards.cryomancer.CryomancerEntity;
+import com.min01.entitytimer.TimerUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -11,11 +12,31 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Mod(IronboundArtefact.MODID)
 public class IronboundArtefact {
+    public static final HashMap<Entity, Integer> STOPPED_ENTITIES = new HashMap<>();
+
+    public static void freezeEntity(Entity entity, int timeOut) {
+        STOPPED_ENTITIES.put(entity, timeOut);
+        TimerUtil.setTimer(entity, 0);
+    }
+
+    public static void tickMap() {
+        for (var i : STOPPED_ENTITIES.keySet()) {
+            if (STOPPED_ENTITIES.get(i) <= 0) {
+                TimerUtil.resetTickrate(i);
+
+            } else {
+                STOPPED_ENTITIES.put(i, STOPPED_ENTITIES.get(i) - 1);
+            }
+        }
+    }
+
     public static final String MODID = "ironbounds_artefacts";
     public static final Logger LOGGER = LogManager.getLogger();
+
     public IronboundArtefact(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
 //        modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
@@ -43,8 +64,9 @@ public class IronboundArtefact {
         public static final String STYLY = "03d1d7ca-657f-45ad-a51b-1f5dc85b2f4c";
         public static final String TOMATO = "5ff3e718-e002-4c48-bdc2-c638477620e4";
 
-        public static  ArrayList<String> CONTRIBUTOR_LIST = new ArrayList<>();
-        static{
+        public static ArrayList<String> CONTRIBUTOR_LIST = new ArrayList<>();
+
+        static {
             CONTRIBUTOR_LIST.add(ACE);
             CONTRIBUTOR_LIST.add(AMADHE);
             CONTRIBUTOR_LIST.add(AMON);

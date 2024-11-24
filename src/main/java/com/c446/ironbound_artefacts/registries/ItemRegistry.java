@@ -62,7 +62,7 @@ public class ItemRegistry {
             )
     );
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_LEGGINGS = ITEMS.register("arcane_weave_leggings",
-            () -> new ArcaneWeaveItem( Type.LEGGINGS,
+            () -> new ArcaneWeaveItem(Type.LEGGINGS,
                     new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(55))
             )
     );

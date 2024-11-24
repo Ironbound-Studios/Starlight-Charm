@@ -1,11 +1,9 @@
 package com.c446.ironbound_artefacts.effects;
 
-import com.c446.ironbound_artefacts.attachment.MovementDeltaData;
+import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.ironbound_spells.spells.TimeStopSpell;
-import com.c446.ironbound_artefacts.registries.AttachmentRegistry;
 import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
-import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.resources.ResourceLocation;
@@ -41,6 +39,11 @@ public class StoppingTimeEffect extends IronboundMobEffect {
             boolean finishSoon = Objects.requireNonNull(caster.getEffect(EffectsRegistry.TIME_STOP_CASTER)).endsWithin(1);
             if (!finishSoon) {
                 for (Entity e : entities) {
+                    if (!e.isAlliedTo(caster)) {
+                        IronboundArtefact.freezeEntity(e, 40);
+                    }
+                    //IronboundArtefact.tickMap();
+                    /*
                     if (e instanceof LivingEntity l) {
                         if (!l.isAlliedTo(caster)){
                             var data = new MovementDeltaData();
@@ -62,13 +65,12 @@ public class StoppingTimeEffect extends IronboundMobEffect {
                 for (Entity e : entities) {
                     e.setNoGravity(false);
                     e.setDeltaMovement(e.getData(AttachmentRegistry.VECTOR_ATTACHMENT).getVec());
+                }*/
                 }
             }
 
 
         }
-
-
         return super.applyEffectTick(caster, spellLevel);
     }
 
@@ -78,8 +80,9 @@ public class StoppingTimeEffect extends IronboundMobEffect {
     }
 
     @Override
-    public StoppingTimeEffect addAttributeModifier(Holder<Attribute> pAttribute, ResourceLocation pId, double pAmount, AttributeModifier.Operation pOperation) {
-        return (StoppingTimeEffect)super.addAttributeModifier(pAttribute, pId, pAmount, pOperation);
+    public StoppingTimeEffect addAttributeModifier(Holder<Attribute> pAttribute, ResourceLocation pId,
+                                                   double pAmount, AttributeModifier.Operation pOperation) {
+        return (StoppingTimeEffect) super.addAttributeModifier(pAttribute, pId, pAmount, pOperation);
     }
 
     @Override

@@ -93,6 +93,7 @@ public class TimeStopSpell extends AbstractSpell {
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
         entity.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP_CASTER, ((int) this.getTickDuration(spellLevel, entity)), spellLevel));
+
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 }

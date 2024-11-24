@@ -44,7 +44,7 @@ public class LichHand extends UserDependantCurios {
             multiplier = 2;
         }
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeModifier.put(AttributeRegistry.SPELL_POWER, new AttributeModifier(IronboundArtefact.prefix("strength_hand"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.BLOOD_SPELL_POWER, new AttributeModifier(IronboundArtefact.prefix("strength_hand"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         return attributeModifier;
     }

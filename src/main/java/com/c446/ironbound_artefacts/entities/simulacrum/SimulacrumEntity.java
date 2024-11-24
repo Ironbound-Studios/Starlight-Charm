@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.entities.simulacrum;
 
+import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.datagen.Tags;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
@@ -70,7 +71,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     public SimulacrumEntity(Level pLevel, @NotNull Player player, float quality) {
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
         setSummoner(player);
-        System.out.println("current quality : " + quality);
+        IronboundArtefact.LOGGER.debug("current quality : {}", quality);
         this.quality = quality;
         //this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(this.getSummoner().getUUID());
     }
@@ -79,9 +80,13 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         this(IBEntitiesReg.SIMULACRUM.get(), pLevel);
     }
 
+
     /**
      * Used for registring.
      * Don't use otherwise...
+     *
+     * @param pEntityType : the entity type.
+     * @param pLevel      : the level to spawn the entity in
      */
     public SimulacrumEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -138,15 +143,15 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     @Override
     public Player getSummoner() {
         if (this.player == null) {
-            //System.out.println("isClient : " + this.level().isClientSide + "player is/was null !!! Why is this happening !!!!!!");
             if (level().getPlayerByUUID(this.getOwnerUUID().get()) == null) {
-                //System.out.println("isClient : " + this.level().isClientSide + "player UUID is absent from the player list.");
+                IronboundArtefact.LOGGER.debug("isClient : {}player UUID is absent from the player list.", this.level().isClientSide);
+//                this.discard();
+                // this causes NPE. don't uncomment.
             } else {
                 this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
             }
-            //this.discard();
         } else {
-            //System.out.println("isClient : " + this.level().isClientSide + "player is/was not null. The good ending :3c");
+            //IronboundArtefact.LOGGER.debug("isClient : {}player is/was not null. The good ending :3c", this.level().isClientSide);
             return this.player;
         }
         return this.level().getPlayerByUUID(this.getOwnerUUID().get());
@@ -156,7 +161,9 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         if (player != null) {
             this.getEntityData().set(OWNER_UUID, Optional.of(player.getUUID()));
             this.player = player;
-            this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getUUID());
+            if (player.level().isClientSide) {
+                this.playerInfo = Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getUUID());
+            }
             this.registerWizardGoals();
         }
     }
@@ -196,9 +203,9 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
 
     @Override
     public boolean shouldRender(double pX, double pY, double pZ) {
-        System.out.println("renderer queried");
-        if (this.playerInfo != null && this.player != null &&super.shouldRender(pX, pY, pZ)){
-            return this.playerInfo != null && this.player != null &&super.shouldRender(pX, pY, pZ);
+        //IronboundArtefact.LOGGER.debug("renderer queried");
+        if (this.getPlayerInfo() != null && this.getSummoner() != null && super.shouldRender(pX, pY, pZ)) {
+            return this.getPlayerInfo() != null && this.getSummoner() != null && super.shouldRender(pX, pY, pZ);
         } else {
             discard();
             return false;
@@ -378,7 +385,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             System.out.println("player info was missing.");
             if (this.getSummoner() == null) {
                 this.discard();
-            } else{
+            } else {
                 this.playerInfo = Minecraft.getInstance().getConnection().getPlayerInfo(this.getSummoner().getUUID());
             }
         }

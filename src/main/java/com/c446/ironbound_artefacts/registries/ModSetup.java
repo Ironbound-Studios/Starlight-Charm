@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.Config;
 import com.c446.ironbound_artefacts.registries.IBEntitiesReg;
 import io.redspace.ironsspellbooks.registries.CreativeTabRegistry;
 import net.minecraft.core.registries.Registries;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -31,7 +33,7 @@ public class ModSetup {
 
     public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
-        //modContainer.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
 
         modEventBus.addListener(this::setup);
     }
