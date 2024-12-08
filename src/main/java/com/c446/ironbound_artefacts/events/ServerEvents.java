@@ -3,6 +3,7 @@ package com.c446.ironbound_artefacts.events;
 
 import com.c446.ironbound_artefacts.Config;
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.attachment.FirstLoginData;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
 import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
@@ -12,8 +13,10 @@ import io.redspace.ironsspellbooks.api.events.ModifySpellLevelEvent;
 import io.redspace.ironsspellbooks.api.events.SpellSummonEvent;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.api.magic.SpellSelectionManager;
+import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
+import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.config.ServerConfigs;
 import io.redspace.ironsspellbooks.entity.mobs.SummonedSkeleton;
@@ -47,6 +50,7 @@ import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -56,6 +60,7 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
+import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,8 +70,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 
-import static com.c446.ironbound_artefacts.registries.ItemRegistry.ARCHMAGE_SPELLBOOK;
-import static com.c446.ironbound_artefacts.registries.ItemRegistry.STAFF_OF_POWER;
+import static com.c446.ironbound_artefacts.IronboundArtefact.ContributorUUIDS.*;
+import static com.c446.ironbound_artefacts.registries.ItemRegistry.*;
 import static net.minecraft.tags.EntityTypeTags.UNDEAD;
 
 @EventBusSubscriber
@@ -113,39 +118,74 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
         ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
-//        event.getServer().getAllLevels().forEach(l->{
-//            l.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(a->{a.remove(Entity.RemovalReason.DISCARDED);});
-//        });
+        event.getServer().getAllLevels().forEach(l -> {
 
+            l.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(
+                    a -> {
+                        a.remove(Entity.RemovalReason.DISCARDED);
+                        IronboundArtefact.LOGGER.debug("trying to merk simulacrum");
+                    });
+        });
     }
 
-
     @SubscribeEvent
-    public static void onServerStarting(ServerStartingEvent event){
+    public static void onServerStarting(ServerStartingEvent event) {
 //        event.getServer().getAllLevels().forEach(l->{
 //            l.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(SimulacrumEntity::discard);
 //        });
     }
 
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
+        var uuid = event.getEntity().getStringUUID();
+        var entity = event.getEntity();
 
+        if (IronboundArtefact.ContributorUUIDS.CONTRIBUTOR_LIST.contains(entity.getStringUUID()) && !entity.getData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS).hasLoggedIn) {
+            event.getEntity().setData(AttachmentRegistry.PLAYER_FIRST_LOGIN_ATTACHMENT_IB_ARTEFACTS, new FirstLoginData().set(true));
+
+            switch (uuid) {
+                case AMON -> {
+                    entity.getInventory().add(new ItemStack(ItemRegistry.STOPWATCH));
+                    entity.getInventory().add(new ItemStack(ItemRegistry.MAGICIANS_MONOCLE));
+                }
+                case ACE -> entity.getInventory().add(new ItemStack(DEVILS_FINGER));
+                case AMADHE -> entity.getInventory().add(new ItemStack(HERMIT_EYE));
+                case CATMOTH -> entity.getInventory().add(new ItemStack(JUDGEMENT_SCALE));
+                case ENDER -> entity.getInventory().add(new ItemStack(LICH_CROWN));
+                case TAR -> entity.getInventory().add(new ItemStack(LICH_HAND));
+                case THEKILLAGER -> entity.getInventory().add(new ItemStack(DEATH_AMULET));
+//                case STYLY -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
+//                case TOMATO -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
+            }
+            if (entity.getName().toString().equals("dev")) {
+                entity.getInventory().add(new ItemStack(ARCHMAGE_SPELLBOOK));
+            }
+        }
+    }
 
     @SubscribeEvent
-    public static void onEntityDamaged(LivingDamageEvent.Post event) {
+    public static void onEntityDamaged(LivingDamageEvent.Pre event) {
         CuriosApi.getCuriosInventory(event.getEntity().getLastAttacker()).ifPresent(inv -> {
-            List<SlotResult> result = inv.findCurios(ItemRegistry.DEATH_AMULET.get());
+            List<SlotResult> result = inv.findCurios(DEATH_AMULET.get());
             if (!result.isEmpty()) {
                 event.getEntity().addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 3, 1));
             }
         });
-        event.getEntity().invulnerableTime = Config.iframeCount;
+        if (event.getSource().getEntity() instanceof Player player) {
+            System.out.println("attacker is player");
+            CuriosApi.getCuriosInventory(player).ifPresent(i -> {
+                System.out.println("attacker has curios inv");
+                if (i.isEquipped(ItemRegistry.STOPWATCH.get()) && STOPWATCH.value().canEntityUseItem(player)) {
+                    System.out.println("attacker has stopwatch");
+                    event.getEntity().invulnerableTime = 5;
+                }
+            });
+            //event.getEntity().invulnerableTime = Config.iframeCount;
+        }
     }
 
     @SubscribeEvent
-    public static void tickEntity(EntityTickEvent.Post event) {
-    }
-
-    @SubscribeEvent
-    public static void levelTick(ServerTickEvent.Pre event){
+    public static void levelTick(ServerTickEvent.Pre event) {
         IronboundArtefact.tickMap();
     }
 
@@ -157,8 +197,8 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onServerStop(ServerStartedEvent event){
-        event.getServer().getAllLevels().forEach(level->{
+    public static void onServerStop(ServerStartedEvent event) {
+        event.getServer().getAllLevels().forEach(level -> {
             level.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(SimulacrumEntity::discard);
         });
     }
@@ -191,6 +231,7 @@ public class ServerEvents {
         }
     }
 
+
     @SubscribeEvent
     public static void entityGoalChanges(LivingChangeTargetEvent event) {
         AtomicBoolean isCrownPresent = new AtomicBoolean(false);
@@ -200,7 +241,8 @@ public class ServerEvents {
                 isCrownPresent.set(!inv.findCurios((new ItemStack(ItemRegistry.LICH_CROWN)).getItem()).isEmpty());
                 isHandPresent.set(!inv.findCurios((new ItemStack(ItemRegistry.LICH_HAND)).getItem()).isEmpty());
             });
-            if (isCrownPresent.get() || isHandPresent.get()) {
+            if (isCrownPresent.get() || isHandPresent.get() && event.getEntity() instanceof Mob) {
+
                 if (event.getEntity().getType().is(UNDEAD)) {
                     event.setCanceled(true);
                 }
@@ -270,30 +312,6 @@ public class ServerEvents {
                 }
             }
         }
-    }
-
-
-
-    @SubscribeEvent
-    public static void getBonusSpells(SpellSelectionManager.SpellSelectionEvent event) {
-        var player = event.getEntity();
-        CuriosApi.getCuriosInventory(player).ifPresent(a -> {
-            var list = a.findCurios(item -> item != null && item.has(ComponentRegistry.SPELL_CONTAINER) && !(item.getItem() instanceof SpellBook));
-            for (var i : list) {
-                var spellContainer = i.stack() != null ? i.stack().get(ComponentRegistry.SPELL_CONTAINER) : null;
-                if (spellContainer != null) {
-                    var spells = spellContainer.getAllSpells();
-                    if (spells != null && !Arrays.stream(spells).toList().isEmpty()) {
-                        for (var spell : spells) {
-                            if (spell == null || spell.getSpell() == null) {
-                                return;
-                            }
-                            event.addSelectionOption(new SpellData(spell.getSpell(), spell.getLevel(), true), i.stack().getItem().getDescriptionId(), spell.index());
-                        }
-                    }
-                }
-            }
-        });
     }
 
     private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {

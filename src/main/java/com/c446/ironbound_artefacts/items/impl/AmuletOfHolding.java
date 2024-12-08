@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
 import java.util.List;
@@ -21,9 +22,6 @@ public class AmuletOfHolding extends UserDependantCurios {
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
-        if (!ISpellContainer.isSpellContainer(stack)) {
-            stack.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false));
-        }
         super.onEquip(slotContext, prevStack, stack);
     }
 

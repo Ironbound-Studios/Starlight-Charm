@@ -1,14 +1,11 @@
-package com.c446.ironbound_artefacts.items.impl;
+package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.components.HermitComponentData;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
-import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.item.curios.AffinityData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
-import io.redspace.ironsspellbooks.api.registry.SpellDataRegistryHolder;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.api.spells.SpellSlot;
@@ -38,9 +35,6 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-
-import static com.c446.ironbound_artefacts.registries.ComponentRegistry.HERMIT_SCROLL_FORGE_COMPONENT;
 
 public class HermitEye extends UserDependantCurios {
 

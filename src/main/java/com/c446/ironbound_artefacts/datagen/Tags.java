@@ -3,8 +3,12 @@ package com.c446.ironbound_artefacts.datagen;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 
 public class Tags {
     public static class SpellTags {
@@ -19,6 +23,7 @@ public class Tags {
         }
 
     }
-
-
+    public static class ItemTags{
+        public static TagKey<Item> WISH_DUPLICABLE = net.minecraft.tags.ItemTags.create(IronboundArtefact.prefix("wish_duplicable"));
+    }
 }

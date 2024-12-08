@@ -15,11 +15,11 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
-/*minecraft {
+minecraft {
     accessTransformers {
         file('src/main/resources/META-INF/accesstransformer.cfg')
     }
-}*/
+}
 
 
 runs {
@@ -101,6 +101,7 @@ jarJar.enable()
 dependencies {
     // FORGE ******************************************************************************************************
     implementation "net.neoforged:neoforge:${neoVersion}"
+    implementation "curse.maven:spell-collector-lib-1149858:5972600"
     // IRONBOUND CORE
     //implementation("com.github.Ironbound-Studios:IronboundCore:731201954b")
     // GECKOLIB ***************************************************************************************************

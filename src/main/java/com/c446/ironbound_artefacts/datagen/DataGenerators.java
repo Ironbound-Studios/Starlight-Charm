@@ -23,14 +23,19 @@ public class DataGenerators {
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
-        PackOutput out = gen.getPackOutput();
-        ExistingFileHelper helper = event.getExistingFileHelper();
+        PackOutput outPut = gen.getPackOutput();
+        ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
 
-        gen.addProvider(
-                event.includeServer(),
-                new ModSpellTagsProvider(out, SpellRegistry.SPELL_REGISTRY_KEY, provider, helper)
-        );
+        gen.addProvider(event.includeServer(), new ModSpellTagsProvider(outPut, SpellRegistry.SPELL_REGISTRY_KEY, provider, existingFileHelper));
+        var blockTags = new ModBlockTagProvider(outPut, provider, existingFileHelper);
+        gen.addProvider(event.includeClient(), new ModModelsProvider(outPut, existingFileHelper));
+        gen.addProvider(event.includeServer(), new WishDuplicableTagsProvider(outPut, provider, existingFileHelper));
+
+//        gen.addProvider(
+//                event.includeServer(),
+//                new WishDuplicableTagsProvider(out, provider, event., helper, "", helper)
+//        );
     }
 
 }

@@ -1,4 +1,4 @@
-package com.c446.ironbound_artefacts.items.impl;
+package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
@@ -24,15 +24,15 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
 
-public class LichHand extends UserDependantCurios {
-    public LichHand(Properties p) {
+public class LichCrown extends UserDependantCurios {
+    public LichCrown(Properties p) {
         super(p);
     }
 
     @Override
     public boolean canEntityUseItem(Entity entity) {
         if (entity instanceof Player player) {
-            return (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.TAR) || entity.getName().getString().equals("Dev"));
+            return (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.ENDER) || entity.getName().getString().equals("Dev"));
         }
         return false;
     }
@@ -44,7 +44,7 @@ public class LichHand extends UserDependantCurios {
             multiplier = 2;
         }
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeModifier.put(AttributeRegistry.BLOOD_SPELL_POWER, new AttributeModifier(IronboundArtefact.prefix("strength_hand"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.SUMMON_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("emperor_crown"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         return attributeModifier;
     }
@@ -52,8 +52,8 @@ public class LichHand extends UserDependantCurios {
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> lines, TooltipFlag tooltipFlag) {
-        lines.add(Component.translatable("item.ironbounds_artefacts.strength_hand.tooltip1"));
-        lines.add(Component.translatable("item.ironbounds_artefacts.strength_hand.tooltip2").withStyle(ChatFormatting.ITALIC));
+        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip1"));
+        lines.add(Component.translatable("item.ironbounds_artefacts.emperor_crown.tooltip2").withStyle(ChatFormatting.ITALIC));
         var affinity = AffinityData.getAffinityData(stack);
         var spell = affinity.getSpell();
         if (!spell.equals(SpellRegistry.none())) {

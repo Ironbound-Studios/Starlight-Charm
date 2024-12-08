@@ -1,6 +1,8 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.datagen.Tags;
+import com.c446.ironbound_artefacts.items.impl.lore_items.LoversStopwatch;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
@@ -17,6 +19,7 @@ import io.redspace.ironsspellbooks.network.SyncManaPacket;
 import io.redspace.ironsspellbooks.registries.*;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,11 +27,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.apache.commons.lang3.time.StopWatch;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -103,9 +108,8 @@ public class WishSpell extends AbstractSpell {
             }
         }
 
-        // MANA REGEN POT
-        if (item.getItem().equals(ItemRegistry.ARCANE_ESSENCE.get())&& entity instanceof ServerPlayer serverPlayer) {
-            System.out.println("trying mana regen.");
+        if (item.getItem().equals(ItemRegistry.ARCANE_ESSENCE.get()) && entity instanceof ServerPlayer serverPlayer) {
+            IronboundArtefact.LOGGER.debug("trying mana regen.");
             var data = MagicData.getPlayerMagicData(serverPlayer);
             data.addMana((float) entity.getAttributeValue(MAX_MANA) * this.getSpellPower(spellLevel, entity));
             PacketDistributor.sendToPlayer(serverPlayer, new SyncManaPacket(data));
@@ -120,7 +124,7 @@ public class WishSpell extends AbstractSpell {
             consumeOneFromStack(item);
         } else if (item.getItem().equals(Items.GOLD_BLOCK)) {
             IronboundArtefact.LOGGER.debug("trying damage res.");
-            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
+            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, Math.min(4, (int) (1 / 2F * this.getSpellPower(spellLevel, entity)))));
             consumeOneFromStack(item);
         } else if (item.getItem().equals(Items.GHAST_TEAR)) {
             IronboundArtefact.LOGGER.debug("trying health regen.");
@@ -136,7 +140,7 @@ public class WishSpell extends AbstractSpell {
                     var selectedSpell = spells.get(num);
                     if (selectedSpell != null && selectedSpell.getSpell() != null && !Objects.equals(selectedSpell.getSpell().getSpellId(), this.getSpellId())) {
                         int spellLevel1 = selectedSpell.getLevel() + spellLevel;
-                        System.out.println("casting spell "+ selectedSpell.getSpell().getComponentId() +" at level : "+ spellLevel1);
+                        System.out.println("casting spell " + selectedSpell.getSpell().getComponentId() + " at level : " + spellLevel1);
                         selectedSpell.getSpell().castSpell(
                                 level,
                                 spellLevel1,
@@ -162,9 +166,17 @@ public class WishSpell extends AbstractSpell {
             if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l) {
                 l.hurt(l.damageSources().wither(), l.getMaxHealth());
             }
+        } else if (item.is(Tags.ItemTags.WISH_DUPLICABLE)) {
+
+            var newMax = item.getCount() * 2;
+            if (newMax > 64) {
+                item.setCount(64);
+            } else {
+                item.setCount(newMax);
+            }
         }
 
-        entity.addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 1, 2));
+        entity.addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 100, 2));
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }

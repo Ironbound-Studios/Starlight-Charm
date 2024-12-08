@@ -1,28 +1,21 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
-import com.c446.ironbound_artefacts.registries.AttributeRegistry;
-import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
-import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
-import io.redspace.ironsspellbooks.config.ServerConfigs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.AABB;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -36,6 +29,8 @@ public class TimeStopSpell extends AbstractSpell {
             .setMaxLevel(3)
             .setCooldownSeconds(3600)
             .build();
+    private final ResourceLocation spellId = IronboundArtefact.prefix("time_stop");
+
 
     public TimeStopSpell() {
         this.baseSpellPower = 10;
@@ -44,9 +39,6 @@ public class TimeStopSpell extends AbstractSpell {
         this.manaCostPerLevel = 300;
         this.castTime = 300;
     }
-
-
-    private final ResourceLocation spellId = IronboundArtefact.prefix("time_stop");
 
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {

@@ -80,7 +80,7 @@ public class ForsakenDreams extends CurioBaseItem {
             if (stack.has(ComponentRegistry.UUID_DATA_COMPONENT)) {
                 if (slotContext.entity() instanceof ServerPlayer player && player.level() instanceof ServerLevel) {
                     this.bossLoc = ResourceLocation.parse(IronboundArtefact.prefix("boss_loc") + stack.get(ComponentRegistry.UUID_DATA_COMPONENT).uuid());
-
+    
                     if (bar == null) {
                         initBar(stack, slotContext);
                     }

@@ -13,6 +13,8 @@ import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.SupportMob;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.NeutralWizard;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
+import io.redspace.ironsspellbooks.entity.mobs.necromancer.NecromancerEntity;
+import io.redspace.ironsspellbooks.entity.mobs.wizards.pyromancer.PyromancerEntity;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -32,10 +34,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
@@ -97,7 +96,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        var attr = Player.createAttributes().add(Attributes.FOLLOW_RANGE, 30D).add(Attributes.MOVEMENT_SPEED, 1);
+        var attr = Player.createAttributes().add(Attributes.FOLLOW_RANGE, 30D).add(Attributes.MOVEMENT_SPEED, 3).add(Attributes.MAX_HEALTH, 150);
         for (var attribute : BuiltInRegistries.ATTRIBUTE.registryKeySet()) {
             if (!attr.hasAttribute(BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute))) {
                 var holder = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute);
@@ -145,13 +144,11 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         if (this.player == null) {
             if (level().getPlayerByUUID(this.getOwnerUUID().get()) == null) {
                 IronboundArtefact.LOGGER.debug("isClient : {}player UUID is absent from the player list.", this.level().isClientSide);
-//                this.discard();
-                // this causes NPE. don't uncomment.
             } else {
                 this.setSummoner(level().getPlayerByUUID(this.getOwnerUUID().get()));
             }
         } else {
-            //IronboundArtefact.LOGGER.debug("isClient : {}player is/was not null. The good ending :3c", this.level().isClientSide);
+            IronboundArtefact.LOGGER.debug("isClient : {}player is/was not null. The good ending :3c", this.level().isClientSide);
             return this.player;
         }
         return this.level().getPlayerByUUID(this.getOwnerUUID().get());
@@ -166,6 +163,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
             }
             this.registerWizardGoals();
         }
+
     }
 
     @Override
@@ -326,11 +324,10 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
 
     protected void registerWizardGoals() {
         this.goalSelector.removeAllGoals(a -> a instanceof WizardAttackGoal || a instanceof WizardSupportGoal<?>);
-
         if (this.getSummoner() instanceof Player player) {
-            this.goalSelector.addGoal(1, new WizardAttackGoal(this, 1.25f, 25, 80).setSpells(getOffensiveSpellsFromList(simpleGetSpells(player), player), getDefensiveSpells(simpleGetSpells(player), player), getMovementSpells(simpleGetSpells(player), player), getUtilSpells(simpleGetSpells(player), player)).setSpellQuality(this.quality * 0.75f, this.quality));
-            System.out.println("min quality : " + this.quality * 0.75 + "max quality : " + this.quality);
-            this.goalSelector.addGoal(2, new WizardSupportGoal<SimulacrumEntity>(this, 1.25f, 100, 180).setSpells(getDefensiveSpells(simpleGetSpells(player), player), (getUtilSpells(simpleGetSpells(player), player))).setSpellQuality(this.quality * 0.75f, this.quality));
+            this.goalSelector.addGoal(2, new WizardAttackGoal(this, 1.25f, 25, 60).setSpells(getOffensiveSpellsFromList(simpleGetSpells(player), player), getDefensiveSpells(simpleGetSpells(player), player), getMovementSpells(simpleGetSpells(player), player), getUtilSpells(simpleGetSpells(player), player)).setSpellQuality(this.quality * 0.75f, this.quality));
+            //System.out.println("min quality : " + this.quality * 0.75 + "max quality : " + this.quality);
+            this.goalSelector.addGoal(2, new WizardSupportGoal<>(this, 1.25f, 100, 180).setSpells(getDefensiveSpells(simpleGetSpells(player), player), (getUtilSpells(simpleGetSpells(player), player))).setSpellQuality(this.quality * 0.75f, this.quality));
         }
     }
 
@@ -351,19 +348,19 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 1f, 15, 5, false, 25));
-        //this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 1.0, 1.2, this::isAngryAt));
+        this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 5f, 5, 5, false, 35));
+        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 3.0, 4f * 1.2, this::isAlliedTo));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1f, false));
         this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
         this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
 
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isHostileTowards));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, (mob) -> mob instanceof Enemy && !(mob instanceof Creeper)));
         this.targetSelector.addGoal(2, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));
         this.targetSelector.addGoal(3, new GenericOwnerHurtTargetGoal(this, this::getSummoner));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, (mob) -> mob instanceof Enemy && !(mob instanceof Creeper)));
         this.targetSelector.addGoal(4, new GenericCopyOwnerTargetGoal(this, this::getSummoner));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isHostileTowards));
         this.targetSelector.addGoal(5, (new GenericHurtByTargetGoal(this, (entity) -> entity == getSummoner())).setAlertOthers());
     }
 
@@ -373,6 +370,9 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     protected Optional<UUID> getOwnerUUID() {
+        if (this.entityData.get(OWNER_UUID).isEmpty()) {
+            this.remove(RemovalReason.KILLED);
+        }
         return this.entityData.get(OWNER_UUID);
     }
 

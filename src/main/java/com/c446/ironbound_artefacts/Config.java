@@ -37,7 +37,6 @@ public class Config {
     static void onLoad(final ModConfigEvent event) {
         iframeSkipping = IS_IFRAME_SKIP_ON.get();
         iframeCount = IFRAME_COUNT.get();
-
     }
 }
 

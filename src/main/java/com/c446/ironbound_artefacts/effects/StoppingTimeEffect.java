@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.EffectCure;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +42,9 @@ public class StoppingTimeEffect extends IronboundMobEffect {
                 for (Entity e : entities) {
                     if (!e.isAlliedTo(caster)) {
                         IronboundArtefact.freezeEntity(e, 40);
+                        if (e instanceof Player player){
+                            player.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, 40,0,false,true));
+                        }
                     }
                     //IronboundArtefact.tickMap();
                     /*

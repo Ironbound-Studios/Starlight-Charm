@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ironbounds_artefacts:item/cloak_of_evasion"
+  }
+}

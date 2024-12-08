@@ -22,13 +22,15 @@ public class IBEntitiesReg {
             "simulacrum",
             EntityType.Builder.<SimulacrumEntity>of(SimulacrumEntity::new, MobCategory.MISC)
                     .sized(1.0f, 2.0f)
-                    .setTrackingRange(10)
+                    .setTrackingRange(30)
+                    .noSave().noSummon().eyeHeight(1.75F)
                     .setShouldReceiveVelocityUpdates(true));
 
     public static final DeferredHolder<EntityType<?>, EntityType<AstralCometEntity>> COMET = registerEntity(
             "comet",
             EntityType.Builder.<AstralCometEntity>of(AstralCometEntity::new, MobCategory.MISC)
                     .sized(1.0f, 2.0f)
+                    .noSave()
                     .setTrackingRange(10)
                     .setShouldReceiveVelocityUpdates(true));
 }

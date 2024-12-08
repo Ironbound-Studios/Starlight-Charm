@@ -1,4 +1,4 @@
-package com.c446.ironbound_artefacts.items.impl;
+package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
@@ -6,12 +6,9 @@ import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.google.common.collect.Multimap;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
-import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
-import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.api.spells.SpellSlot;
 import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
-import io.redspace.ironsspellbooks.entity.armor.ArchevokerArmorModel;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -20,8 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -43,20 +38,18 @@ public class LoversStopwatch extends UserDependantCurios {
         return false;
     }
 
-
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.translatable("item.ironbounds_artefacts.lovers_watch.tooltip1"));
         pTooltipComponents.add(Component.translatable("item.ironbounds_artefacts.lovers_watch.tooltip2").withStyle(ChatFormatting.ITALIC));
-
-//        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }
 
     @Override
     public boolean canEntityUseItem(Entity entity) {return entity.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON) || entity.getName().getString().equals("Dev");}
 
     @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
+        super.onEquip(slotContext, prevStack, stack);
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
             copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(3, true, false, false, new SpellSlot[]{
@@ -71,7 +64,10 @@ public class LoversStopwatch extends UserDependantCurios {
             copy.remove(ComponentRegistry.SPELL_CONTAINER);
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         }
+
     }
+
+
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {

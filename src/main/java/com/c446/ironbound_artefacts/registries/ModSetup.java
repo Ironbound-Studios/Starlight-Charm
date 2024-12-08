@@ -33,7 +33,7 @@ public class ModSetup {
 
     public ModSetup(IEventBus modEventBus, ModContainer modContainer) {
         ModSetup.register(modEventBus);
-        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
         modEventBus.addListener(this::setup);
     }
@@ -65,7 +65,8 @@ public class ModSetup {
                             entries.accept(ItemRegistry.HERMIT_EYE.get());
                             entries.accept(ItemRegistry.STOPWATCH.get());
 
-
+                            entries.accept(ItemRegistry.MAGIC_DEFENSE_RING.get());
+                            entries.accept(ItemRegistry.PROTECTION_RING.get());
                             entries.accept(ItemRegistry.GREATER_SPELL_SLOT_UPGRADE.get());
                             entries.accept(ItemRegistry.AMULET_OF_HOLDING.get());
                             //entries.accept(ItemRegistry.DECK_OF_ALL_THINGS.get());
