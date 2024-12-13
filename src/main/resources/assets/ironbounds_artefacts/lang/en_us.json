@@ -40,8 +40,8 @@
 
 
 
-  "item.ironbounds_artefacts.amulet_of_holding" : "Amulet of Holding",
-  "item.ironbounds_artefacts.amulet_of_holding.tooltip1" : "Can be imbued with four spells.",
+  "item.ironbounds_artefacts.amulet_of_spell_storing" : "Amulet of Spell Storing",
+  "item.ironbounds_artefacts.amulet_of_spell_storing.tooltip1" : "Can be imbued with four spells.",
   "item.ironbounds_artefacts.amulet_of_holding.tooltip2" : "As a drawback however, it will decrease the potency of all spells.",
 
   "item.ironbounds_artefacts.archmage_spellbook": "Archmage's Spell Book",
@@ -49,5 +49,11 @@
   "item.ironbounds_artefacts.greater_spell_slot_upgrade": "Greater Spell Slot Upgrade",
   "item.ironbounds_artefacts.staff_of_power": "The Staff of Power",
   "item.ironbounds_artefacts.staff_of_power.tooltip": "",
-  "spell.ironbounds_artefacts.all_spell.name" : "all spells"
+  "spell.ironbounds_artefacts.all_spell.name" : "all spells",
+
+  "item.ironbounds_artefacts.arcane_weave_helmet": "Arcane Weave Hood",
+  "item.ironbounds_artefacts.arcane_weave_chestplate": "Arcane Weave Coat",
+  "item.ironbounds_artefacts.arcane_weave_leggings": "Arcane Weave leggings",
+  "item.ironbounds_artefacts.arcane_weave_boots": "Arcane Weave Boots",
+  "item.ironbounds_artefacts.magic_protection_ring": "Ring of Magic Resistance"
 }
