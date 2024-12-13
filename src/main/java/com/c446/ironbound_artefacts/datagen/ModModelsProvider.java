@@ -19,5 +19,11 @@ public class ModModelsProvider extends ItemModelProvider {
         basicItem(ItemRegistry.ELVEN_CHAINS.get());
         basicItem(ItemRegistry.ARCANE_PROTECTION_CLOAK.get());
         basicItem(ItemRegistry.THREE_WISHES.get());
+        basicItem(ItemRegistry.AMULET_OF_HOLDING.get());
+        //basicItem(ItemRegistry.AMULET_OF_MANA.get());
+        basicItem(ItemRegistry.WEAVE_HELMET.get());
+        basicItem(ItemRegistry.WEAVE_CHEST_PLATE.get());
+        basicItem(ItemRegistry.WEAVE_LEGGINGS.get());
+        basicItem(ItemRegistry.WEAVE_BOOTS.get());
     }
 }

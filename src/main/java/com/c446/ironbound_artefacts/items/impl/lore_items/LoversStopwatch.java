@@ -45,19 +45,16 @@ public class LoversStopwatch extends UserDependantCurios {
     }
 
     @Override
-    public boolean canEntityUseItem(Entity entity) {return entity.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON) || entity.getName().getString().equals("Dev");}
+    public boolean canEntityUseItem(Entity entity) {
+        return entity.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON) || entity.getName().getString().equals("Dev");
+    }
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         super.onEquip(slotContext, prevStack, stack);
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
-            copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(3, true, false, false, new SpellSlot[]{
-                            new SpellSlot(new SpellData(CustomSpellRegistry.TIME_STOP.get(), 1, true), 0),
-                            new SpellSlot(new SpellData(SpellRegistry.HASTE_SPELL.get(), 8, true), 1),
-                            new SpellSlot(new SpellData(SpellRegistry.SLOW_SPELL.get(), 8, true), 2),
-                    })
-            );
+            copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(3, true, false, false, new SpellSlot[]{new SpellSlot(new SpellData(CustomSpellRegistry.TIME_STOP.get(), 1, true), 0), new SpellSlot(new SpellData(SpellRegistry.HASTE_SPELL.get(), 8, true), 1), new SpellSlot(new SpellData(SpellRegistry.SLOW_SPELL.get(), 8, true), 2),}));
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         } else {
             var copy = stack.copy();
@@ -66,7 +63,6 @@ public class LoversStopwatch extends UserDependantCurios {
         }
 
     }
-
 
 
     @Override

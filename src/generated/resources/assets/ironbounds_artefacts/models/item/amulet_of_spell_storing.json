@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "ironbounds_artefacts:item/amulet_of_spell_storing"
+  }
+}

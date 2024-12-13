@@ -7,6 +7,7 @@ import top.theillusivec4.curios.api.SlotContext;
 public class AmuletOfMana extends CurioBaseItem {
     public AmuletOfMana(Properties properties) {
         super(properties);
+
     }
 
     @Override

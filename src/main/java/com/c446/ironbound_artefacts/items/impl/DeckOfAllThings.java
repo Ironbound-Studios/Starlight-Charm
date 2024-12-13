@@ -44,6 +44,9 @@ public class DeckOfAllThings extends UserDependantCurios {
             var randspell = level.random.nextIntBetweenInclusive(0, spells.length);
             AbstractSpell spell = (AbstractSpell) spells[randspell];
 
+            //
+
+
             while (spell instanceof NoneSpell ||spell instanceof PortalSpell ||spell instanceof SpectralHammerSpell){
                 spell = (AbstractSpell) spells[level.random.nextIntBetweenInclusive(0,spells.length)];
             }

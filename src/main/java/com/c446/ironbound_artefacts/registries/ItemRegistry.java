@@ -40,7 +40,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI;
     public static final DeferredHolder<Item, HermitEye> HERMIT_EYE;
     public static final DeferredHolder<Item, LoversStopwatch> STOPWATCH;
-    public static final DeferredHolder<Item, ForsakenDreams> DREAMS;
+    //public static final DeferredHolder<Item, ForsakenDreams> DREAMS;
     public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.1, AttributeModifier.Operation.ADD_VALUE)));
     public static final DeferredHolder<Item, CurioBaseItem> PROTECTION_RING = ITEMS.register("protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(Attributes.ARMOR, 5, AttributeModifier.Operation.ADD_VALUE)));
     public static final DeferredHolder<Item, EvasionCloak> ARCANE_PROTECTION_CLOAK = ITEMS.register("cloak_of_evasion", () -> new EvasionCloak(new Item.Properties()));
@@ -49,6 +49,7 @@ public class ItemRegistry {
 
     public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK;
     public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING;
+    //public static final DeferredHolder<Item, AmuletOfMana> AMULET_OF_MANA;
     public static final DeferredHolder<Item, Item> GREATER_SPELL_SLOT_UPGRADE;
     //public static final DeferredHolder<Item, DeckOfAllThings> DECK_OF_ALL_THINGS;
 
@@ -62,7 +63,7 @@ public class ItemRegistry {
 
     public static final StaffTier TIER_STAFF_OF_MAGI = new StaffTier(3, -0.5F, new AttributeContainer(AttributeRegistry.MAX_MANA, 250, AttributeModifier.Operation.ADD_VALUE), new AttributeContainer(AttributeRegistry.SPELL_RESIST, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
-    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, 1, new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+    public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(5F, -0.5F, new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MANA_REGEN, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 
     static {
         /*ACE*/
@@ -80,25 +81,16 @@ public class ItemRegistry {
         /*TAR*/
         LICH_HAND = ITEMS.register("strength_hand", () -> new LichHand(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
         STOPWATCH = ITEMS.register("stopwatch", () -> new LoversStopwatch(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
-        DREAMS = ITEMS.register("forsaken_dreams", () -> new ForsakenDreams(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
+        //DREAMS = ITEMS.register("forsaken_dreams", () -> new ForsakenDreams(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
 
-        GREATER_SPELL_SLOT_UPGRADE = ITEMS.register("greater_spell_slot_upgrade", () -> {
-            return new SpellSlotUpgradeItem(15);
-        });
+        GREATER_SPELL_SLOT_UPGRADE = ITEMS.register("greater_spell_slot_upgrade", () -> new SpellSlotUpgradeItem(15));
 
-        AMULET_OF_HOLDING = ITEMS.register("amulet_of_holding", () -> {
-            return new AmuletOfHolding(new Item.Properties().component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false)));
-        });
+        AMULET_OF_HOLDING = ITEMS.register("amulet_of_spell_storing", () -> new AmuletOfHolding(new Item.Properties().component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false))));
+        //AMULET_OF_MANA = ITEMS.register("amulet_of_mana_storing", () -> new AmuletOfMana(new Item.Properties().durability(1500)));
 
-        STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> {
-            return new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER)));
-        });
+        STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER))));
 
-        STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> {
-            return new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI)));
-
-
-        });
+        STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI))));
 
         ARCHMAGE_SPELLBOOK = ITEMS.register("archmage_spellbook", () -> new ArchMageSpellBook(1).withSpellbookAttributes(new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)));
 
