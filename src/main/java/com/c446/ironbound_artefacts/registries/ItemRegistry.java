@@ -41,7 +41,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, HermitEye> HERMIT_EYE;
     public static final DeferredHolder<Item, LoversStopwatch> STOPWATCH;
     //public static final DeferredHolder<Item, ForsakenDreams> DREAMS;
-    public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.1, AttributeModifier.Operation.ADD_VALUE)));
+    public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));
     public static final DeferredHolder<Item, CurioBaseItem> PROTECTION_RING = ITEMS.register("protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(Attributes.ARMOR, 5, AttributeModifier.Operation.ADD_VALUE)));
     public static final DeferredHolder<Item, EvasionCloak> ARCANE_PROTECTION_CLOAK = ITEMS.register("cloak_of_evasion", () -> new EvasionCloak(new Item.Properties()));
     public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(new Item.Properties()));
