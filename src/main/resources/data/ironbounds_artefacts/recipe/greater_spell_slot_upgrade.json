@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "item": "irons_spellbooks:lesser_spell_slot_upgrade"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "M": {
+      "item":"irons_spellbooks:magic_cloth"
+    },
+    "D": {
+      "item": "irons_spellbooks:dragonskin"
+    }
+  },
+  "pattern": [
+    "GDG",
+    "MSM",
+    "GDG"
+    ],
+  "result": {
+    "count": 1,
+    "id": "ironbounds_artefacts:greater_spell_slot_upgrade"
+  }
+}
+
+
