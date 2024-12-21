@@ -17,8 +17,8 @@ public class CustomSpellRegistry {
 
     public static final Supplier<AbstractSpell> TIME_STOP;
     public static final Supplier<AbstractSpell> WISH;
-    public static final Supplier<AbstractSpell> SIMULACRUM;
-    public static final Supplier<AbstractSpell> FASLSE_LIFE;
+    //public static final Supplier<AbstractSpell> SIMULACRUM;
+    //public static final Supplier<AbstractSpell> FASLSE_LIFE;
 
     private static Supplier<AbstractSpell> registerSpell(AbstractSpell spell) {
         return SPELLS.register(spell.getSpellName(), () -> spell);
@@ -27,8 +27,8 @@ public class CustomSpellRegistry {
     static{
         TIME_STOP = registerSpell(new TimeStopSpell());
         WISH = registerSpell(new WishSpell());
-        SIMULACRUM = registerSpell(new SimulacrumSpell());
-        FASLSE_LIFE = registerSpell(new FalseLifeSpell());
+        //SIMULACRUM = registerSpell(new SimulacrumSpell());
+        //FASLSE_LIFE = registerSpell(new FalseLifeSpell());
     }
 
 }

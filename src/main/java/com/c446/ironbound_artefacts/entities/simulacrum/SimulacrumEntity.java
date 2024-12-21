@@ -10,6 +10,8 @@ import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.effect.SummonTimer;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
+import io.redspace.ironsspellbooks.entity.mobs.SummonedPolarBear;
+import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
 import io.redspace.ironsspellbooks.entity.mobs.SupportMob;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.NeutralWizard;
 import io.redspace.ironsspellbooks.entity.mobs.goals.*;
@@ -35,7 +37,10 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
+import net.minecraft.world.entity.animal.PolarBear;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
@@ -96,7 +101,10 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        var attr = Player.createAttributes().add(Attributes.FOLLOW_RANGE, 30D).add(Attributes.MOVEMENT_SPEED, 3).add(Attributes.MAX_HEALTH, 150);
+        var attr = Player.createAttributes()
+                .add(Attributes.FOLLOW_RANGE, 30D)
+                .add(Attributes.MOVEMENT_SPEED, .25f)
+                .add(Attributes.MAX_HEALTH, 150);
         for (var attribute : BuiltInRegistries.ATTRIBUTE.registryKeySet()) {
             if (!attr.hasAttribute(BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute))) {
                 var holder = BuiltInRegistries.ATTRIBUTE.getHolderOrThrow(attribute);
@@ -331,7 +339,7 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         }
     }
 
-    @Override
+    /*@Override
     public double getAttributeValue(Holder<Attribute> pAttribute) {
         if (this.getSummoner() != null) {
             if (this.getSummoner().getAttributes().hasAttribute(pAttribute)) {
@@ -342,26 +350,33 @@ public class SimulacrumEntity extends NeutralWizard implements IMagicSummon, Sup
         } else {
             return createAttributes().build().getValue(pAttribute);
         }
-    }
+    }*/
 
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 5f, 5, 5, false, 35));
-        this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 3.0, 4f * 1.2, this::isAlliedTo));
-        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-        this.goalSelector.addGoal(9, new LookAtPlayerGoal(this, Player.class, 3.0F, 1.0F));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1f, false));
-        this.goalSelector.addGoal(10, new LookAtPlayerGoal(this, Mob.class, 8.0F));
-        this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
+        //SummonedPolarBear
 
+        this.goalSelector.addGoal(1, new GenericFollowOwnerGoal(this, this::getSummoner, 0.9f, 15, 5, false, 25));
+        //this.goalSelector.addGoal(1, new AvoidEntityGoal<>(this, LivingEntity.class, 6.0F, 3.0, 4f * 1.2, this::isAlliedTo));
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new GenericOwnerHurtByTargetGoal(this, this::getSummoner));
         this.targetSelector.addGoal(3, new GenericOwnerHurtTargetGoal(this, this::getSummoner));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isHostileTowards));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Mob.class, 5, false, false, (mob) -> mob instanceof Enemy && !(mob instanceof Creeper)));
         this.targetSelector.addGoal(4, new GenericCopyOwnerTargetGoal(this, this::getSummoner));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, this::isHostileTowards));
         this.targetSelector.addGoal(5, (new GenericHurtByTargetGoal(this, (entity) -> entity == getSummoner())).setAlertOthers());
+        this.targetSelector.addGoal(5, new ResetUniversalAngerTargetGoal<>(this, false));
+
+
+        this.goalSelector.addGoal(1, new FloatGoal(this));
+        this.goalSelector.addGoal(3, new PatrolNearLocationGoal(this, 30, .75f));
+        this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(10, new WizardRecoverGoal(this));
+
+
+
     }
 
     public ResourceLocation getSkinTextureLocation() {

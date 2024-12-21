@@ -80,11 +80,12 @@ public class ServerEvents {
     public static void spellLevelEvent(ModifySpellLevelEvent event) {
         if (event.getEntity() instanceof Player player) {
             AtomicInteger boost = new AtomicInteger(0);
-            CuriosApi.getCuriosInventory(player).ifPresent((curioHandler) -> {
+            /*CuriosApi.getCuriosInventory(player).ifPresent((curioHandler) -> {
                 if (curioHandler.isEquipped(ARCHMAGE_SPELLBOOK.get())) {
                     boost.addAndGet(1);
                 }
             });
+
 
             if (player != null) {
                 if (player.getMainHandItem() != null && player.getMainHandItem().is(STAFF_OF_POWER)) {
@@ -106,7 +107,7 @@ public class ServerEvents {
                         });
                     }
                 }
-            }
+            }*/
 
             if (boost.get() > 2) {
                 boost.set(2);
@@ -117,7 +118,7 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
-        ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
+        //ServerConfigs.IMBUE_WHITELIST_ITEMS.add(STAFF_OF_POWER.get());
         event.getServer().getAllLevels().forEach(l -> {
 
             l.getEntitiesOfClass(SimulacrumEntity.class, AABB.INFINITE).forEach(
@@ -157,9 +158,9 @@ public class ServerEvents {
 //                case STYLY -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
 //                case TOMATO -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
             }
-            if (entity.getName().toString().equals("dev")) {
+            /*if (entity.getName().toString().equals("dev")) {
                 entity.getInventory().add(new ItemStack(ARCHMAGE_SPELLBOOK));
-            }
+            }*/
         }
     }
 

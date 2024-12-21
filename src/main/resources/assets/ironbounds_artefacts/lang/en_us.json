@@ -38,8 +38,6 @@
   "item.ironbounds_artefacts.strength_hand.tooltip1": "Hands of a decrepit Archlich.",
   "item.ironbounds_artefacts.strength_hand.tooltip2": "Allows the creation of Greater Undeads.",
 
-
-
   "item.ironbounds_artefacts.amulet_of_spell_storing" : "Amulet of Spell Storing",
   "item.ironbounds_artefacts.amulet_of_holding.tooltip1" : "Can be imbued with four spells.",
   "item.ironbounds_artefacts.amulet_of_holding.tooltip2" : "As a drawback however, it will decrease the potency of all spells.",
@@ -56,5 +54,11 @@
   "item.ironbounds_artefacts.arcane_weave_leggings": "Arcane Weave leggings",
   "item.ironbounds_artefacts.arcane_weave_boots": "Arcane Weave Boots",
   "item.ironbounds_artefacts.magic_protection_ring": "Ring of Magic Resistance",
-  "item.ironbounds_artefacts.protection_ring": "Protective Ring"
+  "item.ironbounds_artefacts.protection_ring": "Protective Ring",
+
+  "spell.ironbounds_artefacts.wish": "Wish",
+  "spell.ironbounds_artefacts.wish.guide": "You express a wish to an extra planar being.\nDifferent items will have different effects.\nWishing with a scroll will cause you to cast the spell inscribed on it with a level bonus equal to the level of wish.\nAdditional effects may be discovered.\nThe item in your main hand has got priority, and your offhand will only be used if your main hand is empty.",
+
+  "spell.ironbounds_artefacts.time_stop": "Time Stop",
+  "spell.ironbounds_artefacts.guide": "You continually freeze the creatures that surround you for the duration of the spell. Frozen creatures are unable to move and cast spells and attack."
 }

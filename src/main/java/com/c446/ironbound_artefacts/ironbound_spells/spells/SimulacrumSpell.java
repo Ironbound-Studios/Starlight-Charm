@@ -28,8 +28,8 @@ public class SimulacrumSpell extends AbstractSpell {
     public SimulacrumSpell() {
         this.baseSpellPower = 1;
         this.spellPowerPerLevel = 1;
-        this.baseManaCost = 500;
-        this.manaCostPerLevel = 500;
+        this.baseManaCost = 300;
+        this.manaCostPerLevel = 50;
         this.castTime = 0;
     }
 

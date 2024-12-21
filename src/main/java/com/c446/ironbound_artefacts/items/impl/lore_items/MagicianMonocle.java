@@ -80,10 +80,10 @@ public class MagicianMonocle extends UserDependantCurios {
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
             copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false, new SpellSlot[]{
-                            new SpellSlot(new SpellData(SpellRegistry.TELEPORT_SPELL.get(), 8, true), 0),
-                            new SpellSlot(new SpellData(CustomSpellRegistry.FASLSE_LIFE.get(), 10, true), 1),
-                            new SpellSlot(new SpellData(CustomSpellRegistry.SIMULACRUM.get(), 10, true), 2),
-                            new SpellSlot(new SpellData(CustomSpellRegistry.WISH.get(), 3, true), 3)
+                            new SpellSlot(new SpellData(SpellRegistry.LIGHTNING_LANCE_SPELL.get(), 12, true), 0),
+                            new SpellSlot(new SpellData(SpellRegistry.LIGHTNING_BOLT_SPELL.get(), 12, true), 1),
+                            new SpellSlot(new SpellData(SpellRegistry.SCULK_TENTACLES_SPELL.get(), 6, true), 2),
+                            new SpellSlot(new SpellData(CustomSpellRegistry.WISH.get(), 6, true), 3)
                     })
             );
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));

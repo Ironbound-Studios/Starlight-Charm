@@ -9,7 +9,6 @@ public class IBSpellCasterData implements INBTSerializable<CompoundTag> {
     private int wish_recoil = 0;
     private int time_stop_recoil = 0;
 
-
     public void setTimeStopRecoil(int time_stop_recoil) {
         this.time_stop_recoil = time_stop_recoil;
     }
@@ -31,7 +30,9 @@ public class IBSpellCasterData implements INBTSerializable<CompoundTag> {
         var tag = new CompoundTag();
         tag.putInt("wish_cd", this.wish_recoil);
         tag.putInt("time_stop_cd", this.time_stop_recoil);
+
         return tag;
+
     }
 
     @Override

@@ -21,7 +21,7 @@ public class FalseLifeSpell extends AbstractSpell {
         this.baseSpellPower = 2;
         this.spellPowerPerLevel = 1;
         this.baseManaCost = 300;
-        this.manaCostPerLevel = 300;
+        this.manaCostPerLevel = 50;
         this.castTime = 100;
     }
 
@@ -56,7 +56,7 @@ public class FalseLifeSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, (int) (spellLevel * 20 * this.getSpellPower(spellLevel, entity)), (int) ((this.baseSpellPower + this.spellPowerPerLevel) * spellLevel), false, false));
+        entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, (int) (spellLevel * 20 * this.getSpellPower(spellLevel, entity)), this.baseSpellPower + this.spellPowerPerLevel, false, false));
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 }

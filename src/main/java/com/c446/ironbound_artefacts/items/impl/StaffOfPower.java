@@ -17,14 +17,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.c446.ironbound_artefacts.registries.ItemRegistry.STAFF_OF_POWER;
+//import static com.c446.ironbound_artefacts.registries.ItemRegistry.STAFF_OF_POWER;
 
 public class StaffOfPower extends StaffItem {
     public StaffOfPower(Properties properties) {
         super(properties);
     }
 
-
+/*
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @NotNull TooltipContext context, List<Component> lines, @NotNull TooltipFlag tooltipFlag) {
         AtomicReference<String> spellName = new AtomicReference<>("");
@@ -50,5 +50,5 @@ public class StaffOfPower extends StaffItem {
 
 
         super.appendHoverText(stack, context, lines, tooltipFlag);
-    }
+    }*/
 }
