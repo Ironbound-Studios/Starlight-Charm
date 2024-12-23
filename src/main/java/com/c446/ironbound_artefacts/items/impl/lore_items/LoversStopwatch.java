@@ -54,7 +54,10 @@ public class LoversStopwatch extends UserDependantCurios {
         super.onEquip(slotContext, prevStack, stack);
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
-            copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(3, true, false, false, new SpellSlot[]{new SpellSlot(new SpellData(CustomSpellRegistry.TIME_STOP.get(), 1, true), 0), new SpellSlot(new SpellData(SpellRegistry.HASTE_SPELL.get(), 8, true), 1), new SpellSlot(new SpellData(SpellRegistry.SLOW_SPELL.get(), 8, true), 2),}));
+            copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(3, true, false, false, new SpellSlot[]{
+                    new SpellSlot(new SpellData(CustomSpellRegistry.TIME_STOP.get(), 1, true), 0),
+                    new SpellSlot(new SpellData(SpellRegistry.HASTE_SPELL.get(), 6, true), 1),
+                    new SpellSlot(new SpellData(SpellRegistry.SLOW_SPELL.get(), 6, true), 2),}));
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
         } else {
             var copy = stack.copy();
@@ -72,8 +75,8 @@ public class LoversStopwatch extends UserDependantCurios {
         if (slotContext.entity() != null && canEntityUseItem(slotContext.entity())) {
             multiplier *= 2;
         }
-        attributeMap.put(AttributeRegistry.COOLDOWN_REDUCTION, new AttributeModifier(id, 0.1 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        attributeMap.put(AttributeRegistry.CAST_TIME_REDUCTION, new AttributeModifier(id, 0.1 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeMap.put(AttributeRegistry.COOLDOWN_REDUCTION, new AttributeModifier(id, 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));;
+        attributeMap.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));;
         return attributeMap;
     }
 }

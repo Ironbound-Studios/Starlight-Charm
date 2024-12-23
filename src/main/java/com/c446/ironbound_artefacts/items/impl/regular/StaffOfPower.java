@@ -1,21 +1,6 @@
-package com.c446.ironbound_artefacts.items.impl;
+package com.c446.ironbound_artefacts.items.impl.regular;
 
-import com.c446.ironbound_artefacts.registries.EffectsRegistry;
-import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
-import io.redspace.ironsspellbooks.api.spells.SchoolType;
-import io.redspace.ironsspellbooks.item.curios.AffinityRing;
 import io.redspace.ironsspellbooks.item.weapons.StaffItem;
-import io.redspace.ironsspellbooks.util.MinecraftInstanceHelper;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 //import static com.c446.ironbound_artefacts.registries.ItemRegistry.STAFF_OF_POWER;
 

@@ -1,31 +1,22 @@
-package com.c446.ironbound_artefacts.items.impl;
+package com.c446.ironbound_artefacts.items.impl.regular;
 
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.CastSource;
-import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.spells.NoneSpell;
-import io.redspace.ironsspellbooks.spells.blood.RaiseDeadSpell;
 import io.redspace.ironsspellbooks.spells.ender.PortalSpell;
 import io.redspace.ironsspellbooks.spells.evocation.SpectralHammerSpell;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
 
 public class DeckOfAllThings extends UserDependantCurios {
     public DeckOfAllThings(Properties p) {

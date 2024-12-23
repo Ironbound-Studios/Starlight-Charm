@@ -4,6 +4,8 @@ import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import net.minecraft.world.entity.Entity;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
+import java.util.UUID;
+
 public abstract class UserDependantCurios extends BaseItem implements ICurioItem {
     public UserDependantCurios(Properties p) {
         super(p);
@@ -17,6 +19,8 @@ public abstract class UserDependantCurios extends BaseItem implements ICurioItem
         return false;
 
     }
+
+    public UUID user;
 }
 /*
 * DONE :

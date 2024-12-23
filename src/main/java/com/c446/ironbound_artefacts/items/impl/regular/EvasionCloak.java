@@ -1,4 +1,4 @@
-package com.c446.ironbound_artefacts.items.impl;
+package com.c446.ironbound_artefacts.items.impl.regular;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.google.common.collect.Multimap;
@@ -11,7 +11,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
-import org.w3c.dom.Attr;
 import top.theillusivec4.curios.api.SlotContext;
 
 public class EvasionCloak extends CurioBaseItem {

@@ -48,6 +48,7 @@
   "item.ironbounds_artefacts.staff_of_magi": "The Staff of magi",
   "item.ironbounds_artefacts.staff_of_power.tooltip": "",
   "spell.ironbounds_artefacts.all_spell.name" : "all spells",
+  "item.ironbounds_artefacts.phylactery.souls": "Current number of souls : %s",
 
   "item.ironbounds_artefacts.arcane_weave_helmet": "Arcane Weave Hood",
   "item.ironbounds_artefacts.arcane_weave_chestplate": "Arcane Weave Coat",

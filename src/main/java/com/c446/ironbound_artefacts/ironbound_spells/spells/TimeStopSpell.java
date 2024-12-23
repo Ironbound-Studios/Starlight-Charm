@@ -27,7 +27,7 @@ public class TimeStopSpell extends AbstractSpell {
             .setMinRarity(SpellRarity.LEGENDARY)
             .setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE)
             .setMaxLevel(3)
-            .setCooldownSeconds(3600)
+            .setCooldownSeconds(1200)
             .build();
     private final ResourceLocation spellId = IronboundArtefact.prefix("time_stop");
 
@@ -50,7 +50,7 @@ public class TimeStopSpell extends AbstractSpell {
 
 
     public double getTickDuration(int spellLevel, @NonNull LivingEntity caster) {
-        return 20 * (spellLevel + caster.getAttributeValue(INSIGHT) * 0.5);
+        return 20 * (1+spellLevel + caster.getAttributeValue(INSIGHT));
     }
 
     @Override
@@ -85,7 +85,6 @@ public class TimeStopSpell extends AbstractSpell {
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
         entity.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP_CASTER, ((int) this.getTickDuration(spellLevel, entity)), spellLevel));
-
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 }
