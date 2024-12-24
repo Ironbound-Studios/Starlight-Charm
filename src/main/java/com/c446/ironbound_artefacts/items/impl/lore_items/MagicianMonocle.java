@@ -53,7 +53,7 @@ public class MagicianMonocle extends UserDependantCurios {
             multiplier = 2;
         }
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeModifier.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.15 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.15 * Math.pow(multiplier,2), AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         return attributeModifier;
     }
@@ -80,10 +80,10 @@ public class MagicianMonocle extends UserDependantCurios {
         if (canEntityUseItem(slotContext.entity())) {
             var copy = stack.copy();
             copy.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false, new SpellSlot[]{
-                            new SpellSlot(new SpellData(SpellRegistry.LIGHTNING_LANCE_SPELL.get(), 12, true), 0),
-                            new SpellSlot(new SpellData(SpellRegistry.LIGHTNING_BOLT_SPELL.get(), 12, true), 1),
+                            new SpellSlot(new SpellData(SpellRegistry.OAKSKIN_SPELL.get(), 10, true), 0),
+                            new SpellSlot(new SpellData(SpellRegistry.CHARGE_SPELL.get(), 5, true), 1),
                             new SpellSlot(new SpellData(SpellRegistry.SCULK_TENTACLES_SPELL.get(), 6, true), 2),
-                            new SpellSlot(new SpellData(CustomSpellRegistry.WISH.get(), 6, true), 3)
+                            new SpellSlot(new SpellData(SpellRegistry.SONIC_BOOM_SPELL.get(), 5, true), 3)
                     })
             );
             CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));

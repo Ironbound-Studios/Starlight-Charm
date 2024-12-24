@@ -1,13 +1,10 @@
 package com.c446.ironbound_artefacts.registries;
 
-import com.c446.ironbound_artefacts.items.ForsakenDreams;
 import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
-import com.c446.ironbound_artefacts.items.impl.*;
 import com.c446.ironbound_artefacts.items.impl.lore_items.*;
+import com.c446.ironbound_artefacts.items.impl.regular.*;
 import io.redspace.ironsspellbooks.api.item.weapons.ExtendedSwordItem;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
-import io.redspace.ironsspellbooks.api.spells.SpellData;
-import io.redspace.ironsspellbooks.api.spells.SpellSlot;
 import io.redspace.ironsspellbooks.capabilities.magic.SpellContainer;
 import io.redspace.ironsspellbooks.compat.Curios;
 import io.redspace.ironsspellbooks.item.SpellSlotUpgradeItem;
@@ -43,9 +40,10 @@ public class ItemRegistry {
     //public static final DeferredHolder<Item, ForsakenDreams> DREAMS;
     public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));
     public static final DeferredHolder<Item, CurioBaseItem> PROTECTION_RING = ITEMS.register("protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(Attributes.ARMOR, 5, AttributeModifier.Operation.ADD_VALUE)));
-    public static final DeferredHolder<Item, EvasionCloak> ARCANE_PROTECTION_CLOAK = ITEMS.register("cloak_of_evasion", () -> new EvasionCloak(new Item.Properties()));
-    public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(new Item.Properties()));
-    public static final DeferredHolder<Item, RingOfThreeWishes> THREE_WISHES = ITEMS.register("three_wishes", () -> new RingOfThreeWishes(new Item.Properties()));
+    public static final DeferredHolder<Item, EvasionCloak> ARCANE_PROTECTION_CLOAK = ITEMS.register("cloak_of_evasion", () -> new EvasionCloak(new Item.Properties().stacksTo(1)));
+    public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(new Item.Properties().stacksTo(1)));
+    public static final DeferredHolder<Item, RingOfThreeWishes> THREE_WISHES = ITEMS.register("three_wishes", () -> new RingOfThreeWishes(new Item.Properties().stacksTo(1)));
+    public static final DeferredHolder<Item, Phylactery> CONTRACTOR_RING = ITEMS.register("phylactery", () -> new Phylactery(new Item.Properties().stacksTo(1)));
 
     //public static final DeferredHolder<Item, CurioBaseItem> ARCHMAGE_SPELLBOOK;
     public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING;
@@ -56,7 +54,6 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_HELMET = ITEMS.register("arcane_weave_helmet", () -> new ArcaneWeaveItem(Type.HELMET, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(55))));
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_CHEST_PLATE = ITEMS.register("arcane_weave_chestplate", () -> new ArcaneWeaveItem(Type.CHESTPLATE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(Type.CHESTPLATE.getDurability(55))));
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_LEGGINGS = ITEMS.register("arcane_weave_leggings", () -> new ArcaneWeaveItem(Type.LEGGINGS, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(Type.LEGGINGS.getDurability(55))));
-
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_BOOTS = ITEMS.register("arcane_weave_boots", () -> new ArcaneWeaveItem(Type.BOOTS, ItemPropertiesHelper.equipment().rarity(Rarity.RARE).stacksTo(1).durability(Type.BOOTS.getDurability(55))));
 
     public static final StaffTier TIER_STAFF_OF_MAGI = new StaffTier(3, -0.5F, new AttributeContainer(AttributeRegistry.MAX_MANA, 300, AttributeModifier.Operation.ADD_VALUE), new AttributeContainer(AttributeRegistry.SPELL_RESIST, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));

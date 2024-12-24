@@ -16,6 +16,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.EffectCure;
+import net.neoforged.neoforge.event.level.NoteBlockEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -30,6 +31,10 @@ public class StoppingTimeEffect extends IronboundMobEffect {
         super(category, color, particle);
     }
 
+    public boolean isPlayerFriendTo(Player target, Player attacker){
+        return  false;
+    }
+
     @Override
     public boolean applyEffectTick(@NotNull LivingEntity caster, int spellLevel) {
         System.out.println("time stopping effect triggered");
@@ -41,9 +46,9 @@ public class StoppingTimeEffect extends IronboundMobEffect {
             if (!finishSoon) {
                 for (Entity e : entities) {
                     if (!e.isAlliedTo(caster)) {
-                        IronboundArtefact.freezeEntity(e, 40);
+                        IronboundArtefact.freezeEntity(e, 1);
                         if (e instanceof Player player){
-                            player.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, 40,0,false,true));
+                            player.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP, 1,0,false,true));
                         }
                     }
                     //IronboundArtefact.tickMap();

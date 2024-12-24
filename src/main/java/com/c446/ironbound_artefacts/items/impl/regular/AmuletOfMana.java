@@ -1,4 +1,4 @@
-package com.c446.ironbound_artefacts.items.impl;
+package com.c446.ironbound_artefacts.items.impl.regular;
 
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import net.minecraft.world.item.ItemStack;

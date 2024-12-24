@@ -1,25 +1,18 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.components.UniversalPositionComponent;
 import com.c446.ironbound_artefacts.datagen.Tags;
-import com.c446.ironbound_artefacts.items.impl.lore_items.LoversStopwatch;
+import com.c446.ironbound_artefacts.items.impl.lore_items.Phylactery;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
-import io.redspace.ironsspellbooks.api.magic.MagicHelper;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
-import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
-import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
-import io.redspace.ironsspellbooks.entity.mobs.SummonedZombie;
-import io.redspace.ironsspellbooks.item.curios.InvisibiltyRing;
 import io.redspace.ironsspellbooks.network.SyncManaPacket;
 import io.redspace.ironsspellbooks.registries.*;
-import net.minecraft.client.renderer.EffectInstance;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -27,22 +20,18 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.neoforge.network.PacketDistributor;
-import org.apache.commons.lang3.time.StopWatch;
 import org.jetbrains.annotations.Nullable;
+import top.theillusivec4.curios.api.CuriosApi;
 
-import java.util.ArrayList;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 
+import static com.c446.ironbound_artefacts.registries.ComponentRegistry.UNIVERSAL_POS_COMPONENT;
 import static io.redspace.ironsspellbooks.api.registry.AttributeRegistry.MAX_MANA;
-import static net.minecraft.world.effect.MobEffects.WITHER;
 
 @AutoSpellConfig
 public class WishSpell extends AbstractSpell {
@@ -111,24 +100,37 @@ public class WishSpell extends AbstractSpell {
         if (item.getItem().equals(ItemRegistry.ARCANE_ESSENCE.get()) && entity instanceof ServerPlayer serverPlayer) {
             IronboundArtefact.LOGGER.debug("trying mana regen.");
             var data = MagicData.getPlayerMagicData(serverPlayer);
-            data.addMana((float) entity.getAttributeValue(MAX_MANA) * this.getSpellPower(spellLevel, entity));
-            PacketDistributor.sendToPlayer(serverPlayer, new SyncManaPacket(data));
+            entity.addEffect(new MobEffectInstance(EffectsRegistry.MANA_REGEN, 20*60*10*spellLevel, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(item);
+        } else if (item.getItem().equals(Items.LODESTONE)) {
+            IronboundArtefact.LOGGER.debug("trying lodestone");
+            CuriosApi.getCuriosInventory(entity).ifPresent(inv -> {
+                    var contractorRings = inv.findCurios(stack -> stack.getItem() instanceof Phylactery);
+                        contractorRings.forEach(ring->{
+                            System.out.println(ring.stack().getHoverName().toString());
+                            var pos = UniversalPositionComponent.create(entity);
+                            IronboundArtefact.LOGGER.debug("{}{}", pos.getPos().toString(), pos.dimension());
+                            ring.stack().set(UNIVERSAL_POS_COMPONENT, UniversalPositionComponent.create(entity));
+                            var edfre = ring.stack().get(UNIVERSAL_POS_COMPONENT);
+                            IronboundArtefact.LOGGER.debug("{} {}", edfre.getPos(), edfre.dimension());
+                        });
+                    }
+            );
         } else if (item.getItem().equals(Items.PHANTOM_MEMBRANE)) {
             IronboundArtefact.LOGGER.debug("trying slow fall");
-            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 120, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
+            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20*60*10*spellLevel, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(item);
         } else if (item.getItem().equals(Items.MAGMA_CREAM)) {
             IronboundArtefact.LOGGER.debug("trying fire res");
-            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
+            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*60*10*spellLevel, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(item);
         } else if (item.getItem().equals(Items.GOLD_BLOCK)) {
             IronboundArtefact.LOGGER.debug("trying damage res.");
-            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 120, Math.min(4, (int) (1 / 2F * this.getSpellPower(spellLevel, entity)))));
+            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*60*10*spellLevel, Math.min(4, (int) (1 / 2F * this.getSpellPower(spellLevel, entity)))));
             consumeOneFromStack(item);
         } else if (item.getItem().equals(Items.GHAST_TEAR)) {
             IronboundArtefact.LOGGER.debug("trying health regen.");
-            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 120, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
+            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20*60*10*spellLevel, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
             consumeOneFromStack(item);
         } else if (item.has(ComponentRegistry.SPELL_CONTAINER)) {
             IronboundArtefact.LOGGER.debug("found spell container.");

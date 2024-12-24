@@ -4,7 +4,10 @@ package com.c446.ironbound_artefacts.events;
 import com.c446.ironbound_artefacts.Config;
 import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.attachment.FirstLoginData;
+import com.c446.ironbound_artefacts.components.KillCounterComponent;
 import com.c446.ironbound_artefacts.entities.simulacrum.SimulacrumEntity;
+import com.c446.ironbound_artefacts.items.UserDependantCurios;
+import com.c446.ironbound_artefacts.items.impl.lore_items.Phylactery;
 import com.c446.ironbound_artefacts.registries.*;
 import com.c446.ironbound_artefacts.registries.ItemRegistry;
 import com.google.common.collect.HashMultimap;
@@ -50,6 +53,7 @@ import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.item.ItemTossEvent;
 import net.neoforged.neoforge.event.entity.living.LivingChangeTargetEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
@@ -115,6 +119,42 @@ public class ServerEvents {
             event.setLevel(event.getLevel() + boost.get());
         }
     }
+
+
+    @SubscribeEvent
+    public static void onKill(LivingDeathEvent event) {
+        if (event.getSource().getEntity() instanceof Player player) {
+            System.out.println(player.getDisplayName() + "killed" + event.getEntity().getDisplayName());
+            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
+                        var contractorRings = inv.findCurios(stack -> stack.getItem() instanceof Phylactery);
+                        System.out.println(player.getDisplayName().toString() + "has " + contractorRings.size()+ "phylacteries");
+                        contractorRings.forEach(ring -> {
+                                    if (ring.stack().has(com.c446.ironbound_artefacts.registries.ComponentRegistry.KILL_COUNT_COMPONENT)) {
+                                        ring.stack().set(com.c446.ironbound_artefacts.registries.ComponentRegistry.KILL_COUNT_COMPONENT, new KillCounterComponent(ring.stack().get(com.c446.ironbound_artefacts.registries.ComponentRegistry.KILL_COUNT_COMPONENT).killCount() + 1));
+                                    }
+                                    else{
+                                        ring.stack().set(com.c446.ironbound_artefacts.registries.ComponentRegistry.KILL_COUNT_COMPONENT, new KillCounterComponent(1));
+                                    }
+                                }
+                        );
+                    }
+            );
+        }
+        if (event.getEntity() instanceof Player player) {
+            CuriosApi.getCuriosInventory(player).ifPresent(inv -> {
+                        var contractorRings = inv.findCurios(stack -> stack.getItem() instanceof UserDependantCurios);
+                        if (!contractorRings.isEmpty() && contractorRings.getFirst().stack().has(com.c446.ironbound_artefacts.registries.ComponentRegistry.UNIVERSAL_POS_COMPONENT)) {
+                            event.setCanceled(true);
+                            try {
+                                contractorRings.getFirst().stack().get(com.c446.ironbound_artefacts.registries.ComponentRegistry.UNIVERSAL_POS_COMPONENT).goTo(player);
+                            }catch (NullPointerException ignored){}
+                        }
+                    }
+            );
+        }
+    }
+
+
 
     @SubscribeEvent
     public static void onServerStart(ServerStartedEvent event) {
