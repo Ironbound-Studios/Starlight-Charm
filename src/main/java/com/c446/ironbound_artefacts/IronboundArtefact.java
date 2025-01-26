@@ -1,7 +1,6 @@
 package com.c446.ironbound_artefacts;
 
-import com.c446.ironbound_artefacts.registries.ModSetup;
-import com.min01.entitytimer.TimerUtil;
+import com.min01.tickrateapi.util.TickrateUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
@@ -20,13 +19,13 @@ public class IronboundArtefact {
 
     public static void freezeEntity(Entity entity, int timeOut) {
         STOPPED_ENTITIES.put(entity, timeOut);
-        TimerUtil.setTimer(entity, 0);
+        TickrateUtil.setTimer(entity, 0);
     }
 
     public static void tickMap() {
         for (var i : STOPPED_ENTITIES.keySet()) {
             if (STOPPED_ENTITIES.get(i) <= 0) {
-                TimerUtil.resetTickrate(i);
+                TickrateUtil.resetTickrate(i);
 
             } else {
                 STOPPED_ENTITIES.put(i, STOPPED_ENTITIES.get(i) - 1);

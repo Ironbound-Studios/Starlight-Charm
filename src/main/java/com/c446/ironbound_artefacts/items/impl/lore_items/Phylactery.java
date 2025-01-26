@@ -54,6 +54,7 @@ public class Phylactery extends CurioBaseItem {
         return super.getAttributeModifiers(slotContext, id, stack);
     }
 
+
     @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         if (!stack.has(ComponentRegistry.KILL_COUNT_COMPONENT)) {

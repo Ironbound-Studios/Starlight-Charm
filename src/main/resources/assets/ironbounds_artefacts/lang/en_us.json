@@ -10,6 +10,8 @@
   "item.ironbounds_artefacts.devils_finger.tooltip1": "A wizened devil's cut off finger.",
   "item.ironbounds_artefacts.devils_finger.tooltip2": "\"Malevolence lives within you.\"",
 
+  "item.ironbounds_artefacts.elven_chains": "Elven Chains",
+
   "item.ironbounds_artefacts.stopwatch": "Golden Stopwatch",
   "item.ironbounds_artefacts.lovers_watch.tooltip1": "Clockwatch with the hands that indicate the Seconds missing.",
   "item.ironbounds_artefacts.lovers_watch.tooltip2": "Though left alone in the maddening abyss, the watch continued to tick, undisturbed",
@@ -91,6 +93,10 @@
 
   "spell.ironbounds_artefacts.time_stop": "Time Stop",
   "spell.ironbounds_artefacts.time_stop.guide": "You continually freeze the creatures that surround you for the duration of the spell. Frozen creatures are unable to move and cast spells and attack.",
+
+  "spell.ironbounds_artefacts.divine_boon": "Divine Boon",
+  "spell.ironbounds_artefacts.divine_boon.guide": "You express a prayer towards your deity, and gain a Divine Elixir as a reward.",
+
 
   "spell.ironbounds_artefacts.kereshka_favor": "Kereshka's Favour",
   "spell.ironbounds_artefacts.kereshka_favor.guide": "You gain the blessing of the God of Elementals. The blessing's element corresponds to the first School Focus that you have in your inventory. Having a focus in your offhand will always take priority.",

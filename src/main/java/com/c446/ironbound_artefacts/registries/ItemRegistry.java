@@ -43,6 +43,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, RingOfThreeWishes> THREE_WISHES = ITEMS.register("three_wishes", () -> new RingOfThreeWishes(new Item.Properties().stacksTo(1)));
     /*LORE*/
     //public static final DeferredHolder<Item, InsightCharm> AMA_CHARM= ITEMS.register("ingisht_insignia", () -> new InsightCharm(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, FlowerCrown> FC= ITEMS.register("flower_crown", ()->new FlowerCrown(new Item.Properties()));
     public static final DeferredHolder<Item, ArcaneWand> WIZARDING_WAND = ITEMS.register("wizard_wand", () -> new ArcaneWand(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_ARCANE))));
     public static final DeferredHolder<Item, StaffOfPower> STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER))));
     public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI))));

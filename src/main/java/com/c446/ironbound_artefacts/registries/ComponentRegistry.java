@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.registries;
 
 
+import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.components.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -11,6 +12,7 @@ import io.redspace.ironsspellbooks.api.spells.SpellData;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;

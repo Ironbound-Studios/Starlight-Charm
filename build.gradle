@@ -125,21 +125,22 @@ dependencies {
 //    // APOTHEOSIS
     compileOnly "curse.maven:apotheosis-${apotheosis_version}"
     implementation "curse.maven:apothic-attributes-898963:5597608"
+    implementation "curse.maven:atlas-api-1145462:5980493"
     implementation "curse.maven:placebo-283644:5597604"
-
     //QOL
     //todo: 1.21: update these mods
-
+    runtimeOnly "curse.maven:irons-jewelry-1101111:6024241"
 
     // JSON ******************************************************************************************************
     implementation "com.google.code.gson:gson:${gson_version}"
 
     // ISS *****************************************************************************************************
-    implementation("io.redspace:irons_spellbooks:${irons_spells_version}")
-
+    //implementation("io.redspace:irons_spellbooks:${irons_spells_version}")
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:6117735"
     // IB CORE DEPS
     //implementation("com.github.IGN-Styly:Arcanus:1.21.1-0.3.6.1a")
-    implementation "curse.maven:entity-tickrate-api-969702:5897726"
+//    implementation "curse.maven:entity-tickrate-api-969702:5897726"
+    implementation "curse.maven:tickrate-api-969702:5950217"
     testImplementation "org.junit.jupiter:junit-jupiter:5.10.2"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation "net.neoforged:testframework:${neoVersion}"
