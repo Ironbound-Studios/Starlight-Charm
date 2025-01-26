@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": {
+      "item": "irons_spellbooks:mithril_ingot"},
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "minecraft:iron_nugget"
+    },
+    "C": {
+      "item": "minecraft:chain"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "pattern": [
+    "CIC",
+    "CMC",
+    "NDN" ],
+  "result": {
+    "count": 1,
+    "id": "ironbounds_artefacts:amulet_of_spell_storing"
+  }
+}
+
+
