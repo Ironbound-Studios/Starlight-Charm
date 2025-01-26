@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "ironbounds_artefacts:item/wizard_wand"
+  }
+}

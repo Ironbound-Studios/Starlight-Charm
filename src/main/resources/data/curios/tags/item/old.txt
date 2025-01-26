@@ -1,0 +1,5 @@
+    "ironbounds_artefacts:devils_finger",
+    "ironbounds_artefacts:judgement_scale",
+    "ironbounds_artefacts:strength_hand",
+    "ironbounds_artefacts:stopwatch",
+    "ironbounds_artefacts:death_amulet",

@@ -1,5 +1,5 @@
 {
-  "tab.ironbounds_artefacts.curios" : "Ironbounds  Artefacts  ",
+  "tab.ironbounds_artefacts.curios" : "Ironbounds Artefacts  ",
   "itemGroup.examplemod": "Example Mod Tab",
   "block.examplemod.example_block": "Example Block",
   "item.examplemod.example_item": "Example Item",
@@ -38,28 +38,60 @@
   "item.ironbounds_artefacts.strength_hand.tooltip1": "Hands of a decrepit Archlich.",
   "item.ironbounds_artefacts.strength_hand.tooltip2": "Allows the creation of Greater Undeads.",
 
+  "item.ironbounds_artefacts.insight_insignia": "Arcane Insignia of Insight",
+  "item.ironbounds_artefacts.insight_insignia.unique": "Insignia of the Inheritor",
+  "item.ironbounds_artefacts.insight_insignia.tooltip.1": "In the days of long past, those who graduated from the Academy of the Arcane were granted this Insignia to showcase their accomplishments.",
+  "item.ironbounds_artefacts.insight_insignia.tooltip.2": "Some even claimed the Insignia enhanced the intuition and insight of their holders but these claims were dismissed as mere superstition. House Stellarkan has long since passed down of the Insignia once held by the Headmaster himself, as a sign of leadership.",
+  "item.ironbounds_artefacts.insight_insignia.tooltip.3": "The Insignia has become synonymous with Magical Authority.",
+
+  "item.ironbounds_artefacts.phylactery": "Orb of Soul Binding",
+  "item.ironbounds_artefacts.phylactery.tooltip1": "When you are about to die, consume a certain number of souls to go to your spawn location.",
+  "item.ironbounds_artefacts.phylactery.tooltip2": "You can set your spawn location in any dimension, at any position.",
+  "item.ironbounds_artefacts.phylactery.tooltip3": "Be careful about where you set your respawn point.",
+  "item.ironbounds_artefacts.phylactery.tooltip4": "Right Click to bind your spawn location.",
+
   "item.ironbounds_artefacts.amulet_of_spell_storing" : "Amulet of Spell Storing",
   "item.ironbounds_artefacts.amulet_of_holding.tooltip1" : "Can be imbued with four spells.",
   "item.ironbounds_artefacts.amulet_of_holding.tooltip2" : "As a drawback however, it will decrease the potency of all spells.",
 
   "item.ironbounds_artefacts.archmage_spellbook": "Archmage's Spell Book",
   "item.ironbounds_artefacts.archmage_spellbook.tooltip": "Spellbook dropped by the apprentice of an Archmage.",
+
   "item.ironbounds_artefacts.greater_spell_slot_upgrade": "Greater Spell Slot Upgrade",
-  "item.ironbounds_artefacts.staff_of_magi": "The Staff of magi",
-  "item.ironbounds_artefacts.staff_of_power.tooltip": "",
+
+  "item.ironbounds_artefacts.staff_of_magi": "The Staff of The Magi",
+
+  "item.ironbounds_artefacts.staff_of_power": "The Staff of Power",
+
+  "item.ironbounds_artefacts.wizard_wand": "Arcane Wand of Wizardry",
+  "item.ironbounds_artefacts.wizard_wand.tooltip1": "Arcane Wands have long since been a sign of Wizards everywhere. Originally invented by one of the Archmages, House Stellarkan were amongst the first to enter Wand Manufacturing Industry and their innovation of the Hither Tither Wand produced this masterwork item.\n",
+  "item.ironbounds_artefacts.wizard_wand.tooltip2": "Arcane Wands of Wizardry remain the staple choice of Wizards everywhere and new variants are being researched. Some say House Stellarkan is said to have an Arcane Wand gifted to the Headmaster by the Arbiter itself.",
+
+
+
+
+
   "spell.ironbounds_artefacts.all_spell.name" : "all spells",
   "item.ironbounds_artefacts.phylactery.souls": "Current number of souls : %s",
 
-  "item.ironbounds_artefacts.arcane_weave_helmet": "Arcane Weave Hood",
-  "item.ironbounds_artefacts.arcane_weave_chestplate": "Arcane Weave Coat",
-  "item.ironbounds_artefacts.arcane_weave_leggings": "Arcane Weave leggings",
-  "item.ironbounds_artefacts.arcane_weave_boots": "Arcane Weave Boots",
+  "item.ironbounds_artefacts.arcane_weave_helmet": "Hood of the Weave",
+  "item.ironbounds_artefacts.arcane_weave_chestplate": "Robes of the Weave",
+  "item.ironbounds_artefacts.arcane_weave_leggings": "Leggings of the Weave",
+  "item.ironbounds_artefacts.arcane_weave_boots": "Boots of the Weave",
   "item.ironbounds_artefacts.magic_protection_ring": "Ring of Magic Resistance",
-  "item.ironbounds_artefacts.protection_ring": "Protective Ring",
+  "item.ironbounds_artefacts.protection_ring": "Ring of Resistance",
 
   "spell.ironbounds_artefacts.wish": "Wish",
   "spell.ironbounds_artefacts.wish.guide": "You express a wish to an extra planar being.\nDifferent items will have different effects.\nWishing with a scroll will cause you to cast the spell inscribed on it with a level bonus equal to the level of wish.\nAdditional effects may be discovered.\nThe item in your main hand has got priority, and your offhand will only be used if your main hand is empty.",
 
   "spell.ironbounds_artefacts.time_stop": "Time Stop",
-  "spell.ironbounds_artefacts.guide": "You continually freeze the creatures that surround you for the duration of the spell. Frozen creatures are unable to move and cast spells and attack."
+  "spell.ironbounds_artefacts.time_stop.guide": "You continually freeze the creatures that surround you for the duration of the spell. Frozen creatures are unable to move and cast spells and attack.",
+
+  "spell.ironbounds_artefacts.kereshka_favor": "Kereshka's Favour",
+  "spell.ironbounds_artefacts.kereshka_favor.guide": "You gain the blessing of the God of Elementals. The blessing's element corresponds to the first School Focus that you have in your inventory. Having a focus in your offhand will always take priority.",
+
+  "spell.ironbounds_artefacts.arcane_battery": "Arcane Battery",
+  "spell.ironbounds_artefacts.arcane_battery.guide": "You can cast the next spell for free without any cooldown."
+
+
 }

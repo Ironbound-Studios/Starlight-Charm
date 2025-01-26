@@ -1,6 +1,7 @@
 package com.c446.ironbound_artefacts.ironbound_spells.spells;
 
 import com.c446.ironbound_artefacts.IronboundArtefact;
+import com.c446.ironbound_artefacts.registries.AttributeRegistry;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
@@ -43,14 +44,18 @@ public class TimeStopSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks((float) getTickDuration(spellLevel, caster), 1)),
+                Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks((float) getTickDuration(spellLevel), 1)),
                 Component.translatable("ui.irons_spellbooks.radius", Utils.stringTruncation(this.getAOE(spellLevel, caster), 1))
         );
     }
 
 
-    public double getTickDuration(int spellLevel, @NonNull LivingEntity caster) {
-        return 20 * (1+spellLevel + caster.getAttributeValue(INSIGHT));
+    public double getTickDuration(int spellLevel) {
+        return 20 * (1+spellLevel);
+    }
+
+    public float getAOE(int spellLevel, LivingEntity entity) {
+        return (10 * spellLevel + this.getSpellPower(spellLevel, entity));
     }
 
     @Override
@@ -73,9 +78,7 @@ public class TimeStopSpell extends AbstractSpell {
         return CastType.LONG;
     }
 
-    public float getAOE(int spellLevel, LivingEntity entity) {
-        return (10 * spellLevel + this.getSpellPower(spellLevel, entity));
-    }
+
 
     public AABB getBoundingBox(LivingEntity entity, int level) {
         return entity.getBoundingBox().inflate(this.getAOE(level, entity));
@@ -84,7 +87,7 @@ public class TimeStopSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP_CASTER, ((int) this.getTickDuration(spellLevel, entity)), spellLevel));
+        entity.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP_CASTER, (int) ((int) this.getTickDuration(spellLevel)*(1+entity.getAttributeValue(INSIGHT))), spellLevel));
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 }

@@ -22,6 +22,7 @@ public class ModSetup {
         ItemRegistry.ITEMS.register(eventBus);
         AttributeRegistry.ATTRIBUTES.register(eventBus);
         EffectsRegistry.EFFECTS.register(eventBus);
+        EffectsRegistry.POTIONS.register(eventBus);
         CustomSpellRegistry.SPELLS.register(eventBus);
         IBEntitiesReg.ENTITIES.register(eventBus);
         AttachmentRegistry.ATTACHMENT_TYPE_DEFERRED_REGISTER.register(eventBus);
@@ -54,16 +55,17 @@ public class ModSetup {
                 CreativeModeTab.builder()
                         .withTabsAfter(CreativeTabRegistry.MATERIALS_TAB.getKey())
                         .title(Component.translatable("tab.ironbounds_artefacts.curios"))
-                        .icon(() -> new ItemStack(ItemRegistry.LICH_HAND))
+                        .icon(() -> new ItemStack(ItemRegistry.THREE_WISHES))
                         .displayItems((enabledFeatures, entries) -> {
-                            entries.accept(ItemRegistry.DEATH_AMULET.get());
-                            entries.accept(ItemRegistry.DEVILS_FINGER.get());
-                            entries.accept(ItemRegistry.MAGICIANS_MONOCLE.get());
-                            entries.accept(ItemRegistry.JUDGEMENT_SCALE.get());
-                            entries.accept(ItemRegistry.LICH_HAND.get());
-                            entries.accept(ItemRegistry.LICH_CROWN.get());
+                            //entries.accept(ItemRegistry.DEATH_AMULET.get());
+                            //entries.accept(ItemRegistry.DEVILS_FINGER.get());
+                            //entries.accept(ItemRegistry.MAGICIANS_MONOCLE.get());
+                            //entries.accept(ItemRegistry.JUDGEMENT_SCALE.get());
+                            //entries.accept(ItemRegistry.LICH_HAND.get());
+                            //entries.accept(ItemRegistry.LICH_CROWN.get());
                             entries.accept(ItemRegistry.HERMIT_EYE.get());
-                            entries.accept(ItemRegistry.STOPWATCH.get());
+                            entries.accept(ItemRegistry.LICH_CROWN.get());
+                            //entries.accept(ItemRegistry.STOPWATCH.get());
 
                             entries.accept(ItemRegistry.MAGIC_DEFENSE_RING.get());
                             entries.accept(ItemRegistry.PROTECTION_RING.get());
@@ -73,8 +75,9 @@ public class ModSetup {
                             //entries.accept(ItemRegistry.STAFF_OF_POWER.get());
                             //entries.accept(ItemRegistry.ARCHMAGE_SPELLBOOK.get());
 
-
-
+                            entries.accept(ItemRegistry.ARCANE_PROTECTION_CLOAK.get());
+                            entries.accept(ItemRegistry.ELVEN_CHAINS.get());
+                            entries.accept(ItemRegistry.STAFF_OF_POWER.get());
                             entries.accept(ItemRegistry.STAFF_OF_MAGI.get());
                             entries.accept(ItemRegistry.WEAVE_HELMET.get());
                             entries.accept(ItemRegistry.WEAVE_CHEST_PLATE.get());

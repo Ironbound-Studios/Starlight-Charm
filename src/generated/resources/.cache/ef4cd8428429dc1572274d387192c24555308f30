@@ -1,5 +1,4 @@
-// 1.21	2024-12-13T09:19:12.3711278	Item Models: ironbounds_artefacts
-74066532929224741c0da4d9b3034846edab9fa3 assets/ironbounds_artefacts/models/item/amulet_of_mana_storing.json
+// 1.21	2025-01-26T17:37:10.7461108	Item Models: ironbounds_artefacts
 7d0c09311da0a49c69167e009e23f39b07cea886 assets/ironbounds_artefacts/models/item/amulet_of_spell_storing.json
 5cdb7e0e4e4a5b3d43216f7e01fbae073edab176 assets/ironbounds_artefacts/models/item/arcane_weave_boots.json
 cd840b9c7e752a5b3cb61332649a9ee63378e5b4 assets/ironbounds_artefacts/models/item/arcane_weave_chestplate.json
@@ -7,6 +6,9 @@ cd840b9c7e752a5b3cb61332649a9ee63378e5b4 assets/ironbounds_artefacts/models/item
 22f5dde62dba81700127f09d7ff0f377c5ddc234 assets/ironbounds_artefacts/models/item/arcane_weave_leggings.json
 ea769e7d0c5a628ac47d7925e40256a04f93fb91 assets/ironbounds_artefacts/models/item/cloak_of_evasion.json
 acd51668f924fc247c2daeaa859e744402d72fad assets/ironbounds_artefacts/models/item/elven_chains.json
+d50a7339b3f45099ca6235bcdbab5819df6822da assets/ironbounds_artefacts/models/item/forsaken_dreams.json
 e5c13c3ceb12440e3de7ac1dfbed83471fc85bb3 assets/ironbounds_artefacts/models/item/magic_protection_ring.json
+d3973fbdefab22588dc45ab7039464b04cfa0970 assets/ironbounds_artefacts/models/item/phylactery.json
 9898f13e18e02117439158e0da91c2aeaf3642a5 assets/ironbounds_artefacts/models/item/protection_ring.json
 8b3be8b27575882f44ef862637f38f5b3a5bd418 assets/ironbounds_artefacts/models/item/three_wishes.json
+aa7bd075798a70dfd25221e148bad6c88c5319ef assets/ironbounds_artefacts/models/item/wizard_wand.json

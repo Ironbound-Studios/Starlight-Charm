@@ -13,8 +13,11 @@ import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.network.SyncManaPacket;
 import io.redspace.ironsspellbooks.registries.*;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -81,104 +84,105 @@ public class WishSpell extends AbstractSpell {
         return (player.getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON));
     }
 
+    public boolean applyItemEffect(ItemStack item, LivingEntity entity, int spellLevel, Level level, CastSource castSource) {
+        ServerPlayer serverPlayer = entity instanceof ServerPlayer ? (ServerPlayer) entity : null;
+        if (serverPlayer != null && item.is(ItemRegistry.ARCANE_ESSENCE.get())) {
+            return applyEffect(entity, EffectsRegistry.MANA_REGEN, spellLevel, item);
+        } else if (item.is(Items.PHANTOM_MEMBRANE)) {
+            return applyEffect(entity, MobEffects.SLOW_FALLING, spellLevel, item);
+        } else if (item.is(Items.MAGMA_CREAM)) {
+            return applyEffect(entity, MobEffects.FIRE_RESISTANCE, spellLevel, item);
+        } else if (item.is(Items.GOLD_BLOCK)) {
+            return applyEffect(entity, MobEffects.DAMAGE_RESISTANCE, spellLevel, 4, item);
+        } else if (item.is(Items.GHAST_TEAR)) {
+            return applyEffect(entity, MobEffects.REGENERATION, spellLevel, item);
+        } else if (item.has(ComponentRegistry.SPELL_CONTAINER)) {
+            return handleSpellContainer(item, entity, serverPlayer, spellLevel, level, castSource);
+        } else if (item.is(Items.ZOMBIE_HEAD) && item.getCount() > 3) {
+            return applySummonEffects(level, entity, spellLevel);
+        } else if (item.is(Items.WITHER_SKELETON_SKULL)) {
+            return handleWitherSkull(level, entity);
+        } else if (item.is(Tags.ItemTags.WISH_DUPLICABLE)) {
+            return handleWishDuplicable(item);
+        }
+        return false;
+    }
+
+    private boolean applyEffect(LivingEntity entity, Holder<MobEffect> effect, int spellLevel, ItemStack item) {
+        entity.addEffect(new MobEffectInstance(effect, 20 * 60 * 10 * spellLevel, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
+        consumeOneFromStack(item);
+        return true;
+    }
+
+    private boolean applyEffect(LivingEntity entity, Holder<MobEffect> effect, int spellLevel, int maxStrength, ItemStack item) {
+        entity.addEffect(new MobEffectInstance(effect, 20 * 60 * 10 * spellLevel, Math.min(maxStrength, (int) (1 / 2F * this.getSpellPower(spellLevel, entity)))));
+        consumeOneFromStack(item);
+        return true;
+    }
+
+    private boolean handleSpellContainer(ItemStack item, LivingEntity entity, ServerPlayer serverPlayer, int spellLevel, Level level, CastSource castSource) {
+        IronboundArtefact.LOGGER.debug("found spell container.");
+        var spellContainer = item.get(ComponentRegistry.SPELL_CONTAINER);
+        if (spellContainer != null && item.is(ItemRegistry.SCROLL.get())) {
+            var spells = spellContainer.getActiveSpells();
+            if (spells != null && !spells.isEmpty()) {
+                var num = level.random.nextIntBetweenInclusive(0, spells.size() - 1);
+                var selectedSpell = spells.get(num);
+                if (selectedSpell != null && selectedSpell.getSpell() != null && !Objects.equals(selectedSpell.getSpell().getSpellId(), this.getSpellId())) {
+                    int spellLevel1 = selectedSpell.getLevel() + spellLevel;
+                    System.out.println("casting spell " + selectedSpell.getSpell().getComponentId() + " at level : " + spellLevel1);
+                    selectedSpell.getSpell().castSpell(
+                            level,
+                            spellLevel1,
+                            (ServerPlayer) entity,
+                            castSource,
+                            false
+                    );
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean applySummonEffects(Level level, LivingEntity entity, int spellLevel) {
+        var entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(150), a -> a instanceof IMagicSummon);
+        for (LivingEntity l : entities) {
+            if (l instanceof IMagicSummon s) {
+                if (s.getSummoner().equals(entity)) {
+                    l.addEffect(new MobEffectInstance(MobEffectRegistry.HASTENED, 60 * spellLevel, spellLevel));
+                    l.addEffect(new MobEffectInstance(MobEffectRegistry.CHARGED, 60 * spellLevel, spellLevel));
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean handleWitherSkull(Level level, LivingEntity entity) {
+        var result = Utils.raycastForEntity(level, entity, 150, true);
+        if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l) {
+            l.hurt(l.damageSources().wither(), l.getMaxHealth() * 2);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean handleWishDuplicable(ItemStack item) {
+        var newMax = item.getCount() * 2;
+        if (newMax > 64) {
+            item.setCount(64);
+        } else {
+            item.setCount(newMax);
+        }
+        return true;
+    }
+
+
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        ItemStack item = entity.getMainHandItem();
-        if (item.equals(ItemStack.EMPTY)) {
-            item = entity.getOffhandItem();
-        }
-
-        if (item == ItemStack.EMPTY) {
-            entity.heal(entity.getMaxHealth());
-            for (MobEffectInstance i : entity.getActiveEffects()) {
-                if (!i.getEffect().value().isBeneficial()) {
-                    entity.removeEffect(i.getEffect());
-                }
-            }
-        }
-
-        if (item.getItem().equals(ItemRegistry.ARCANE_ESSENCE.get()) && entity instanceof ServerPlayer serverPlayer) {
-            IronboundArtefact.LOGGER.debug("trying mana regen.");
-            var data = MagicData.getPlayerMagicData(serverPlayer);
-            entity.addEffect(new MobEffectInstance(EffectsRegistry.MANA_REGEN, 20*60*10*spellLevel, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(item);
-        } else if (item.getItem().equals(Items.LODESTONE)) {
-            IronboundArtefact.LOGGER.debug("trying lodestone");
-            CuriosApi.getCuriosInventory(entity).ifPresent(inv -> {
-                    var contractorRings = inv.findCurios(stack -> stack.getItem() instanceof Phylactery);
-                        contractorRings.forEach(ring->{
-                            System.out.println(ring.stack().getHoverName().toString());
-                            var pos = UniversalPositionComponent.create(entity);
-                            IronboundArtefact.LOGGER.debug("{}{}", pos.getPos().toString(), pos.dimension());
-                            ring.stack().set(UNIVERSAL_POS_COMPONENT, UniversalPositionComponent.create(entity));
-                            var edfre = ring.stack().get(UNIVERSAL_POS_COMPONENT);
-                            IronboundArtefact.LOGGER.debug("{} {}", edfre.getPos(), edfre.dimension());
-                        });
-                    }
-            );
-        } else if (item.getItem().equals(Items.PHANTOM_MEMBRANE)) {
-            IronboundArtefact.LOGGER.debug("trying slow fall");
-            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20*60*10*spellLevel, (int) (1 / 2 * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(item);
-        } else if (item.getItem().equals(Items.MAGMA_CREAM)) {
-            IronboundArtefact.LOGGER.debug("trying fire res");
-            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20*60*10*spellLevel, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(item);
-        } else if (item.getItem().equals(Items.GOLD_BLOCK)) {
-            IronboundArtefact.LOGGER.debug("trying damage res.");
-            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20*60*10*spellLevel, Math.min(4, (int) (1 / 2F * this.getSpellPower(spellLevel, entity)))));
-            consumeOneFromStack(item);
-        } else if (item.getItem().equals(Items.GHAST_TEAR)) {
-            IronboundArtefact.LOGGER.debug("trying health regen.");
-            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 20*60*10*spellLevel, (int) (1 / 2F * this.getSpellPower(spellLevel, entity))));
-            consumeOneFromStack(item);
-        } else if (item.has(ComponentRegistry.SPELL_CONTAINER)) {
-            IronboundArtefact.LOGGER.debug("found spell container.");
-            var spellContainer = item.get(ComponentRegistry.SPELL_CONTAINER);
-            if (spellContainer != null && item.getItem().equals(ItemRegistry.SCROLL.get())) {
-                var spells = spellContainer.getActiveSpells();
-                if (spells != null && !spells.isEmpty()) {
-                    var num = level.random.nextIntBetweenInclusive(0, spells.size() - 1);
-                    var selectedSpell = spells.get(num);
-                    if (selectedSpell != null && selectedSpell.getSpell() != null && !Objects.equals(selectedSpell.getSpell().getSpellId(), this.getSpellId())) {
-                        int spellLevel1 = selectedSpell.getLevel() + spellLevel;
-                        System.out.println("casting spell " + selectedSpell.getSpell().getComponentId() + " at level : " + spellLevel1);
-                        selectedSpell.getSpell().castSpell(
-                                level,
-                                spellLevel1,
-                                (ServerPlayer) entity,
-                                castSource,
-                                false
-                        );
-                    }
-                }
-            }
-        } else if (item.getItem().equals(Items.ZOMBIE_HEAD) && item.getCount() > 3) {
-            var entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(150), a -> a instanceof IMagicSummon);
-            for (LivingEntity l : entities) {
-                if (l instanceof IMagicSummon s) {
-                    if (s.getSummoner().equals(entity)) {
-                        l.addEffect(new MobEffectInstance(MobEffectRegistry.HASTENED, 60 * spellLevel, spellLevel));
-                        l.addEffect(new MobEffectInstance(MobEffectRegistry.CHARGED, 60 * spellLevel, spellLevel));
-                    }
-                }
-            }
-        } else if (item.getItem().equals(Items.WITHER_SKELETON_SKULL)) {
-            var result = Utils.raycastForEntity(level, entity, 150, true);
-            if (result instanceof EntityHitResult result1 && result1.getEntity() instanceof LivingEntity l) {
-                l.hurt(l.damageSources().wither(), l.getMaxHealth());
-            }
-        } else if (item.is(Tags.ItemTags.WISH_DUPLICABLE)) {
-
-            var newMax = item.getCount() * 2;
-            if (newMax > 64) {
-                item.setCount(64);
-            } else {
-                item.setCount(newMax);
-            }
-        }
-
-        entity.addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 100, 2));
+        applyItemEffect(entity.getOffhandItem(), entity, spellLevel, level, castSource);
+        applyItemEffect(entity.getMainHandItem(), entity, spellLevel, level, castSource);
+        entity.addEffect(new MobEffectInstance(EffectsRegistry.VOID_POISON, 100, 4));
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }

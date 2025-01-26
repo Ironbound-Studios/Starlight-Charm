@@ -39,12 +39,8 @@ public class LichCrown extends UserDependantCurios {
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
-        int multiplier = 1;
-        if (canEntityUseItem(slotContext.entity())) {
-            multiplier = 2;
-        }
         var attributeModifier = ICurioItem.defaultInstance.getAttributeModifiers(slotContext, id);
-        attributeModifier.put(AttributeRegistry.SUMMON_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("emperor_crown"), 0.2 * multiplier, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributeModifier.put(AttributeRegistry.SUMMON_DAMAGE, new AttributeModifier(IronboundArtefact.prefix("emperor_crown"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
         return attributeModifier;
     }
@@ -68,20 +64,17 @@ public class LichCrown extends UserDependantCurios {
     }
 
     @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        if (canEntityUseItem(slotContext.entity())) {
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.RAISE_DEAD_SPELL.get().getSpellId(), 3));
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        } else {
-            var copy = stack.copy();
-            copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.none().getSpellId(), 0));
-            CuriosApi.getCuriosInventory(slotContext.entity()).ifPresent(a -> a.setEquippedCurio(slotContext.identifier(), slotContext.index(), copy));
-        }
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
+        var copy = stack.copy();
+        copy.set(ComponentRegistry.AFFINITY_COMPONENT, new AffinityData(SpellRegistry.RAISE_DEAD_SPELL.get().getSpellId(), 3));
+        stack = copy;
+
+        super.onEquip(slotContext, prevStack, stack);
     }
 
     @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
         return true;
     }
+
 }

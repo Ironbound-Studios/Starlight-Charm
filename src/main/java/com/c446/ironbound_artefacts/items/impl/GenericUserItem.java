@@ -1,4 +1,4 @@
-package com.c446.ironbound_artefacts.items.impl.lore_items;
+package com.c446.ironbound_artefacts.items.impl;
 
 import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import net.minecraft.core.Holder;

@@ -1,4 +1,4 @@
-package com.c446.ironbound_artefacts.items.impl.regular;
+package com.c446.ironbound_artefacts.items.impl.lore_items;
 
 import io.redspace.ironsspellbooks.item.weapons.StaffItem;
 
