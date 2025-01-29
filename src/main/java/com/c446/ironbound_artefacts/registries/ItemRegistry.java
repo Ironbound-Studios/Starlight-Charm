@@ -1,5 +1,6 @@
 package com.c446.ironbound_artefacts.registries;
 
+import com.c446.ironbound_artefacts.items.armor.archmagi_weave.ArchmagiWeaveItem;
 import com.c446.ironbound_artefacts.items.impl.regular.ForsakenDreams;
 import com.c446.ironbound_artefacts.items.armor.arcane_weave.ArcaneWeaveItem;
 import com.c446.ironbound_artefacts.items.impl.lore_items.*;
@@ -56,6 +57,13 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_CHEST_PLATE = ITEMS.register("arcane_weave_chestplate", () -> new ArcaneWeaveItem(Type.CHESTPLATE, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(Type.CHESTPLATE.getDurability(55))));
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_LEGGINGS = ITEMS.register("arcane_weave_leggings", () -> new ArcaneWeaveItem(Type.LEGGINGS, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(Type.LEGGINGS.getDurability(55))));
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_BOOTS = ITEMS.register("arcane_weave_boots", () -> new ArcaneWeaveItem(Type.BOOTS, ItemPropertiesHelper.equipment().rarity(Rarity.RARE).stacksTo(1).durability(Type.BOOTS.getDurability(55))));
+
+    public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_HEAD = ITEMS.register("archmage_weave_helmet", () -> new ArchmagiWeaveItem(Type.HELMET, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(200))));
+    public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_CHEST = ITEMS.register("archmage_weave_chestplate", () -> new ArchmagiWeaveItem(Type.CHESTPLATE, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(Type.CHESTPLATE.getDurability(200))));
+    public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_LEG= ITEMS.register("archmage_weave_leggings", () -> new ArchmagiWeaveItem(Type.LEGGINGS, new Item.Properties().rarity(Rarity.EPIC).stacksTo(1).durability(Type.LEGGINGS.getDurability(200))));
+    public static final DeferredHolder<Item, ArchmagiWeaveItem> ARCHMAGE_BOOTS = ITEMS.register("archmage_weave_boots", () -> new ArchmagiWeaveItem(Type.BOOTS, ItemPropertiesHelper.equipment().rarity(Rarity.EPIC).stacksTo(1).durability(Type.BOOTS.getDurability(200))));
+
+
     /*LORE*/
 
     //public static final DeferredHolder<Item, MagicianMonocle> MAGICIANS_MONOCLE = ITEMS.register("magicians_monocle", () -> new MagicianMonocle(new Item.Properties().rarity(Rarity.EPIC).fireResistant().stacksTo(1)));

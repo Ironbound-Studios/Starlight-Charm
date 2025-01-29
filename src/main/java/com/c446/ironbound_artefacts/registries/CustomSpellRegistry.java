@@ -16,7 +16,7 @@ public class CustomSpellRegistry {
     public static final Supplier<AbstractSpell> TIME_STOP;
     public static final Supplier<AbstractSpell> WISH;
     public static final Supplier<AbstractSpell> DIVINE_BOON;
-    public static final Supplier<AbstractSpell>  KERESHKA_FAVOR;
+    //public static final Supplier<AbstractSpell>  KERESHKA_FAVOR;
     //public static final Supplier<AbstractSpell> SIMULACRUM;
     //public static final Supplier<AbstractSpell> FASLSE_LIFE;
 
@@ -28,7 +28,7 @@ public class CustomSpellRegistry {
         TIME_STOP = registerSpell(new TimeStopSpell());
         WISH = registerSpell(new WishSpell());
         DIVINE_BOON = registerSpell(new DivineGiftSpell());
-        KERESHKA_FAVOR = registerSpell(new StaffOfMagi.KereshkaFavor());
+        //KERESHKA_FAVOR = registerSpell(new StaffOfMagi.KereshkaFavor());
         //SIMULACRUM = registerSpell(new SimulacrumSpell());
         //FASLSE_LIFE = registerSpell(new FalseLifeSpell());
     }

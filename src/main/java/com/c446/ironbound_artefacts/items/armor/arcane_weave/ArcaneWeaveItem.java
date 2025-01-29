@@ -16,9 +16,11 @@ public class ArcaneWeaveItem extends ImbuableChestplateArmorItem {
     }
 
     public static AttributeContainer[] arcaneWeaveAttribute() {
-        return new AttributeContainer[]{new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE),
-                new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-                new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)};
+        return new AttributeContainer[]{
+                new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE),
+                new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)
+        };
     }
 
     @Override

@@ -20,19 +20,37 @@ public class ModArmorMaterial {
 
     public static final Holder<ArmorMaterial> ARCANE_WEAVE_MATERIAL = register("arcane_weave",
             Util.make(new EnumMap<ArmorItem.Type, Integer>(ArmorItem.Type.class), attribute -> {
-                attribute.put(ArmorItem.Type.HELMET, 1);
-                attribute.put(ArmorItem.Type.CHESTPLATE, 2);
-                attribute.put(ArmorItem.Type.LEGGINGS, 3);
+                attribute.put(ArmorItem.Type.HELMET, 2);
+                attribute.put(ArmorItem.Type.CHESTPLATE, 5);
+                attribute.put(ArmorItem.Type.LEGGINGS, 4);
                 attribute.put(ArmorItem.Type.BOOTS, 1);
-                attribute.put(ArmorItem.Type.BODY, 4);
+                attribute.put(ArmorItem.Type.BODY, 5);
             }),
-            16,
+            32,
             SoundEvents.ARMOR_EQUIP_LEATHER,
             2,
-            0.1f,
+            0f,
+            () -> Ingredient.of(ItemRegistry.MAGIC_CLOTH.get()
+            )
+    );
+
+    public static final Holder<ArmorMaterial> ARCHMAGI_WEAVE = register("archmagi_weave",
+            Util.make(new EnumMap<ArmorItem.Type, Integer>(ArmorItem.Type.class), attribute -> {
+                attribute.put(ArmorItem.Type.HELMET, 3);
+                attribute.put(ArmorItem.Type.CHESTPLATE, 8);
+                attribute.put(ArmorItem.Type.LEGGINGS, 6);
+                attribute.put(ArmorItem.Type.BOOTS, 3);
+                attribute.put(ArmorItem.Type.BODY, 8);
+            }),
+            32,
+            SoundEvents.ARMOR_EQUIP_DIAMOND,
+            2,
+            0.2f,
             () -> Ingredient.of(ItemRegistry.MITHRIL_INGOT.get()
             )
     );
+
+
 
 
 //    private static Holder<ArmorMaterial> register(String name, EnumMap<ArmorItem.Type, Integer> defense, int enchantability, float toughness, float kb_res, Supplier<Item> ingredient){
