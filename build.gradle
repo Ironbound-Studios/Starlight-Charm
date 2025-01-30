@@ -130,7 +130,7 @@ dependencies {
     //QOL
     //todo: 1.21: update these mods
     runtimeOnly "curse.maven:irons-jewelry-1101111:6024241"
-
+    implementation "curse.maven:snackpirates-aeromancy-additions-1160104:6128611"
     // JSON ******************************************************************************************************
     implementation "com.google.code.gson:gson:${gson_version}"
 

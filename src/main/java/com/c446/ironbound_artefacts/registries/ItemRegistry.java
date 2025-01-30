@@ -48,7 +48,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, StaffOfPower> STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER))));
     public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI))));
     public static final DeferredHolder<Item, LichCrown> LICH_CROWN = ITEMS.register("emperor_crown", () -> new LichCrown(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
-
+    public static final DeferredHolder<Item, StarLightCharm> STAR_LIGHT_CHARM =ITEMS.register ("starlight_charm", () -> new StarLightCharm (new Item.Properties().rarity(Rarity.EPIC)));
     /*IN PROGRESS*/
     /*GENERIC*/
     public static final DeferredHolder<Item, Phylactery> PHYLACTERY = ITEMS.register("phylactery", () -> new Phylactery(new Item.Properties().stacksTo(1)));

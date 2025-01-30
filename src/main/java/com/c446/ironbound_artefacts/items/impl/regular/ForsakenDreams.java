@@ -26,6 +26,7 @@ public class ForsakenDreams extends CurioBaseItem {
     }
 
 
+
 //    public void initBar(ItemStack stack, SlotContext slotContext) {
 //        if (slotContext.entity() != null) {
 //            this.bossLoc = ResourceLocation.parse(IronboundArtefact.prefix("boss_loc") + slotContext.entity().getStringUUID());

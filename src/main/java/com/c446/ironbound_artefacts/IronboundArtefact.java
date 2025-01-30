@@ -63,6 +63,7 @@ public class IronboundArtefact {
         public static final String STYLY = "03d1d7ca-657f-45ad-a51b-1f5dc85b2f4c";
         public static final String TOMATO = "5ff3e718-e002-4c48-bdc2-c638477620e4";
 
+        public static final String GRAY = "5bfbbbf3-ba6b-44a5-bf25-3aa48256e4d6";
         public static ArrayList<String> CONTRIBUTOR_LIST = new ArrayList<>();
 
         static {
@@ -76,6 +77,7 @@ public class IronboundArtefact {
             CONTRIBUTOR_LIST.add(TOMATO);
             CONTRIBUTOR_LIST.add(THEKILLAGER);
             CONTRIBUTOR_LIST.add(STYLY);
+            CONTRIBUTOR_LIST.add(GRAY);
         }
     }
 }
