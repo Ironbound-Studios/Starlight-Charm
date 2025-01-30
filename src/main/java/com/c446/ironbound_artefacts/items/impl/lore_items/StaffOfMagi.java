@@ -94,6 +94,6 @@ public class StaffOfMagi extends StaffItem implements IPresetSpellContainer{
 
     @Override
     public void initializeSpellContainer(ItemStack itemStack) {
-        itemStack.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(1, true, false, false, new SpellSlot[]{new SpellSlot(new SpellData(CustomSpellRegistry.KERESHKA_FAVOR.get(), 1), 0)}));
+        //itemStack.set(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(1, true, false, false, new SpellSlot[]{new SpellSlot(new SpellData(CustomSpellRegistry..get(), 1), 0)}));
     }
 }
