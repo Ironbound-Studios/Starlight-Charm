@@ -133,7 +133,7 @@ dependencies {
 
     // JSON ******************************************************************************************************
     implementation "com.google.code.gson:gson:${gson_version}"
-
+    //implementation "curse.maven:bookshelf-228525:6140734"
     // ISS *****************************************************************************************************
     //implementation("io.redspace:irons_spellbooks:${irons_spells_version}")
     implementation "curse.maven:irons-spells-n-spellbooks-855414:6117735"

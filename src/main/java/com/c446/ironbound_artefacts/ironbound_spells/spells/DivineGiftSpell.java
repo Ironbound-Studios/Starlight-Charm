@@ -54,8 +54,13 @@ public class DivineGiftSpell extends AbstractSpell {
             .build();
 
     @Override
+    public boolean canBeCraftedBy(Player player) {
+        return true;
+    }
+
+    @Override
     public int getSpellCooldown() {
-        return 60 * 20;
+        return 60 * 20 * 20;
     }
 
     private final ResourceLocation spellId = IronboundArtefact.prefix("divine_boon");
@@ -80,7 +85,7 @@ public class DivineGiftSpell extends AbstractSpell {
         if (entity instanceof Player p) {
             var potion = new ItemStack(Items.POTION, spellLevel);
 //            if (entity.getAttributeValue(AttributeRegistry.HOLY_SPELL_POWER) * entity.getAttributeValue(AttributeRegistry.SPELL_POWER) >= 2) {
-                potion.set(DataComponents.POTION_CONTENTS, new PotionContents(EffectsRegistry.DIVINE_GIFT));
+            potion.set(DataComponents.POTION_CONTENTS, new PotionContents(EffectsRegistry.DIVINE_GIFT));
 //            } else {
 //                potion.set(DataComponents.POTION_CONTENTS, new PotionContents(EffectsRegistry.DIVINE_GIFT));
 //            }

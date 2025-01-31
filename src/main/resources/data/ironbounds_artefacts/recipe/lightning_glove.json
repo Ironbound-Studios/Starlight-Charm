@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "tag": "c:leathers"
+    },
+    "B": {
+      "item": "irons_spellbooks:lightning_bottle"
+    },
+    "M": {
+      "item":"irons_spellbooks:mithril_ingot"
+    },
+    "R": {
+      "item":"minecraft:lightning_rod"
+    }
+  },
+  "pattern": [
+    "BRB",
+    "LML",
+    "LML"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ironbounds_artefacts:lightning_glove"
+  }
+}

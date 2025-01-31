@@ -36,17 +36,17 @@ public class ModArmorMaterial {
 
     public static final Holder<ArmorMaterial> ARCHMAGI_WEAVE = register("archmagi_weave",
             Util.make(new EnumMap<>(ArmorItem.Type.class), attribute -> {
-                attribute.put(ArmorItem.Type.HELMET, 3);
-                attribute.put(ArmorItem.Type.CHESTPLATE, 8);
-                attribute.put(ArmorItem.Type.LEGGINGS, 6);
-                attribute.put(ArmorItem.Type.BOOTS, 3);
-                attribute.put(ArmorItem.Type.BODY, 8);
+                attribute.put(ArmorItem.Type.HELMET, 2);
+                attribute.put(ArmorItem.Type.CHESTPLATE, 6);
+                attribute.put(ArmorItem.Type.LEGGINGS, 5);
+                attribute.put(ArmorItem.Type.BOOTS, 2);
+                attribute.put(ArmorItem.Type.BODY, 0);
             }),
             32,
             SoundEvents.ARMOR_EQUIP_DIAMOND,
-            2,
-            0.2f,
-            () -> Ingredient.of(ItemRegistry.MITHRIL_INGOT.get()
+            0,
+            0f,
+            () -> Ingredient.of(ItemRegistry.ARCANE_INGOT.get()
             )
     );
 

@@ -148,6 +148,7 @@ public class ServerEvents {
             });
         }
     }
+
     @SubscribeEvent
     public static void PhylacteryHandler(LivingDeathEvent event) {
         if (event.getEntity() instanceof Player player) {
@@ -209,7 +210,6 @@ public class ServerEvents {
     }
 
 
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void grantItemsOnJoin(PlayerEvent.PlayerLoggedInEvent event) {
         var uuid = event.getEntity().getStringUUID();
@@ -221,9 +221,10 @@ public class ServerEvents {
             switch (uuid) {
                 case AMON -> {
                     entity.getInventory().add(new ItemStack(STAFF_OF_POWER));
-                    //entity.getInventory().add(new ItemStack(STAFF_OF_MAGI));
-                    entity.getInventory().add(new ItemStack(ELVEN_CHAINS));
+                    entity.getInventory().add(new ItemStack(ARCHMAGE_SPELLBOOK));
+                    entity.getInventory().add(new ItemStack(LIGHTNING_GLOVES));
                 }
+                case NINJA_FOX -> entity.getInventory().add(new ItemStack(FC));
                 //case ACE -> entity.getInventory().add(new ItemStack(DEVILS_FINGER));
                 case AMADHE -> entity.getInventory().add(new ItemStack(WIZARDING_WAND));
                 //case CATMOTH -> entity.getInventory().add(new ItemStack(JUDGEMENT_SCALE));
