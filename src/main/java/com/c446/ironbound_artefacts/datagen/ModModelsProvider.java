@@ -44,6 +44,13 @@ public class ModModelsProvider extends ItemModelProvider {
         basicItem(ItemRegistry.WEAVE_BOOTS.get());
         basicItem(ItemRegistry.PHYLACTERY.get());
         basicItem(ItemRegistry.DREAMS.get());
+        basicItem(ItemRegistry.FC.get());
+        basicItem(ItemRegistry.LIGHTNING_GLOVES.get());
+        basicItem(ItemRegistry.ARCHMAGE_BOOTS.get());
+        basicItem(ItemRegistry.ARCHMAGE_CHEST.get());
+        basicItem(ItemRegistry.ARCHMAGE_HEAD.get());
+        basicItem(ItemRegistry.ARCHMAGE_LEG.get());
         handHeld(ItemRegistry.WIZARDING_WAND.get());
+
     }
 }

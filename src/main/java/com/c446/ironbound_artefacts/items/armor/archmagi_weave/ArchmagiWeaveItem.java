@@ -20,7 +20,7 @@ public class ArchmagiWeaveItem extends ImbuableChestplateArmorItem {
     }
 
     public static AttributeContainer[] arcaneWeaveAttribute() {
-        return new AttributeContainer[]{new AttributeContainer(AttributeRegistry.MAX_MANA, 250, AttributeModifier.Operation.ADD_VALUE),
+        return new AttributeContainer[]{new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE),
                 new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
                 new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)};
     }

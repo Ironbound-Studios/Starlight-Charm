@@ -18,6 +18,11 @@ public class Tags {
         public static TagKey<AbstractSpell> MOUVEMENT_SPELL = create(IronboundArtefact.prefix("mouvement_spell"));
         public static TagKey<AbstractSpell> SUPPORT_SPELL = create(IronboundArtefact.prefix("support_spell"));
 
+        public static TagKey<AbstractSpell> ARCHMAGE_ALLOWED_SPELL = create(IronboundArtefact.prefix("archmage_spells"));
+        public static TagKey<AbstractSpell> ARCHMAGE_SINGLE_SPELL = create(IronboundArtefact.prefix("archmage_single_spells"));
+        public static TagKey<AbstractSpell> ARCHMAGE_BARRAGE_SPELL = create(IronboundArtefact.prefix("archmage_barrage_spells"));
+        public static TagKey<AbstractSpell> ARCHMAGE_COMMON = create(IronboundArtefact.prefix("archmage_common"));
+
         public static TagKey<AbstractSpell> create(ResourceLocation name) {
             return new TagKey<AbstractSpell>(SpellRegistry.SPELL_REGISTRY_KEY, name);
         }

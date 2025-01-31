@@ -25,7 +25,7 @@ public class FlowerCrown extends UserDependantCurios {
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (slotContext.entity() != null && slotContext.entity() instanceof Player player){
             if (player.level().getBlockState(player.getOnPos()).is(BlockTags.DIRT)){
-                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,5,1,false,true));
+                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,40,2,false,true));
             }
         }
         super.curioTick(slotContext, stack);

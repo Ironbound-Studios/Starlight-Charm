@@ -17,9 +17,9 @@ public abstract class UserDependantCurios extends BaseItem implements ICurioItem
 
     public boolean canEntityUseItem(Entity entity){
         return false;
-
+    //these two get replaced
     }
-
+    // not here, let's move up one class
     public UUID user;
 }
 /*

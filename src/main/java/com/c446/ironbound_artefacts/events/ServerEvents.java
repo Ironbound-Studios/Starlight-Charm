@@ -221,7 +221,7 @@ public class ServerEvents {
             switch (uuid) {
                 case AMON -> {
                     entity.getInventory().add(new ItemStack(STAFF_OF_POWER));
-                    entity.getInventory().add(new ItemStack(STAFF_OF_MAGI));
+                    //entity.getInventory().add(new ItemStack(STAFF_OF_MAGI));
                     entity.getInventory().add(new ItemStack(ELVEN_CHAINS));
                 }
                 //case ACE -> entity.getInventory().add(new ItemStack(DEVILS_FINGER));
@@ -356,25 +356,25 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onAttributesAddedToItem(ItemAttributeModifierEvent event) {
-        if (event.getItemStack().getItem().equals(ItemRegistry.STAFF_OF_MAGI.get()) && event.getItemStack().has(ComponentRegistry.UPGRADE_DATA)) {
-            var data = event.getItemStack().get(ComponentRegistry.UPGRADE_DATA);
-            for (var upgrade : data.getUpgrades().keySet()) {
-                var amount = data.getUpgrades().get(upgrade);
-                AtomicReference<EquipmentSlotGroup> slot = new AtomicReference<>();
-                AtomicReference<AttributeModifier> modifier = new AtomicReference<>();
-
-                event.getModifiers().forEach(a -> {
-                    if (a.modifier().id().equals(upgrade.getId())) {
-                        slot.set(a.slot());
-                        modifier.set(a.modifier());
-                    }
-                });
-                if (slot.get() != null && modifier.get() != null) {
-                    //event.removeModifier(upgrade.getAttribute(), upgrade.getId());
-                    //event.addModifier(upgrade.getAttribute(), modifier.get(), slot.get());
-                }
-            }
-        }
+//        if (event.getItemStack().getItem().equals(ItemRegistry.STAFF_OF_MAGI.get()) && event.getItemStack().has(ComponentRegistry.UPGRADE_DATA)) {
+//            var data = event.getItemStack().get(ComponentRegistry.UPGRADE_DATA);
+//            for (var upgrade : data.getUpgrades().keySet()) {
+//                var amount = data.getUpgrades().get(upgrade);
+//                AtomicReference<EquipmentSlotGroup> slot = new AtomicReference<>();
+//                AtomicReference<AttributeModifier> modifier = new AtomicReference<>();
+//
+//                event.getModifiers().forEach(a -> {
+//                    if (a.modifier().id().equals(upgrade.getId())) {
+//                        slot.set(a.slot());
+//                        modifier.set(a.modifier());
+//                    }
+//                });
+//                if (slot.get() != null && modifier.get() != null) {
+//                    //event.removeModifier(upgrade.getAttribute(), upgrade.getId());
+//                    //event.addModifier(upgrade.getAttribute(), modifier.get(), slot.get());
+//                }
+//            }
+//        }
     }
 
     private static Monster equipCreatureBasedOnQuality(Monster creature, int quality, boolean canGetNetherite) {

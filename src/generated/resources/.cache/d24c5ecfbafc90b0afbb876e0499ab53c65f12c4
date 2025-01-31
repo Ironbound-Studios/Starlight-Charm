@@ -1,4 +1,7 @@
-// 1.21	2024-11-17T14:04:39.7317554	Tags for irons_spellbooks:spells mod id ironbounds_artefacts
+// 1.21	2025-01-29T22:05:33.6566215	Tags for irons_spellbooks:spells mod id ironbounds_artefacts
+4f721a2c28502ab631730396d5dfc0ce95df9b52 data/ironbounds_artefacts/tags/irons_spellbooks/spells/archmage_barrage_spells.json
+75b27d12df60cf1aea8829c820cc8fda0d8af39f data/ironbounds_artefacts/tags/irons_spellbooks/spells/archmage_common.json
+3b438f12d33f64ff0ace741172481ed26fbf9a61 data/ironbounds_artefacts/tags/irons_spellbooks/spells/archmage_spells.json
 41408712840eb6af4956c09e00553bd66b2a64f7 data/ironbounds_artefacts/tags/irons_spellbooks/spells/defensive_spell.json
 f9cbe396e84c8436f332f794edc8f3936ba94387 data/ironbounds_artefacts/tags/irons_spellbooks/spells/mouvement_spell.json
 929f1bad459330cca0b2d04ef3b23cc25690bb80 data/ironbounds_artefacts/tags/irons_spellbooks/spells/offensive_spell.json

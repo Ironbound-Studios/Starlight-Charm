@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 public class ModArmorMaterial {
 
     public static final Holder<ArmorMaterial> ARCANE_WEAVE_MATERIAL = register("arcane_weave",
-            Util.make(new EnumMap<ArmorItem.Type, Integer>(ArmorItem.Type.class), attribute -> {
+            Util.make(new EnumMap<>(ArmorItem.Type.class), attribute -> {
                 attribute.put(ArmorItem.Type.HELMET, 2);
                 attribute.put(ArmorItem.Type.CHESTPLATE, 5);
                 attribute.put(ArmorItem.Type.LEGGINGS, 4);
@@ -35,7 +35,7 @@ public class ModArmorMaterial {
     );
 
     public static final Holder<ArmorMaterial> ARCHMAGI_WEAVE = register("archmagi_weave",
-            Util.make(new EnumMap<ArmorItem.Type, Integer>(ArmorItem.Type.class), attribute -> {
+            Util.make(new EnumMap<>(ArmorItem.Type.class), attribute -> {
                 attribute.put(ArmorItem.Type.HELMET, 3);
                 attribute.put(ArmorItem.Type.CHESTPLATE, 8);
                 attribute.put(ArmorItem.Type.LEGGINGS, 6);

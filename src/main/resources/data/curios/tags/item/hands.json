@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "ironbounds_artefacts:phylactery"
+    "ironbounds_artefacts:phylactery",
+    "ironbounds_artefacts:lightning_glove"
   ]
 }

@@ -11,6 +11,8 @@
   "item.ironbounds_artefacts.devils_finger.tooltip2": "\"Malevolence lives within you.\"",
 
   "item.ironbounds_artefacts.elven_chains": "Elven Chains",
+  "item.ironbounds_artefacts.lightning_glove": "Glove of Belligerent Skies",
+  "item.ironbounds_artefacts.cloak_of_evasion": "Cloak of Evasion",
 
   "item.ironbounds_artefacts.stopwatch": "Golden Stopwatch",
   "item.ironbounds_artefacts.lovers_watch.tooltip1": "Clockwatch with the hands that indicate the Seconds missing.",
@@ -69,6 +71,7 @@
   "item.ironbounds_artefacts.forsaken_dreams.tooltip1": "The bloodied eye of those who dared to dream",
 
   "item.ironbounds_artefacts.three_wishes": "Three Wishes",
+  "item.ironbounds_artefacts.flower_crown": "Flowery Crown",
 
   "item.ironbounds_artefacts.wizard_wand": "Arcane Wand of Wizardry",
   "item.ironbounds_artefacts.wizard_wand.tooltip1": "Arcane Wands have long since been a sign of Wizards everywhere. Originally invented by one of the Archmages, House Stellarkan were amongst the first to enter Wand Manufacturing Industry and their innovation of the Hither Tither Wand produced this masterwork item.\n",
@@ -85,6 +88,12 @@
   "item.ironbounds_artefacts.arcane_weave_chestplate": "Robes of the Weave",
   "item.ironbounds_artefacts.arcane_weave_leggings": "Leggings of the Weave",
   "item.ironbounds_artefacts.arcane_weave_boots": "Boots of the Weave",
+
+  "item.ironbounds_artefacts.archmage_weave_helmet": "Hood of the Archmagi",
+  "item.ironbounds_artefacts.archmage_weave_chestplate": "Robes of the Archmagi",
+  "item.ironbounds_artefacts.archmage_weave_leggings": "Leggings of the Archmagi",
+  "item.ironbounds_artefacts.archmage_weave_boots": "Boots of the Archmagi",
+
   "item.ironbounds_artefacts.magic_protection_ring": "Ring of Magic Resistance",
   "item.ironbounds_artefacts.protection_ring": "Ring of Resistance",
 
