@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "irons_spellbooks:cooldown_rune"
+    },
+    "A": {
+      "item": "ironbounds_artefacts:arcane_weave_helmet"
+    }
+  },
+  "pattern": [
+    "CCC",
+    "CAC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ironbounds_artefacts:archmage_weave_helmet"
+  }
+}

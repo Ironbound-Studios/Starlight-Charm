@@ -38,25 +38,25 @@ public class ItemRegistry {
     //public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI))));
 
     // HEADWEARS
-    public static final DeferredHolder<Item, FlowerCrown> FC= ITEMS.register("flower_crown", ()->new FlowerCrown(ItemPropertiesHelper.equipment().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, FlowerCrown> FC= ITEMS.register("flower_crown", ()->new FlowerCrown(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
     public static final DeferredHolder<Item, LichCrown> LICH_CROWN = ITEMS.register("emperor_crown", () -> new LichCrown(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
 
     // NECKLACES
     //public static final DeferredHolder<Item, InsightCharm> AMA_CHARM= ITEMS.register("ingisht_insignia", () -> new InsightCharm(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
-    public static final DeferredHolder<Item, Phylactery> PHYLACTERY = ITEMS.register("phylactery", () -> new Phylactery(ItemPropertiesHelper.equipment().rarity(Rarity.EPIC)));
-    public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING = ITEMS.register("amulet_of_spell_storing", () -> new AmuletOfHolding(new Item.Properties().component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false))));
+    public static final DeferredHolder<Item, Phylactery> PHYLACTERY = ITEMS.register("phylactery", () -> new Phylactery(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING = ITEMS.register("amulet_of_spell_storing", () -> new AmuletOfHolding(ItemPropertiesHelper.equipment().rarity(Rarity.RARE).component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false))));
 
     // RINGS
-    public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(ItemPropertiesHelper.equipment().rarity(Rarity.UNCOMMON)).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));
-    public static final DeferredHolder<Item, CurioBaseItem> PROTECTION_RING = ITEMS.register("protection_ring", () -> new CurioBaseItem(ItemPropertiesHelper.equipment().rarity(Rarity.UNCOMMON)).withAttributes(Curios.RING_SLOT, new AttributeContainer(Attributes.ARMOR, 5, AttributeModifier.Operation.ADD_VALUE)));
-    public static final DeferredHolder<Item, RingOfThreeWishes> THREE_WISHES = ITEMS.register("three_wishes", () -> new RingOfThreeWishes(ItemPropertiesHelper.equipment().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(ItemPropertiesHelper.equipment(1).rarity(Rarity.UNCOMMON)).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));
+    public static final DeferredHolder<Item, CurioBaseItem> PROTECTION_RING = ITEMS.register("protection_ring", () -> new CurioBaseItem(ItemPropertiesHelper.equipment(1).rarity(Rarity.UNCOMMON)).withAttributes(Curios.RING_SLOT, new AttributeContainer(Attributes.ARMOR, 5, AttributeModifier.Operation.ADD_VALUE)));
+    public static final DeferredHolder<Item, RingOfThreeWishes> THREE_WISHES = ITEMS.register("three_wishes", () -> new RingOfThreeWishes(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC)));
 
     // BODY
-    public static final DeferredHolder<Item, EvasionCloak> ARCANE_PROTECTION_CLOAK = ITEMS.register("cloak_of_evasion", () -> new EvasionCloak(new Item.Properties().stacksTo(1)));
-    public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(ItemPropertiesHelper.equipment().rarity(Rarity.EPIC)));
+    public static final DeferredHolder<Item, EvasionCloak> ARCANE_PROTECTION_CLOAK = ITEMS.register("cloak_of_evasion", () -> new EvasionCloak(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
 
     // GLOVES
-    public static final DeferredHolder<Item, BelligerentSkies> LIGHTNING_GLOVES = ITEMS.register("lightning_glove", ()-> new BelligerentSkies(ItemPropertiesHelper.equipment().rarity(Rarity.RARE)));
+    public static final DeferredHolder<Item, BelligerentSkies> LIGHTNING_GLOVES = ITEMS.register("lightning_glove", ()-> new BelligerentSkies(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE)));
     // BOOTS
 
     public static final DeferredHolder<Item, ArcaneWeaveItem> WEAVE_HELMET = ITEMS.register("arcane_weave_helmet", () -> new ArcaneWeaveItem(Type.HELMET, new Item.Properties().rarity(Rarity.RARE).stacksTo(1).durability(ArmorItem.Type.HELMET.getDurability(55))));
@@ -89,7 +89,7 @@ public class ItemRegistry {
 
 
 
-    public static final DeferredHolder<Item, HermitEye> HERMIT_EYE = ITEMS.register("hermit_eye", () -> new HermitEye(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
+    //public static final DeferredHolder<Item, HermitEye> HERMIT_EYE = ITEMS.register("hermit_eye", () -> new HermitEye(new Item.Properties().fireResistant().rarity(Rarity.EPIC).stacksTo(1)));
 
     static {
 

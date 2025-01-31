@@ -225,7 +225,7 @@ public class ServerEvents {
                     entity.getInventory().add(new ItemStack(ELVEN_CHAINS));
                 }
                 //case ACE -> entity.getInventory().add(new ItemStack(DEVILS_FINGER));
-                case AMADHE -> entity.getInventory().add(new ItemStack(HERMIT_EYE));
+                case AMADHE -> entity.getInventory().add(new ItemStack(WIZARDING_WAND));
                 //case CATMOTH -> entity.getInventory().add(new ItemStack(JUDGEMENT_SCALE));
                 case ENDER -> entity.getInventory().add(new ItemStack(LICH_CROWN));
                 case TAR -> entity.getInventory().add(new ItemStack(PHYLACTERY));

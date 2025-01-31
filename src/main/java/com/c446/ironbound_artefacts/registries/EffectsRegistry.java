@@ -39,6 +39,7 @@ public class EffectsRegistry {
     public static final Holder<Potion> DIVINE_GIFT = POTIONS.register("divine_favour_greater", () -> new Potion(
             new MobEffectInstance(MobEffectRegistry.INSTANT_MANA, 1, 4),
             new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 12000, 2),
+            new MobEffectInstance(MobEffects.REGENERATION, 12000, 2),
             new MobEffectInstance(MobEffectRegistry.ANGEL_WINGS, 12000, 0))
     );
 

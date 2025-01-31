@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "irons_spellbooks:cooldown_rune"
+    },
+    "A": {
+      "item": "ironbounds_artefacts:arcane_weave_chestplate"
+    }
+  },
+  "pattern": [
+    "C C",
+    "CAC",
+    "CCC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "ironbounds_artefacts:archmage_weave_chestplate"
+  }
+}

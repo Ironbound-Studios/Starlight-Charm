@@ -76,38 +76,10 @@ public class HermitEye extends UserDependantCurios {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
-        ItemStack stack = null;
-        if (usedHand == InteractionHand.MAIN_HAND) {
-            stack = player.getMainHandItem();
-        } else if (usedHand == InteractionHand.OFF_HAND) {
-            stack = player.getOffhandItem();
-        }
-
-        if (level instanceof ServerLevel serverLevel) {
-            openMenuKey(player, serverLevel, stack);
-        }
-
-        return super.use(level, player, usedHand);
-    }
-
-    @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
         return false;
     }
 
-    public static void openMenuKey(Player entity, ServerLevel serverLevel, ItemStack stack) {
-        if (stack.getItem() == ItemRegistry.HERMIT_EYE.get()) {
-            GlobalPos pos = new GlobalPos(ServerLevel.OVERWORLD, new BlockPos(30_000_100, 0, 30_000_100));
-
-            var overworld = serverLevel.getServer().getLevel(ServerLevel.OVERWORLD);
-            var state = Objects.requireNonNull(overworld).getBlockEntity(pos.pos());
-
-            if (state instanceof ScrollForgeTile scrollForgeTile) {
-                scrollForgeTile.createMenu(serverLevel.random.nextInt(), entity.getInventory(), entity);
-            }
-        }
-    }
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {

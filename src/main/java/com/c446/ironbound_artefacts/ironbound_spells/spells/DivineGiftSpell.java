@@ -4,11 +4,15 @@ import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.registries.EffectsRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
+import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
+import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -23,6 +27,8 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.Level;
 
+import java.util.List;
+
 @AutoSpellConfig
 public class DivineGiftSpell extends AbstractSpell {
     public DivineGiftSpell() {
@@ -33,16 +39,23 @@ public class DivineGiftSpell extends AbstractSpell {
         this.castTime = 100;
     }
 
+    @Override
+    public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
+        return List.of(
+                Component.translatable("ui.irons_spellbooks.divine_gift.amount", Utils.stringTruncation(spellLevel, 0))
+        );
+    }
+
     private final DefaultConfig defaultConfig = new DefaultConfig()
             .setMinRarity(SpellRarity.LEGENDARY)
             .setSchoolResource(SchoolRegistry.HOLY_RESOURCE)
             .setMaxLevel(5)
-            .setCooldownSeconds(60*20)
+            .setCooldownSeconds(60 * 20)
             .build();
 
     @Override
     public int getSpellCooldown() {
-        return 60*20;
+        return 60 * 20;
     }
 
     private final ResourceLocation spellId = IronboundArtefact.prefix("divine_boon");
@@ -64,14 +77,15 @@ public class DivineGiftSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        if (entity instanceof Player p){
-            var potion = new ItemStack(Items.POTION);
-            potion.set(DataComponents.POTION_CONTENTS, new PotionContents(EffectsRegistry.DIVINE_GIFT));
-
+        if (entity instanceof Player p) {
+            var potion = new ItemStack(Items.POTION, spellLevel);
+//            if (entity.getAttributeValue(AttributeRegistry.HOLY_SPELL_POWER) * entity.getAttributeValue(AttributeRegistry.SPELL_POWER) >= 2) {
+                potion.set(DataComponents.POTION_CONTENTS, new PotionContents(EffectsRegistry.DIVINE_GIFT));
+//            } else {
+//                potion.set(DataComponents.POTION_CONTENTS, new PotionContents(EffectsRegistry.DIVINE_GIFT));
+//            }
             p.addItem(potion);
         }
-
-
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 }

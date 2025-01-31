@@ -77,9 +77,10 @@
   "item.ironbounds_artefacts.wizard_wand.tooltip1": "Arcane Wands have long since been a sign of Wizards everywhere. Originally invented by one of the Archmages, House Stellarkan were amongst the first to enter Wand Manufacturing Industry and their innovation of the Hither Tither Wand produced this masterwork item.\n",
   "item.ironbounds_artefacts.wizard_wand.tooltip2": "Arcane Wands of Wizardry remain the staple choice of Wizards everywhere and new variants are being researched. Some say House Stellarkan is said to have an Arcane Wand gifted to the Headmaster by the Arbiter itself.",
 
+  "item.minecraft.potion.effect.divine_favour_greater": "Divine Elixir",
+  "item.minecraft.potion.effect.divine_favour_lesser": "Lesser Divine Elixir",
 
-
-
+"ui.irons_spellbooks.divine_gift.amount": "%d Potion Created",
 
   "spell.ironbounds_artefacts.all_spell.name" : "all spells",
   "item.ironbounds_artefacts.phylactery.souls": "Current number of souls : %s",
