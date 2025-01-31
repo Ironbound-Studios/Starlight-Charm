@@ -47,13 +47,13 @@ public class ItemRegistry {
     public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING = ITEMS.register("amulet_of_spell_storing", () -> new AmuletOfHolding(new Item.Properties().component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false))));
 
     // RINGS
-    public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));
-    public static final DeferredHolder<Item, CurioBaseItem> PROTECTION_RING = ITEMS.register("protection_ring", () -> new CurioBaseItem(new Item.Properties()).withAttributes(Curios.RING_SLOT, new AttributeContainer(Attributes.ARMOR, 5, AttributeModifier.Operation.ADD_VALUE)));
-    public static final DeferredHolder<Item, RingOfThreeWishes> THREE_WISHES = ITEMS.register("three_wishes", () -> new RingOfThreeWishes(new Item.Properties().stacksTo(1)));
+    public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(ItemPropertiesHelper.equipment().rarity(Rarity.UNCOMMON)).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));
+    public static final DeferredHolder<Item, CurioBaseItem> PROTECTION_RING = ITEMS.register("protection_ring", () -> new CurioBaseItem(ItemPropertiesHelper.equipment().rarity(Rarity.UNCOMMON)).withAttributes(Curios.RING_SLOT, new AttributeContainer(Attributes.ARMOR, 5, AttributeModifier.Operation.ADD_VALUE)));
+    public static final DeferredHolder<Item, RingOfThreeWishes> THREE_WISHES = ITEMS.register("three_wishes", () -> new RingOfThreeWishes(ItemPropertiesHelper.equipment().rarity(Rarity.EPIC)));
 
     // BODY
     public static final DeferredHolder<Item, EvasionCloak> ARCANE_PROTECTION_CLOAK = ITEMS.register("cloak_of_evasion", () -> new EvasionCloak(new Item.Properties().stacksTo(1)));
-    public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(new Item.Properties().stacksTo(1)));
+    public static final DeferredHolder<Item, ElvenChains> ELVEN_CHAINS = ITEMS.register("elven_chains", () -> new ElvenChains(ItemPropertiesHelper.equipment().rarity(Rarity.EPIC)));
 
     // GLOVES
     public static final DeferredHolder<Item, BelligerentSkies> LIGHTNING_GLOVES = ITEMS.register("lightning_glove", ()-> new BelligerentSkies(ItemPropertiesHelper.equipment().rarity(Rarity.RARE)));
