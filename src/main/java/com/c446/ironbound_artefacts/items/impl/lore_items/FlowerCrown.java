@@ -21,12 +21,14 @@ public class FlowerCrown extends UserDependantCurios {
         super(p);
     }
 
+    int timeOnGrass=0;
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
         if (slotContext.entity() != null && slotContext.entity() instanceof Player player){
             if (player.level().getBlockState(player.getOnPos()).is(BlockTags.DIRT)){
-                player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,40,2,false,true));
-            }
+                timeOnGrass++;
+                player.addEffect(new MobEffectInstance(ALObjects.MobEffects.VITALITY,40, Math.min(timeOnGrass % 200, 2),true,true));
+            } else{timeOnGrass=0;}
         }
         super.curioTick(slotContext, stack);
     }

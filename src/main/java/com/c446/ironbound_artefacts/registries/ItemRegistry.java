@@ -12,6 +12,7 @@ import io.redspace.ironsspellbooks.compat.Curios;
 import io.redspace.ironsspellbooks.item.SpellSlotUpgradeItem;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
+import io.redspace.ironsspellbooks.item.weapons.StaffItem;
 import io.redspace.ironsspellbooks.item.weapons.StaffTier;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
@@ -31,10 +32,12 @@ public class ItemRegistry {
     public static final StaffTier TIER_STAFF_OF_MAGI = new StaffTier(5, -2.4F, new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     public static final StaffTier TIER_STAFF_OF_POWER = new StaffTier(7, -2.4F,new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),  new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
     public static final StaffTier TIER_STAFF_OF_ARCANE = new StaffTier(5,-2.4F, new AttributeContainer(AttributeRegistry.CAST_TIME_REDUCTION,0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION,0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+    public static  final StaffTier TIER_SUN_STAFF = new StaffTier(5, -2.4F, new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.FIRE_SPELL_POWER, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.05, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(BuiltInRegistries.ITEM, MODID);
 
     // WANDS
     public static final DeferredHolder<Item, StaffOfPower> STAFF_OF_POWER = ITEMS.register("staff_of_power", () -> new StaffOfPower(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_POWER))));
+    public static final DeferredHolder<Item, StaffItem> STAFF_OF_SUN = ITEMS.register("sun_staff", () -> new StaffItem(ItemPropertiesHelper.equipment(1).rarity(Rarity.COMMON).attributes(ExtendedSwordItem.createAttributes(TIER_SUN_STAFF))));
     //public static final DeferredHolder<Item, StaffOfMagi> STAFF_OF_MAGI = ITEMS.register("staff_of_magi", () -> new StaffOfMagi(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(TIER_STAFF_OF_MAGI))));
 
     // HEADWEARS
@@ -44,7 +47,7 @@ public class ItemRegistry {
     // NECKLACES
     //public static final DeferredHolder<Item, InsightCharm> AMA_CHARM= ITEMS.register("ingisht_insignia", () -> new InsightCharm(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
     public static final DeferredHolder<Item, Phylactery> PHYLACTERY = ITEMS.register("phylactery", () -> new Phylactery(ItemPropertiesHelper.equipment(1).rarity(Rarity.EPIC)));
-    public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING = ITEMS.register("amulet_of_spell_storing", () -> new AmuletOfHolding(ItemPropertiesHelper.equipment().rarity(Rarity.RARE).component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false))));
+    public static final DeferredHolder<Item, AmuletOfHolding> AMULET_OF_HOLDING = ITEMS.register("amulet_of_spell_storing", () -> new AmuletOfHolding(ItemPropertiesHelper.equipment(1).rarity(Rarity.RARE).component(ComponentRegistry.SPELL_CONTAINER, new SpellContainer(4, true, false, false))));
 
     // RINGS
     public static final DeferredHolder<Item, CurioBaseItem> MAGIC_DEFENSE_RING = ITEMS.register("magic_protection_ring", () -> new CurioBaseItem(ItemPropertiesHelper.equipment(1).rarity(Rarity.UNCOMMON)).withAttributes(Curios.RING_SLOT, new AttributeContainer(AttributeRegistry.SPELL_RESIST, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)));

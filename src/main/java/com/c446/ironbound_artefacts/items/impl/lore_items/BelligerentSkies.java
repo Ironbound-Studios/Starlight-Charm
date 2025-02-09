@@ -18,9 +18,8 @@ public class BelligerentSkies extends UserDependantCurios {
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         var map = super.getAttributeModifiers(slotContext, id, stack);
-        map.put(AttributeRegistry.LIGHTNING_SPELL_POWER, new AttributeModifier(id, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        map.put(AttributeRegistry.LIGHTNING_SPELL_POWER, new AttributeModifier(id, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         map.put(AttributeRegistry.ICE_MAGIC_RESIST, new AttributeModifier(id, -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        map.put(AttributeRegistry.SPELL_POWER, new AttributeModifier(id, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return map;
     }
 }

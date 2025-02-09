@@ -79,6 +79,7 @@ repositories {
             includeGroup("com.github.Ironbound-Studios")
         }
     }
+    maven { url = 'https://maven.azuredoom.com/mods'}
     maven {
         // saps.dev Maven (KubeJS and Rhino)
         url = uri("https://maven.saps.dev/releases")
@@ -102,6 +103,8 @@ dependencies {
     // FORGE ******************************************************************************************************
     implementation "net.neoforged:neoforge:${neoVersion}"
     implementation "curse.maven:spell-collector-lib-1149858:5972600"
+    runtimeOnly "mod.azure.azurelib:azurelib-neo-1.21:2.3.15"
+
     // IRONBOUND CORE
     //implementation("com.github.Ironbound-Studios:IronboundCore:731201954b")
     // GECKOLIB ***************************************************************************************************
@@ -119,7 +122,7 @@ dependencies {
     // CURIOS *****************************************************************************************************
     //todo: 1.21: find correct maven for new curios
     implementation "curse.maven:adorned-1036809:5546365"
-
+    runtimeOnly "curse.maven:discerning-the-eldritch-1143065:6090834"
 //    // PATCHOULI **************************************************************************************************
     compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}-NEOFORGE"
 //    // APOTHEOSIS
@@ -145,7 +148,7 @@ dependencies {
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
     testImplementation "net.neoforged:testframework:${neoVersion}"
 
-    localRuntime "curse.maven:better-combat-by-daedelus-639842:5723092"
+    //localRuntime "curse.maven:better-combat-by-daedelus-639842:5723092"
     localRuntime "curse.maven:cloth-config-348521:5623420"
 
 }

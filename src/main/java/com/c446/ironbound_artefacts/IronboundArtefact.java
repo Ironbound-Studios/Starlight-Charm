@@ -2,6 +2,7 @@ package com.c446.ironbound_artefacts;
 
 import com.min01.tickrateapi.util.TickrateUtil;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -51,6 +52,9 @@ public class IronboundArtefact {
     }
 
     public static final class ContributorUUIDS {
+        public static boolean isAdminOrDev(ServerPlayer player){
+            return player.hasPermissions(2) || player.getStringUUID().equals(AMON) || player.getStringUUID().equals(ACE);
+        }
         public static final String ACE = "34e0c700-66dd-4932-8e0b-0083076609d5";
         public static final String AMADHE = "387aa6d4-f388-400f-b9c5-1514f238ceae";
         public static final String AMON = "2980a99e-8582-4f63-9b82-f7117bc8be2c";

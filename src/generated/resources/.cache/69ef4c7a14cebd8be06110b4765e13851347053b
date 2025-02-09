@@ -1,3 +1,16 @@
-// 1.21	2025-01-30T20:22:00.5645095	Tags for minecraft:item mod id ironbounds_artefacts
+// 1.21	2025-02-02T14:30:56.9575685	Tags for minecraft:item mod id ironbounds_artefacts
+d4ca17b2d24a6754d511c6ecb481eac1089b9036 data/c/tags/item/armors.json
+b3c510d9ae6427bb87397f9bd62ae71ea95c05fd data/c/tags/item/enchantables.json
 655ca37b17d8cdff41accca2541a34fddd3d190a data/c/tags/item/hidden_from_recipe_viewers.json
+8b42f786eda264fbe52b8b63309df3863db2b289 data/c/tags/item/tools/melee_weapon.json
 ac15ffdce50f068aafd90e086ab97e73fa5beec0 data/ironbounds_artefacts/tags/item/wish_duplicable.json
+8b42f786eda264fbe52b8b63309df3863db2b289 data/irons_spellbooks/tags/item/staff.json
+448c8d3cd05cc0e29c0567866a95015c3998c967 data/minecraft/tags/item/enchantable/armor.json
+10d9523843ef343b2986c5b652e721a085b19ad0 data/minecraft/tags/item/enchantable/chest_armor.json
+448c8d3cd05cc0e29c0567866a95015c3998c967 data/minecraft/tags/item/enchantable/durability.json
+aa4b5e86035b84b244513d1998b94adebbcc1d30 data/minecraft/tags/item/enchantable/foot_armor.json
+59cd5cc68873fee9bc1a3d7fd70b46c4cc2ca6a4 data/minecraft/tags/item/enchantable/head_armor.json
+5aff8fe693447c0c7f9df548e74f1da92cab7c6d data/minecraft/tags/item/enchantable/leg_armor.json
+8b42f786eda264fbe52b8b63309df3863db2b289 data/minecraft/tags/item/enchantable/sharp_weapon.json
+8b42f786eda264fbe52b8b63309df3863db2b289 data/minecraft/tags/item/enchantable/sword.json
+448c8d3cd05cc0e29c0567866a95015c3998c967 data/minecraft/tags/item/enchantable/vanishing.json

@@ -16,6 +16,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import static com.c446.ironbound_artefacts.IronboundArtefact.MODID;
+import static io.redspace.ironsspellbooks.registries.ItemRegistry.*;
 
 public class ModSetup {
     public static void register(IEventBus eventBus) {
@@ -29,7 +30,7 @@ public class ModSetup {
         ComponentRegistry.register(eventBus);
         //ArmorMaterials.MATERIALS.register(eventBus);
         ModCreativeTabReg.CREATIVE_MOD_TABS.register(eventBus);
-        //ModIngredientTypeRegistry.INGREDIENT_TYPES.register(eventBus);
+
     }
 
     public ModSetup(IEventBus modEventBus, ModContainer modContainer) {

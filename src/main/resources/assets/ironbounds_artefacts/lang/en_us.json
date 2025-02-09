@@ -1,118 +1,89 @@
 {
-  "tab.ironbounds_artefacts.curios" : "Ironbounds Artefacts  ",
-  "itemGroup.examplemod": "Example Mod Tab",
   "block.examplemod.example_block": "Example Block",
-  "item.examplemod.example_item": "Example Item",
-  "ironbounds_artefacts.attribute.void_damage": "Void Damage",
+  "effect.ironbounds_artefacts.frozen": "Time Frozen",
+  "effect.ironbounds_artefacts.stopping_time": "Stopping Time",
+  "effect.ironbounds_artefacts.void_poison": "Wish Recoil ",
   "ironbounds_artefacts.attribute.insight": "Insight",
-
+  "ironbounds_artefacts.attribute.void_damage": "Void Damage",
+  "item.ironbounds_artefacts.amulet_of_holding.tooltip1": "Can be imbued with four spells.",
+  "item.ironbounds_artefacts.amulet_of_holding.tooltip2": "As a drawback however, it will decrease the potency of all spells.",
+  "item.ironbounds_artefacts.amulet_of_spell_storing": "Amulet of Spell Storing",
+  "item.ironbounds_artefacts.archmage_spellbook": "Archmage's Spell Book",
+  "item.ironbounds_artefacts.archmage_spellbook.tooltip": "Spellbook dropped by the apprentice of an Archmage.",
+  "item.ironbounds_artefacts.archmage_weave_boots": "Boots of the Archmagi",
+  "item.ironbounds_artefacts.archmage_weave_chestplate": "Robes of the Archmagi",
+  "item.ironbounds_artefacts.archmage_weave_helmet": "Hood of the Archmagi",
+  "item.ironbounds_artefacts.archmage_weave_leggings": "Leggings of the Archmagi",
+  "item.ironbounds_artefacts.arcane_weave_boots": "Boots of the Weave",
+  "item.ironbounds_artefacts.arcane_weave_chestplate": "Robes of the Weave",
+  "item.ironbounds_artefacts.arcane_weave_helmet": "Hood of the Weave",
+  "item.ironbounds_artefacts.arcane_weave_leggings": "Leggings of the Weave",
+  "item.ironbounds_artefacts.cloak_of_evasion": "Cloak of Evasion",
+  "item.ironbounds_artefacts.death_amulet": "Amulet of Death.",
+  "item.ironbounds_artefacts.death_amulet.tooltip1": "Amulet of Death.",
+  "item.ironbounds_artefacts.death_amulet.tooltip2": "",
   "item.ironbounds_artefacts.devils_finger": "Devil's Crimson Finger",
   "item.ironbounds_artefacts.devils_finger.tooltip1": "A wizened devil's cut off finger.",
   "item.ironbounds_artefacts.devils_finger.tooltip2": "\"Malevolence lives within you.\"",
-
   "item.ironbounds_artefacts.elven_chains": "Elven Chains",
-  "item.ironbounds_artefacts.lightning_glove": "Glove of Belligerent Skies",
-  "item.ironbounds_artefacts.cloak_of_evasion": "Cloak of Evasion",
-
-  "item.ironbounds_artefacts.stopwatch": "Golden Stopwatch",
-  "item.ironbounds_artefacts.lovers_watch.tooltip1": "Clockwatch with the hands that indicate the Seconds missing.",
-  "item.ironbounds_artefacts.lovers_watch.tooltip2": "Though left alone in the maddening abyss, the watch continued to tick, undisturbed",
-
-  "item.ironbounds_artefacts.magicians_monocle": "Magician's Monocle",
-  "item.ironbounds_artefacts.magicians_monocle.tooltip1": "A Wandering Magician's monocle.",
-  "item.ironbounds_artefacts.magicians_monocle.tooltip2": "\"Now, peer into the unseen, and experience the truths of the cosmos\"",
-
-  "item.ironbounds_artefacts.judgement_scale" : "Final Judgement Scale",
-  "item.ironbounds_artefacts.judgement_scale.tooltip1": "Pure golden scale, having witnessed countless trials.",
-  "item.ironbounds_artefacts.judgement_scale.tooltip2": "\"Weigh your heart, be the judge of only yourself\"",
-
-  "item.ironbounds_artefacts.death_amulet" : "Amulet of Death.",
-  "item.ironbounds_artefacts.death_amulet.tooltip1" : "Amulet of Death.",
-  "item.ironbounds_artefacts.death_amulet.tooltip2" : "",
-
-  "item.ironbounds_artefacts.hermit_eye" : "Hermetic Amulet",
-  "item.ironbounds_artefacts.hermit_amulet.tooltip1" : "Amulet often worn by an Old Hermit.",
-  "item.ironbounds_artefacts.hermit_amulet.tooltip2" : "\"The Ancient One That Watches Peers Through The Hermetic Amulet...\"",
-
   "item.ironbounds_artefacts.emperor_crown": "Golden Crown",
   "item.ironbounds_artefacts.emperor_crown.tooltip1": "The Crown of a Long Decayed Lich, feels horrible just looking at it.",
   "item.ironbounds_artefacts.emperor_crown.tooltip2": "Allows the creation of Greater Undeads",
-
-  "item.ironbounds_artefacts.strength_hand": "Hand of Power",
-  "item.ironbounds_artefacts.strength_hand.tooltip1": "Hands of a decrepit Archlich.",
-  "item.ironbounds_artefacts.strength_hand.tooltip2": "Allows the creation of Greater Undeads.",
-
+  "item.ironbounds_artefacts.forsaken_dreams": "Forsaken dreams",
+  "item.ironbounds_artefacts.forsaken_dreams.tooltip1": "The bloodied eye of those who dared to dream",
+  "item.ironbounds_artefacts.flower_crown": "Flowery Crown",
+  "item.ironbounds_artefacts.greater_spell_slot_upgrade": "Greater Spell Slot Upgrade",
+  "item.ironbounds_artefacts.hermit_amulet.tooltip1": "Amulet often worn by an Old Hermit.",
+  "item.ironbounds_artefacts.hermit_amulet.tooltip2": "\"The Ancient One That Watches Peers Through The Hermetic Amulet...\"",
+  "item.ironbounds_artefacts.hermit_eye": "Hermetic Amulet",
   "item.ironbounds_artefacts.insight_insignia": "Arcane Insignia of Insight",
-  "item.ironbounds_artefacts.insight_insignia.unique": "Insignia of the Inheritor",
   "item.ironbounds_artefacts.insight_insignia.tooltip.1": "In the days of long past, those who graduated from the Academy of the Arcane were granted this Insignia to showcase their accomplishments.",
   "item.ironbounds_artefacts.insight_insignia.tooltip.2": "Some even claimed the Insignia enhanced the intuition and insight of their holders but these claims were dismissed as mere superstition. House Stellarkan has long since passed down of the Insignia once held by the Headmaster himself, as a sign of leadership.",
   "item.ironbounds_artefacts.insight_insignia.tooltip.3": "The Insignia has become synonymous with Magical Authority.",
-
+  "item.ironbounds_artefacts.insight_insignia.unique": "Insignia of the Inheritor",
+  "item.ironbounds_artefacts.judgement_scale": "Final Judgement Scale",
+  "item.ironbounds_artefacts.judgement_scale.tooltip1": "Pure golden scale, having witnessed countless trials.",
+  "item.ironbounds_artefacts.judgement_scale.tooltip2": "\"Weigh your heart, be the judge of only yourself\"",
+  "item.ironbounds_artefacts.lightning_glove": "Glove of Belligerent Skies",
+  "item.ironbounds_artefacts.lovers_watch.tooltip1": "Clockwatch with the hands that indicate the Seconds missing.",
+  "item.ironbounds_artefacts.lovers_watch.tooltip2": "Though left alone in the maddening abyss, the watch continued to tick, undisturbed",
+  "item.ironbounds_artefacts.magicians_monocle": "Magician's Monocle",
+  "item.ironbounds_artefacts.magicians_monocle.tooltip1": "A Wandering Magician's monocle.",
+  "item.ironbounds_artefacts.magicians_monocle.tooltip2": "\"Now, peer into the unseen, and experience the truths of the cosmos\"",
+  "item.ironbounds_artefacts.magic_protection_ring": "Ring of Magic Resistance",
   "item.ironbounds_artefacts.phylactery": "Orb of Soul Binding",
+  "item.ironbounds_artefacts.phylactery.souls": "Current number of souls : %s",
   "item.ironbounds_artefacts.phylactery.tooltip1": "When you are about to die, consume a certain number of souls to go to your spawn location.",
   "item.ironbounds_artefacts.phylactery.tooltip2": "You can set your spawn location in any dimension, at any position.",
   "item.ironbounds_artefacts.phylactery.tooltip3": "Be careful about where you set your respawn point.",
   "item.ironbounds_artefacts.phylactery.tooltip4": "Right Click to bind your spawn location.",
-
-  "item.ironbounds_artefacts.amulet_of_spell_storing" : "Amulet of Spell Storing",
-  "item.ironbounds_artefacts.amulet_of_holding.tooltip1" : "Can be imbued with four spells.",
-  "item.ironbounds_artefacts.amulet_of_holding.tooltip2" : "As a drawback however, it will decrease the potency of all spells.",
-
-  "item.ironbounds_artefacts.archmage_spellbook": "Archmage's Spell Book",
-  "item.ironbounds_artefacts.archmage_spellbook.tooltip": "Spellbook dropped by the apprentice of an Archmage.",
-
-  "item.ironbounds_artefacts.greater_spell_slot_upgrade": "Greater Spell Slot Upgrade",
-
+  "item.ironbounds_artefacts.protection_ring": "Ring of Resistance",
   "item.ironbounds_artefacts.staff_of_magi": "The Staff of The Magi",
-
   "item.ironbounds_artefacts.staff_of_power": "The Staff of Power",
-
-  "item.ironbounds_artefacts.forsaken_dreams": "Forsaken dreams",
-  "item.ironbounds_artefacts.forsaken_dreams.tooltip1": "The bloodied eye of those who dared to dream",
-
+  "item.ironbounds_artefacts.strength_hand": "Hand of Power",
+  "item.ironbounds_artefacts.strength_hand.tooltip1": "Hands of a decrepit Archlich.",
+  "item.ironbounds_artefacts.strength_hand.tooltip2": "Allows the creation of Greater Undeads.",
+  "item.ironbounds_artefacts.stopwatch": "Golden Stopwatch",
+  "item.ironbounds_artefacts.sun_staff": "The Staff of the Sun",
   "item.ironbounds_artefacts.three_wishes": "Three Wishes",
-  "item.ironbounds_artefacts.flower_crown": "Flowery Crown",
-
   "item.ironbounds_artefacts.wizard_wand": "Arcane Wand of Wizardry",
   "item.ironbounds_artefacts.wizard_wand.tooltip1": "Arcane Wands have long since been a sign of Wizards everywhere. Originally invented by one of the Archmages, House Stellarkan were amongst the first to enter Wand Manufacturing Industry and their innovation of the Hither Tither Wand produced this masterwork item.\n",
   "item.ironbounds_artefacts.wizard_wand.tooltip2": "Arcane Wands of Wizardry remain the staple choice of Wizards everywhere and new variants are being researched. Some say House Stellarkan is said to have an Arcane Wand gifted to the Headmaster by the Arbiter itself.",
-
+  "item.examplemod.example_item": "Example Item",
   "item.minecraft.potion.effect.divine_favour_greater": "Divine Elixir",
   "item.minecraft.potion.effect.divine_favour_lesser": "Lesser Divine Elixir",
-
-"ui.irons_spellbooks.divine_gift.amount": "%d Potion Created",
-
-  "spell.ironbounds_artefacts.all_spell.name" : "all spells",
-  "item.ironbounds_artefacts.phylactery.souls": "Current number of souls : %s",
-
-  "item.ironbounds_artefacts.arcane_weave_helmet": "Hood of the Weave",
-  "item.ironbounds_artefacts.arcane_weave_chestplate": "Robes of the Weave",
-  "item.ironbounds_artefacts.arcane_weave_leggings": "Leggings of the Weave",
-  "item.ironbounds_artefacts.arcane_weave_boots": "Boots of the Weave",
-
-  "item.ironbounds_artefacts.archmage_weave_helmet": "Hood of the Archmagi",
-  "item.ironbounds_artefacts.archmage_weave_chestplate": "Robes of the Archmagi",
-  "item.ironbounds_artefacts.archmage_weave_leggings": "Leggings of the Archmagi",
-  "item.ironbounds_artefacts.archmage_weave_boots": "Boots of the Archmagi",
-
-  "item.ironbounds_artefacts.magic_protection_ring": "Ring of Magic Resistance",
-  "item.ironbounds_artefacts.protection_ring": "Ring of Resistance",
-
-  "spell.ironbounds_artefacts.wish": "Wish",
-  "spell.ironbounds_artefacts.wish.guide": "You express a wish to an extra planar being.\nDifferent items will have different effects.\nWishing with a scroll will cause you to cast the spell inscribed on it with a level bonus equal to the level of wish.\nAdditional effects may be discovered.\nThe item in your main hand has got priority, and your offhand will only be used if your main hand is empty.",
-
-  "spell.ironbounds_artefacts.time_stop": "Time Stop",
-  "spell.ironbounds_artefacts.time_stop.guide": "You continually freeze the creatures that surround you for the duration of the spell. Frozen creatures are unable to move and cast spells and attack.",
-
+  "itemGroup.examplemod": "Example Mod Tab",
+  "spell.ironbounds_artefacts.all_spell.name": "all spells",
+  "spell.ironbounds_artefacts.arcane_battery": "Arcane Battery",
+  "spell.ironbounds_artefacts.arcane_battery.guide": "You can cast the next spell for free without any cooldown.",
   "spell.ironbounds_artefacts.divine_boon": "Divine Boon",
   "spell.ironbounds_artefacts.divine_boon.guide": "You express a prayer towards your deity, and gain a Divine Elixir as a reward.",
-
-
   "spell.ironbounds_artefacts.kereshka_favor": "Kereshka's Favour",
   "spell.ironbounds_artefacts.kereshka_favor.guide": "You gain the blessing of the God of Elementals. The blessing's element corresponds to the first School Focus that you have in your inventory. Having a focus in your offhand will always take priority.",
-
-  "spell.ironbounds_artefacts.arcane_battery": "Arcane Battery",
-  "spell.ironbounds_artefacts.arcane_battery.guide": "You can cast the next spell for free without any cooldown."
-
-
+  "spell.ironbounds_artefacts.time_stop": "Time Stop",
+  "spell.ironbounds_artefacts.time_stop.guide": "You continually freeze the creatures that surround you for the duration of the spell. Frozen creatures are unable to move and cast spells and attack.",
+  "spell.ironbounds_artefacts.wish": "Wish",
+  "spell.ironbounds_artefacts.wish.guide": "You express a wish to an extra planar being.\nDifferent items will have different effects.\nWishing with a scroll will cause you to cast the spell inscribed on it with a level bonus equal to the level of wish.\nAdditional effects may be discovered.\nThe item in your main hand has got priority, and your offhand will only be used if your main hand is empty.",
+  "tab.ironbounds_artefacts.curios": "Ironbounds Artefacts  ",
+  "ui.irons_spellbooks.divine_gift.amount": "%d Potion Created"
 }

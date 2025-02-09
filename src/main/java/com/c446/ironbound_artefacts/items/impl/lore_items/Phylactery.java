@@ -1,11 +1,11 @@
 package com.c446.ironbound_artefacts.items.impl.lore_items;
 
+import com.c446.ironbound_artefacts.IronboundArtefact;
 import com.c446.ironbound_artefacts.components.KillCounterComponent;
 import com.c446.ironbound_artefacts.components.UniversalPositionComponent;
-import com.c446.ironbound_artefacts.items.UserDependantCurios;
 import com.c446.ironbound_artefacts.registries.ComponentRegistry;
-import com.c446.ironbound_artefacts.registries.CustomSpellRegistry;
 import com.google.common.collect.Multimap;
+import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.SpellData;
 import io.redspace.ironsspellbooks.api.spells.SpellSlot;
@@ -18,23 +18,17 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.RespawnAnchorBlock;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import org.jetbrains.annotations.NotNull;
-import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
-import java.util.*;
+import java.util.List;
 
 import static io.redspace.ironsspellbooks.registries.ComponentRegistry.SPELL_CONTAINER;
 
@@ -51,7 +45,15 @@ public class Phylactery extends CurioBaseItem {
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
-        return super.getAttributeModifiers(slotContext, id, stack);
+        var map = super.getAttributeModifiers(slotContext, id, stack);
+        if (slotContext.entity() != null) {
+            if (slotContext.entity().getStringUUID().equals(IronboundArtefact.ContributorUUIDS.AMON)) {
+                map.put(AttributeRegistry.MANA_REGEN, new AttributeModifier(id, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            } else {
+                map.put(AttributeRegistry.BLOOD_SPELL_POWER, new AttributeModifier(id, 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            }
+        }
+        return map;
     }
 
 
@@ -79,7 +81,6 @@ public class Phylactery extends CurioBaseItem {
         return super.use(level, player, hand);
 
     }
-
 
 
     @Override

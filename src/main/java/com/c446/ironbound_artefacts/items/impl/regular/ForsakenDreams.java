@@ -96,8 +96,7 @@ public class ForsakenDreams extends CurioBaseItem {
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getAttributeModifiers(SlotContext slotContext, ResourceLocation id, ItemStack stack) {
         var attributes = super.getAttributeModifiers(slotContext, id, stack);
-        attributes.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(IronboundArtefact.prefix("boss_attribute"), 0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-        attributes.put(AttributeRegistry.HOLY_MAGIC_RESIST, new AttributeModifier(IronboundArtefact.prefix("boss_attribute"), -0.5, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+        attributes.put(AttributeRegistry.ELDRITCH_SPELL_POWER, new AttributeModifier(id, 0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         return attributes;
     }
 }

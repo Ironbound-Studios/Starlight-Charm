@@ -73,7 +73,6 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
-import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.Arrays;
 import java.util.List;
@@ -228,8 +227,10 @@ public class ServerEvents {
                 //case ACE -> entity.getInventory().add(new ItemStack(DEVILS_FINGER));
                 case AMADHE -> entity.getInventory().add(new ItemStack(WIZARDING_WAND));
                 //case CATMOTH -> entity.getInventory().add(new ItemStack(JUDGEMENT_SCALE));
-                case ENDER -> entity.getInventory().add(new ItemStack(LICH_CROWN));
-                case TAR -> entity.getInventory().add(new ItemStack(PHYLACTERY));
+                case ENDER,TAR -> {
+                    entity.getInventory().add(new ItemStack(LICH_CROWN));
+                    entity.getInventory().add(new ItemStack(PHYLACTERY));
+                }
                 //case THEKILLAGER -> entity.getInventory().add(new ItemStack(DEATH_AMULET));
 //case STYLY -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));
 //                case TOMATO -> entity.getInventory().add(new ItemStack(ItemRegistry.HERMIT_EYE));

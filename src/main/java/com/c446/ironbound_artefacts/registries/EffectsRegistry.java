@@ -64,8 +64,6 @@ public class EffectsRegistry {
                     .addAttributeModifier(AttributeRegistry.LIGHTNING_SPELL_POWER.getDelegate(), StaffOfMagi.MARKOHESHKIR_ATTRIBUTE, 0.15f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
                     .addAttributeModifier(AttributeRegistry.LIGHTNING_MAGIC_RESIST.getDelegate(), StaffOfMagi.MARKOHESHKIR_ATTRIBUTE, 0.15f, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
-
-
     public static final DeferredHolder<MobEffect, TimeStopEffect> TIME_STOP = EFFECTS.register("time_frozen", () -> new TimeStopEffect(MobEffectCategory.BENEFICIAL, rgbToInt(120, 0, 200)).addAttributeModifier(Attributes.MOVEMENT_SPEED, IronboundArtefact.prefix("time_stop_speed_mod"), -1d, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 
     /*

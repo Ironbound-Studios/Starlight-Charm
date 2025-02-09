@@ -17,17 +17,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 import static com.c446.ironbound_artefacts.registries.AttributeRegistry.INSIGHT;
+import static io.redspace.ironsspellbooks.api.registry.AttributeRegistry.ELDRITCH_SPELL_POWER;
 
 @AutoSpellConfig
 public class TimeStopSpell extends AbstractSpell {
     private final DefaultConfig defaultConfig = new DefaultConfig()
             .setMinRarity(SpellRarity.LEGENDARY)
             .setSchoolResource(SchoolRegistry.ELDRITCH_RESOURCE)
-            .setMaxLevel(3)
+            .setMaxLevel(5)
             .setCooldownSeconds(1200)
             .build();
     private final ResourceLocation spellId = IronboundArtefact.prefix("time_stop");
@@ -37,25 +39,49 @@ public class TimeStopSpell extends AbstractSpell {
         this.baseSpellPower = 10;
         this.spellPowerPerLevel = 5;
         this.baseManaCost = 700;
-        this.manaCostPerLevel = 300;
-        this.castTime = 300;
+        this.manaCostPerLevel = 100;
+        this.castTime = 20;
+    }
+
+    @Override
+    public int getCastTime(int spellLevel) {
+        return (this.castTime * (spellLevel));
+    }
+
+    @Override
+    public int getEffectiveCastTime(int spellLevel, @Nullable LivingEntity entity) {
+        return 20 + super.getEffectiveCastTime(spellLevel-1, entity);
     }
 
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
-        return List.of(
-                Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks((float) getTickDuration(spellLevel), 1)),
-                Component.translatable("ui.irons_spellbooks.radius", Utils.stringTruncation(this.getAOE(spellLevel, caster), 1))
-        );
+        if (caster instanceof Player){
+            return List.of(
+                    Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks((float) getTickDuration(spellLevel, caster), 1)),
+                    Component.translatable("ui.irons_spellbooks.radius", Utils.stringTruncation(this.getAOE(spellLevel, caster), 1))
+            );
+        } else{
+            return List.of(
+                    Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks((float) getTickDuration(spellLevel), 1)),
+                    Component.translatable("ui.irons_spellbooks.radius", Utils.stringTruncation(this.getAOE(spellLevel), 1))
+            );
+
+        }
+    }
+    public double getTickDuration(int spellLevel) {
+        return 20 * spellLevel;
     }
 
+    public double getTickDuration(int spellLevel, LivingEntity living) {
+        return 20 * (spellLevel + living.getAttributeValue(ELDRITCH_SPELL_POWER));
+    }
 
-    public double getTickDuration(int spellLevel) {
-        return 20 * (1+spellLevel);
+    public float getAOE(int spellLevel) {
+        return (10 * spellLevel);
     }
 
     public float getAOE(int spellLevel, LivingEntity entity) {
-        return (10 * spellLevel + this.getSpellPower(spellLevel, entity));
+        return (float) Math.max((8 * spellLevel * entity.getAttributeValue(ELDRITCH_SPELL_POWER)), 8+16*(spellLevel-1));
     }
 
     @Override
@@ -87,7 +113,7 @@ public class TimeStopSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP_CASTER, (int) ((int) this.getTickDuration(spellLevel)*(1+entity.getAttributeValue(INSIGHT))), spellLevel));
+        entity.addEffect(new MobEffectInstance(EffectsRegistry.TIME_STOP_CASTER, (int) this.getTickDuration(spellLevel, entity), spellLevel));
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 }
